@@ -4,7 +4,7 @@ require('dotenv').config();
 const { REST, Routes } = require('discord.js');
 
 // hey.jsのmodule.exportsを呼び出します。
-const heyFile = require('./commands/hey.js');
+const heyFile = require('./src/commands/hey.js');
 
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [heyFile.data.toJSON()];
