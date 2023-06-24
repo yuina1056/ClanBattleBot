@@ -7,7 +7,7 @@
     "test": "ts-node src/main.ts",
     "start": "node build/main.js",
     "compile": "tsc -p .",
-    "deploy-command": "node deploy-command.js"
+    "deploy-command": "node build/deploy-command.js"
   },
   "author": "",
   "license": "ISC",

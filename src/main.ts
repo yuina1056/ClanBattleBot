@@ -10,12 +10,12 @@ const { Client, Events, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
-client.once(Events.ClientReady, c => {
-  console.log(`準備OKです! ${c.user.tag}がログインします。`);
+client.once(Events.ClientReady, () => {
+  console.log(`準備OKです! ${client.user.tag}がログインします。`);
 });
 
 //スラッシュコマンドに応答するには、interactionCreateのイベントリスナーを使う必要があります
-client.on(Events.InteractionCreate, async interaction => {
+client.on(Events.InteractionCreate, async (interaction: any) => {
 
   // スラッシュ以外のコマンドの場合は対象外なので早期リターンさせて終了します
   // コマンドにスラッシュが使われているかどうかはisChatInputCommand()で判断しています
