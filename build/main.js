@@ -49,6 +49,7 @@ client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void
             }
             break;
         case dice_1.default.data.name:
+            // diceコマンドに対する処理
             try {
                 yield dice_1.default.execute(interaction);
             }
