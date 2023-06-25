@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 // hey.jsのmodule.exportsを呼び出します。
-const heyFile = require('./commands/hey.js');
+const heyFile = require('./commands/hey');
 
 // discord.jsライブラリの中から必要な設定を呼び出し、変数に保存します
 const { Client, Events, GatewayIntentBits } = require('discord.js');
@@ -22,19 +22,21 @@ client.on(Events.InteractionCreate, async (interaction: any) => {
   if (!interaction.isChatInputCommand()) return;
 
   // heyコマンドに対する処理
-  if (interaction.commandName === heyFile.data.name) {
-    try {
-      await heyFile.execute(interaction);
-    } catch (error) {
-      console.error(error);
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-      } else {
-        await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+  switch (interaction.commandName) {
+    case heyFile.data.name:
+      try {
+        await heyFile.execute(interaction);
+      } catch (error) {
+        console.error(error);
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        } else {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
       }
-    }
-  } else {
-    console.error(`${interaction.commandName}というコマンドには対応していません。`);
+      break;
+    default:
+      console.error(`${interaction.commandName}というコマンドには対応していません。`);
   }
 });
 

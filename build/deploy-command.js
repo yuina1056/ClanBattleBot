@@ -8,11 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 // discord.js v14では、下記のようにRESTとRoutesはdiscord.jsパッケージから直接インポートできます
 const { REST, Routes } = require('discord.js');
 // hey.jsのmodule.exportsを呼び出します。
-// const heyFile = require('./src/commands/hey.js');
+const heyFile = require('./commands/hey');
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [heyFile.data.toJSON()];
 // DiscordのAPIには現在最新のversion10を指定

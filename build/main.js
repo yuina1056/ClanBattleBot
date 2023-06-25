@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 require('dotenv').config();
 // hey.jsのmodule.exportsを呼び出します。
-const heyFile = require('./commands/hey.js');
+const heyFile = require('./commands/hey');
 // discord.jsライブラリの中から必要な設定を呼び出し、変数に保存します
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
@@ -26,22 +26,23 @@ client.on(Events.InteractionCreate, (interaction) => __awaiter(void 0, void 0, v
     if (!interaction.isChatInputCommand())
         return;
     // heyコマンドに対する処理
-    if (interaction.commandName === heyFile.data.name) {
-        try {
-            yield heyFile.execute(interaction);
-        }
-        catch (error) {
-            console.error(error);
-            if (interaction.replied || interaction.deferred) {
-                yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+    switch (interaction.commandName) {
+        case heyFile.data.name:
+            try {
+                yield heyFile.execute(interaction);
             }
-            else {
-                yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+            catch (error) {
+                console.error(error);
+                if (interaction.replied || interaction.deferred) {
+                    yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                }
+                else {
+                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                }
             }
-        }
-    }
-    else {
-        console.error(`${interaction.commandName}というコマンドには対応していません。`);
+            break;
+        default:
+            console.error(`${interaction.commandName}というコマンドには対応していません。`);
     }
 }));
 // ログインします
