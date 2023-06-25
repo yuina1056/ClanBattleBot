@@ -1,22 +1,25 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+import { REST, Routes } from 'discord.js';
 
-// discord.js v14では、下記のようにRESTとRoutesはdiscord.jsパッケージから直接インポートできます
-const { REST, Routes } = require('discord.js');
+dotenv.config();
 
-// hey.jsのmodule.exportsを呼び出します。
 const heyFile = require('./commands/hey');
+const diceFile = require('./commands/dice');
 
 // 登録コマンドを呼び出してリスト形式で登録
-const commands = [heyFile.data.toJSON()];
+const commands = [
+  heyFile.data.toJSON(),
+  diceFile.data.toJSON()
+];
 
 // DiscordのAPIには現在最新のversion10を指定
-const rest = new REST({ version: '10' }).setToken(process.env.DISCORDAPPBOTTOKEN);
+const rest = new REST({ version: '10' }).setToken(process.env.DISCORDAPPBOTTOKEN ?? "");
 
 // Discordサーバーにコマンドを登録
 (async () => {
   try {
     await rest.put(
-      Routes.applicationGuildCommands(process.env.DISCORDAPPLICATIONID, process.env.DISCORDGUILDID),
+      Routes.applicationGuildCommands(process.env.DISCORDAPPLICATIONID ?? "", process.env.DISCORDGUILDID ?? ""),
       { body: commands },
     );
     console.log('サーバー固有のコマンドが登録されました！');

@@ -10,15 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.execute = exports.data = void 0;
-// SlashCommandBuilder という部品を discord.js からインポートしています。
-// これにより、スラッシュコマンドを簡単に構築できます。
 const discord_js_1 = require("discord.js");
 exports.data = new discord_js_1.SlashCommandBuilder()
-    .setName('hey')
-    .setDescription('あいさつに反応してbotが返事します');
+    .setName('dice')
+    .setDescription('運命のダイスロール');
 function execute(interaction) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield interaction.reply('Fuck.');
+        const result = Math.floor(Math.random() * (6 + 1 - 1)) + 1;
+        const res = result.toString();
+        yield interaction.reply('サイコロの出目：' + res);
     });
 }
 exports.execute = execute;
