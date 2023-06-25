@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 // hey.jsのmodule.exportsを呼び出します。
-const heyFile = require('./commands/hey');
+const hey = require('./commands/hey');
 
 // discord.jsライブラリの中から必要な設定を呼び出し、変数に保存します
 const { Client, Events, GatewayIntentBits } = require('discord.js');
@@ -21,11 +21,11 @@ client.on(Events.InteractionCreate, async (interaction: any) => {
   // コマンドにスラッシュが使われているかどうかはisChatInputCommand()で判断しています
   if (!interaction.isChatInputCommand()) return;
 
-  // heyコマンドに対する処理
   switch (interaction.commandName) {
-    case heyFile.data.name:
+    case hey.data.name:
+      // heyコマンドに対する処理
       try {
-        await heyFile.execute(interaction);
+        await hey.execute(interaction);
       } catch (error) {
         console.error(error);
         if (interaction.replied || interaction.deferred) {

@@ -6,8 +6,6 @@ const { REST, Routes } = require('discord.js');
 // hey.jsのmodule.exportsを呼び出します。
 const heyFile = require('./commands/hey');
 
-export { }
-
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [heyFile.data.toJSON()];
 

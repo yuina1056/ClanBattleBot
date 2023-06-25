@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 require('dotenv').config();
 // hey.jsのmodule.exportsを呼び出します。
-const heyFile = require('./commands/hey');
+const hey = require('./commands/hey');
 // discord.jsライブラリの中から必要な設定を呼び出し、変数に保存します
 const { Client, Events, GatewayIntentBits } = require('discord.js');
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
@@ -25,11 +25,11 @@ client.on(Events.InteractionCreate, (interaction) => __awaiter(void 0, void 0, v
     // コマンドにスラッシュが使われているかどうかはisChatInputCommand()で判断しています
     if (!interaction.isChatInputCommand())
         return;
-    // heyコマンドに対する処理
     switch (interaction.commandName) {
-        case heyFile.data.name:
+        case hey.data.name:
+            // heyコマンドに対する処理
             try {
-                yield heyFile.execute(interaction);
+                yield hey.execute(interaction);
             }
             catch (error) {
                 console.error(error);
