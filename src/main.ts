@@ -7,6 +7,7 @@ dotenv.config();
 // default exportsのインポート
 import hey from './commands/hey';
 import dice from './commands/dice';
+import setup from './commands/setup'
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -41,6 +42,20 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
       // diceコマンドに対する処理
       try {
         await dice.execute(interaction);
+      } catch (error) {
+        console.error(error);
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        } else {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
+      }
+      break;
+    case setup.data.name:
+      // setupコマンドに対する処理
+      try {
+        // var guild = client.guilds.cache.get(process.env.DISCORDGUILDID ?? '')
+        await setup.execute(interaction);
       } catch (error) {
         console.error(error);
         if (interaction.replied || interaction.deferred) {

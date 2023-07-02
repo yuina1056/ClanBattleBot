@@ -19,10 +19,12 @@ const v10_1 = require("discord-api-types/v10");
 dotenv_1.default.config();
 const hey_1 = __importDefault(require("./commands/hey"));
 const dice_1 = __importDefault(require("./commands/dice"));
+const setup_1 = __importDefault(require("./commands/setup"));
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [
     hey_1.default.data.toJSON(),
-    dice_1.default.data.toJSON()
+    dice_1.default.data.toJSON(),
+    setup_1.default.data.toJSON()
 ];
 // DiscordのAPIには現在最新のversion10を指定
 const rest = new rest_1.REST({ version: '10' }).setToken((_a = process.env.DISCORDAPPBOTTOKEN) !== null && _a !== void 0 ? _a : '');

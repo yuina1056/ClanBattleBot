@@ -6,11 +6,13 @@ dotenv.config();
 
 import heyFile from './commands/hey';
 import diceFile from './commands/dice';
+import setupFile from './commands/setup';
 
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [
   heyFile.data.toJSON(),
-  diceFile.data.toJSON()
+  diceFile.data.toJSON(),
+  setupFile.data.toJSON()
 ];
 
 // DiscordのAPIには現在最新のversion10を指定
