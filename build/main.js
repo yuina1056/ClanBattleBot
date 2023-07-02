@@ -21,7 +21,7 @@ const hey_1 = __importDefault(require("./commands/hey"));
 const dice_1 = __importDefault(require("./commands/dice"));
 const setup_1 = __importDefault(require("./commands/setup"));
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
-const client = new discord_js_1.Client({ intents: [discord_js_1.GatewayIntentBits.Guilds] });
+const client = new discord_js_1.Client({ intents: [discord_js_1.GatewayIntentBits.Guilds, discord_js_1.GatewayIntentBits.GuildMembers] });
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
 client.once(discord_js_1.Events.ClientReady, () => {
     var _a;

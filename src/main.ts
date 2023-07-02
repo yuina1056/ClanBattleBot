@@ -10,7 +10,7 @@ import dice from './commands/dice';
 import setup from './commands/setup'
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
 
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
 client.once(Events.ClientReady, () => {
