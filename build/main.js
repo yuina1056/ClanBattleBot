@@ -31,57 +31,69 @@ client.once(discord_js_1.Events.ClientReady, () => {
 client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void 0, void 0, void 0, function* () {
     // スラッシュ以外のコマンドの場合は対象外なので早期リターンさせて終了します
     // コマンドにスラッシュが使われているかどうかはisChatInputCommand()で判断しています
-    if (!interaction.isChatInputCommand())
-        return;
-    switch (interaction.commandName) {
-        case hey_1.default.data.name:
-            // heyコマンドに対する処理
-            try {
-                yield hey_1.default.execute(interaction);
-            }
-            catch (error) {
-                console.error(error);
-                if (interaction.replied || interaction.deferred) {
-                    yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+    if (interaction.isChatInputCommand()) {
+        switch (interaction.commandName) {
+            case hey_1.default.data.name:
+                // heyコマンドに対する処理
+                try {
+                    yield hey_1.default.execute(interaction);
                 }
-                else {
-                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                catch (error) {
+                    console.error(error);
+                    if (interaction.replied || interaction.deferred) {
+                        yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                    }
+                    else {
+                        yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                    }
                 }
-            }
-            break;
-        case dice_1.default.data.name:
-            // diceコマンドに対する処理
-            try {
-                yield dice_1.default.execute(interaction);
-            }
-            catch (error) {
-                console.error(error);
-                if (interaction.replied || interaction.deferred) {
-                    yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                break;
+            case dice_1.default.data.name:
+                // diceコマンドに対する処理
+                try {
+                    yield dice_1.default.execute(interaction);
                 }
-                else {
-                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                catch (error) {
+                    console.error(error);
+                    if (interaction.replied || interaction.deferred) {
+                        yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                    }
+                    else {
+                        yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                    }
                 }
-            }
-            break;
-        case setup_1.default.data.name:
-            // setupコマンドに対する処理
-            try {
-                // var guild = client.guilds.cache.get(process.env.DISCORDGUILDID ?? '')
-                yield setup_1.default.execute(interaction);
-            }
-            catch (error) {
-                console.error(error);
-                if (interaction.replied || interaction.deferred) {
-                    yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                break;
+            case setup_1.default.data.name:
+                // setupコマンドに対する処理
+                try {
+                    // var guild = client.guilds.cache.get(process.env.DISCORDGUILDID ?? '')
+                    yield setup_1.default.execute(interaction);
                 }
-                else {
-                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                catch (error) {
+                    console.error(error);
+                    if (interaction.replied || interaction.deferred) {
+                        yield interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                    }
+                    else {
+                        yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                    }
                 }
-            }
-            break;
-        default:
-            console.error(`${interaction.commandName}というコマンドには対応していません。`);
+                break;
+            default:
+                console.error(`${interaction.commandName}というコマンドには対応していません。`);
+        }
+    }
+    if (interaction.isButton()) {
+        switch (interaction.customId) {
+            case 'declaration':
+                yield interaction.reply({ content: '凸宣言されました', ephemeral: true });
+                break;
+            case 'remainingHP':
+                yield interaction.reply({ content: '残HPが表示されました', ephemeral: true });
+                break;
+            default:
+                console.error(`${interaction.customId}というボタンには対応していません。`);
+        }
     }
 }));
 // ログインします

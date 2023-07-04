@@ -24,10 +24,10 @@ function execute(interaction) {
         // 作成したカテゴリ内にチャンネル作成
         yield createManagementChannel(guild, '凸管理', categoryId);
         yield createBossChannel(guild, '1ボス', categoryId);
-        // await createChannel(guild, '2ボス', categoryId)
-        // await createChannel(guild, '3ボス', categoryId)
-        // await createChannel(guild, '4ボス', categoryId)
-        // await createChannel(guild, '5ボス', categoryId)
+        // await createBossChannel(guild, '2ボス', categoryId)
+        // await createBossChannel(guild, '3ボス', categoryId)
+        // await createBossChannel(guild, '4ボス', categoryId)
+        // await createBossChannel(guild, '5ボス', categoryId)
         yield interaction.reply('チャンネルを作成しました');
     });
 }
