@@ -17,9 +17,9 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const rest_1 = require("@discordjs/rest");
 const v10_1 = require("discord-api-types/v10");
 dotenv_1.default.config();
-const hey_1 = __importDefault(require("./commands/hey"));
-const dice_1 = __importDefault(require("./commands/dice"));
-const setup_1 = __importDefault(require("./commands/setup"));
+const hey_1 = __importDefault(require("./commands/slash/hey"));
+const dice_1 = __importDefault(require("./commands/slash/dice"));
+const setup_1 = __importDefault(require("./commands/slash/setup"));
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [
     hey_1.default.data.toJSON(),

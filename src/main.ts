@@ -5,9 +5,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // default exportsのインポート
-import hey from './commands/hey';
-import dice from './commands/dice';
-import setup from './commands/setup';
+import hey from './commands/slash/hey';
+import dice from './commands/slash/dice';
+import setup from './commands/slash/setup';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -50,7 +50,6 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
       case setup.data.name:
         // setupコマンドに対する処理
         try {
-          // var guild = client.guilds.cache.get(process.env.DISCORDGUILDID ?? '')
           await setup.execute(interaction);
         } catch (error) {
           console.error(error);

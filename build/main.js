@@ -17,9 +17,9 @@ const discord_js_1 = require("discord.js");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // default exportsのインポート
-const hey_1 = __importDefault(require("./commands/hey"));
-const dice_1 = __importDefault(require("./commands/dice"));
-const setup_1 = __importDefault(require("./commands/setup"));
+const hey_1 = __importDefault(require("./commands/slash/hey"));
+const dice_1 = __importDefault(require("./commands/slash/dice"));
+const setup_1 = __importDefault(require("./commands/slash/setup"));
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new discord_js_1.Client({ intents: [discord_js_1.GatewayIntentBits.Guilds, discord_js_1.GatewayIntentBits.GuildMembers] });
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
@@ -27,10 +27,8 @@ client.once(discord_js_1.Events.ClientReady, () => {
     var _a;
     console.log(`準備OKです! ${(_a = client.user) === null || _a === void 0 ? void 0 : _a.tag}がログインします。`);
 });
-//スラッシュコマンドに応答するには、interactionCreateのイベントリスナーを使う必要があります
 client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void 0, void 0, void 0, function* () {
-    // スラッシュ以外のコマンドの場合は対象外なので早期リターンさせて終了します
-    // コマンドにスラッシュが使われているかどうかはisChatInputCommand()で判断しています
+    // スラッシュコマンドの処理
     if (interaction.isChatInputCommand()) {
         switch (interaction.commandName) {
             case hey_1.default.data.name:
@@ -66,7 +64,6 @@ client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void
             case setup_1.default.data.name:
                 // setupコマンドに対する処理
                 try {
-                    // var guild = client.guilds.cache.get(process.env.DISCORDGUILDID ?? '')
                     yield setup_1.default.execute(interaction);
                 }
                 catch (error) {
@@ -83,6 +80,7 @@ client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void
                 console.error(`${interaction.commandName}というコマンドには対応していません。`);
         }
     }
+    // ボタンの処理
     if (interaction.isButton()) {
         switch (interaction.customId) {
             case 'declaration':

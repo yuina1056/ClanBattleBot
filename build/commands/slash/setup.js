@@ -15,12 +15,19 @@ exports.data = new discord_js_1.SlashCommandBuilder()
     .setName('setup')
     .setDescription('botを使い始める準備をします');
 function execute(interaction) {
-    var _a;
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        const guild = interaction.guild;
+        var guild;
+        if (interaction.guild != null) {
+            guild = interaction.guild;
+        }
+        else {
+            return;
+        }
+        // const guild = interaction.guild
         // カテゴリ作成
-        yield (guild === null || guild === void 0 ? void 0 : guild.channels.create({ name: 'クランバトル管理', type: discord_js_1.ChannelType.GuildCategory }));
-        const categoryId = (_a = guild === null || guild === void 0 ? void 0 : guild.channels.cache.find((channel) => channel.name === 'クランバトル管理')) === null || _a === void 0 ? void 0 : _a.id;
+        yield guild.channels.create({ name: 'クランバトル管理', type: discord_js_1.ChannelType.GuildCategory });
+        const categoryId = (_b = (_a = guild.channels.cache.find((channel) => channel.name === 'クランバトル管理')) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : '';
         // 作成したカテゴリ内にチャンネル作成
         yield createManagementChannel(guild, '凸管理', categoryId);
         yield createBossChannel(guild, '1ボス', categoryId);
@@ -38,13 +45,13 @@ exports.default = {
 };
 // 凸管理用チャンネル作成
 function createManagementChannel(guild, channelName, categoryId) {
-    var _a, _b;
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        yield (guild === null || guild === void 0 ? void 0 : guild.channels.create({ name: channelName, parent: categoryId }));
+        yield guild.channels.create({ name: channelName, parent: categoryId });
         const button = new discord_js_1.ButtonBuilder().setCustomId('hoge').setStyle(discord_js_1.ButtonStyle.Primary).setLabel("にゃーん").setEmoji("🐈");
         const row = new discord_js_1.ActionRowBuilder().addComponents(button).toJSON();
-        const channelId = (_a = guild === null || guild === void 0 ? void 0 : guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _a === void 0 ? void 0 : _a.id;
-        const channel = (_b = guild === null || guild === void 0 ? void 0 : guild.channels) === null || _b === void 0 ? void 0 : _b.cache.get(channelId !== null && channelId !== void 0 ? channelId : '');
+        const channelId = (_a = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _a === void 0 ? void 0 : _a.id;
+        const channel = guild.channels.cache.get(channelId !== null && channelId !== void 0 ? channelId : '');
         if (channel === null || channel === void 0 ? void 0 : channel.isTextBased()) {
             yield channel.send({
                 content: "猫になりたい",
