@@ -8,6 +8,8 @@ dotenv.config();
 import hey from './commands/slash/hey';
 import dice from './commands/slash/dice';
 import setup from './commands/slash/setup';
+import declaration from './commands/button/declaration';
+import remainingHP from './commands/button/remaining_hp';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -69,10 +71,18 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
   if (interaction.isButton()) {
     switch (interaction.customId) {
       case 'declaration':
-        await interaction.reply({ content: '凸宣言されました', ephemeral: true });
+        try {
+          await declaration.execute(interaction);
+        } catch (error) {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
         break;
       case 'remainingHP':
-        await interaction.reply({ content: '残HPが表示されました', ephemeral: true });
+        try {
+          await remainingHP.execute(interaction);
+        } catch (error) {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
         break;
       default:
         console.error(`${interaction.customId}というボタンには対応していません。`);

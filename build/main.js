@@ -20,6 +20,8 @@ dotenv_1.default.config();
 const hey_1 = __importDefault(require("./commands/slash/hey"));
 const dice_1 = __importDefault(require("./commands/slash/dice"));
 const setup_1 = __importDefault(require("./commands/slash/setup"));
+const declaration_1 = __importDefault(require("./commands/button/declaration"));
+const remaining_hp_1 = __importDefault(require("./commands/button/remaining_hp"));
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new discord_js_1.Client({ intents: [discord_js_1.GatewayIntentBits.Guilds, discord_js_1.GatewayIntentBits.GuildMembers] });
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
@@ -84,10 +86,20 @@ client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void
     if (interaction.isButton()) {
         switch (interaction.customId) {
             case 'declaration':
-                yield interaction.reply({ content: '凸宣言されました', ephemeral: true });
+                try {
+                    yield declaration_1.default.execute(interaction);
+                }
+                catch (error) {
+                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                }
                 break;
             case 'remainingHP':
-                yield interaction.reply({ content: '残HPが表示されました', ephemeral: true });
+                try {
+                    yield remaining_hp_1.default.execute(interaction);
+                }
+                catch (error) {
+                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                }
                 break;
             default:
                 console.error(`${interaction.customId}というボタンには対応していません。`);
