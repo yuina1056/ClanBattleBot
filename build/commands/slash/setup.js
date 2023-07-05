@@ -13,10 +13,21 @@ exports.execute = exports.data = void 0;
 const discord_js_1 = require("discord.js");
 exports.data = new discord_js_1.SlashCommandBuilder()
     .setName('setup')
-    .setDescription('botを使い始める準備をします');
+    .setDescription('botを使い始める準備をします')
+    .addRoleOption((option) => option.setName('ロール')
+    .setDescription('作成するクランのロールを入力')
+    .setRequired(true));
 function execute(interaction) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
+        var roleName;
+        if (interaction.options.data[0].role != null && interaction.options.data[0].role.managed) {
+            roleName = interaction.options.data[0].role.name;
+        }
+        else {
+            yield interaction.reply({ content: '指定されたロールは作成したロールではありません', ephemeral: true });
+            return;
+        }
         var guild;
         if (interaction.guild != null) {
             guild = interaction.guild;
@@ -24,10 +35,14 @@ function execute(interaction) {
         else {
             return;
         }
-        // const guild = interaction.guild
+        const categoryName = 'クランバトル管理(' + roleName + ')';
+        if (guild.channels.cache.find((channel) => channel.name === categoryName) != null) {
+            yield interaction.reply({ content: '既にチャンネルのセットアップが完了しています', ephemeral: true });
+            return;
+        }
         // カテゴリ作成
-        yield guild.channels.create({ name: 'クランバトル管理', type: discord_js_1.ChannelType.GuildCategory });
-        const categoryId = (_b = (_a = guild.channels.cache.find((channel) => channel.name === 'クランバトル管理')) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : '';
+        yield guild.channels.create({ name: categoryName, type: discord_js_1.ChannelType.GuildCategory });
+        const categoryId = (_b = (_a = guild.channels.cache.find((channel) => channel.name === categoryName)) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : '';
         // 作成したカテゴリ内にチャンネル作成
         yield createManagementChannel(guild, '凸管理', categoryId);
         yield createBossChannel(guild, '1ボス', categoryId);
@@ -35,7 +50,7 @@ function execute(interaction) {
         // await createBossChannel(guild, '3ボス', categoryId)
         // await createBossChannel(guild, '4ボス', categoryId)
         // await createBossChannel(guild, '5ボス', categoryId)
-        yield interaction.reply('チャンネルを作成しました');
+        yield interaction.reply({ content: 'チャンネルを作成しました', ephemeral: true });
     });
 }
 exports.execute = execute;
