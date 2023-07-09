@@ -14,7 +14,7 @@ export async function execute(interaction: CommandInteraction) {
   if (interaction.options.data[0].role != null && interaction.options.data[0].role.managed) {
     roleName = interaction.options.data[0].role.name
   } else {
-    await interaction.reply({ content: '指定されたロールは作成したロールではありません', ephemeral: true })
+    await interaction.reply({ content: '指定されたロールはユーザーで作成したロールではありません', ephemeral: true })
     return
   }
 
