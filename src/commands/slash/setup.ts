@@ -1,4 +1,4 @@
-import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilder, CommandInteraction, ButtonStyle, EmbedBuilder } from 'discord.js';
+import { ChannelType, SlashCommandBuilder, Guild, ActionRowBuilder, CommandInteraction, EmbedBuilder } from 'discord.js';
 
 import button_declaration from '../button/declaration';
 import button_remainingHP from '../button/remaining_hp';
@@ -57,7 +57,7 @@ export default {
 async function createManagementChannel(guild: Guild, channelName: string, categoryId: string) {
   await guild.channels.create({ name: channelName, parent: categoryId })
 
-  const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
+  const channelId = guild.channels.cache.find((channel) => {channel.name === channelName && channel.parentId === categoryId})?.id
   const channel = guild.channels.cache.get(channelId ?? '')
 
   if (channel?.isTextBased()) {
@@ -74,30 +74,38 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
   await guild.channels.create({ name: channelName, parent: categoryId })
 
   // コンポーネント定義
-  const embed = new EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields(
-    {
-      name: 'クラン名',
-      value: roleName
-    },
-    {
-      name: '段階',
-      value: "1段階目"
-    },
-    {
-      name: '周回数',
-      value: "1周目"
-    },
-    {
-      name: 'HP',
-      value: 'hogehoge:TODO'
-    },
-    {
-      name: '凸宣言者',
-      value: 'hogehoge:TODO'
-    }
-  )
+  const embed = new EmbedBuilder()
+    .setTitle(channelName)
+    .setColor("#00ff00")
+    .setFields(
+      {
+        name: 'クラン名',
+        value: roleName
+      },
+      {
+        name: '段階',
+        value: "1段階目"
+      },
+      {
+        name: '周回数',
+        value: "1周目"
+      },
+      {
+        name: 'HP',
+        value: 'hogehoge:TODO'
+      },
+      {
+        name: '凸宣言者',
+        value: 'hogehoge:TODO'
+      }
+    )
 
-  const channel = guild.channels.cache.get(guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id ?? '')
+  const channel = guild.channels.cache.get(
+    guild.channels.cache.find(
+      (channel) => {
+        channel.name === channelName && channel.parentId === categoryId
+      })?.id ?? ''
+  )
   if (channel?.isTextBased()) {
     await channel.send({
       embeds: [
