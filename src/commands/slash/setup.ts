@@ -10,7 +10,7 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: CommandInteraction) {
-  var roleName: string
+  let roleName: string
   if (interaction.options.data[0].role != null && interaction.options.data[0].role.managed) {
     roleName = interaction.options.data[0].role.name
   } else {
@@ -18,7 +18,7 @@ export async function execute(interaction: CommandInteraction) {
     return
   }
 
-  var guild: Guild
+  let guild: Guild
   if (interaction.guild != null) {
     guild = interaction.guild
   } else {
