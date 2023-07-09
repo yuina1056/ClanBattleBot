@@ -1,4 +1,9 @@
 import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilder, CommandInteraction, ButtonStyle, EmbedBuilder } from 'discord.js';
+
+import button_declaration from '../button/declaration';
+import button_remainingHP from '../button/remaining_hp';
+import button_magagement_setting from '../button/magagement_setting';
+
 export const data = new SlashCommandBuilder()
   .setName('setup')
   .setDescription('botを使い始める準備をします')
@@ -52,16 +57,13 @@ export default {
 async function createManagementChannel(guild: Guild, channelName: string, categoryId: string) {
   await guild.channels.create({ name: channelName, parent: categoryId })
 
-  // コンポーネント定義
-  const button = new ButtonBuilder().setCustomId('management_setting').setStyle(ButtonStyle.Primary).setLabel("設定")
-
   const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
   const channel = guild.channels.cache.get(channelId ?? '')
 
   if (channel?.isTextBased()) {
     await channel.send({
       components: [
-        new ActionRowBuilder().addComponents(button).toJSON() as any
+        new ActionRowBuilder().addComponents(button_magagement_setting.data).toJSON() as any
       ]
     })
   }
@@ -94,8 +96,6 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
       value: 'hogehoge:TODO'
     }
   )
-  const buttonDeclaration = new ButtonBuilder().setCustomId('declaration').setStyle(ButtonStyle.Primary).setLabel("凸宣言")
-  const buttonRemainingHP = new ButtonBuilder().setCustomId('remainingHP').setStyle(ButtonStyle.Danger).setLabel("残HP")
 
   const channel = guild.channels.cache.get(guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id ?? '')
   if (channel?.isTextBased()) {
@@ -104,7 +104,7 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
         embed.toJSON() as any
       ],
       components: [
-        new ActionRowBuilder().addComponents(buttonDeclaration, buttonRemainingHP).toJSON() as any,
+        new ActionRowBuilder().addComponents(button_declaration.data, button_remainingHP.data).toJSON() as any,
       ]
     })
   }

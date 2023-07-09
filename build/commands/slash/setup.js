@@ -8,9 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.execute = exports.data = void 0;
 const discord_js_1 = require("discord.js");
+const declaration_1 = __importDefault(require("../button/declaration"));
+const remaining_hp_1 = __importDefault(require("../button/remaining_hp"));
+const magagement_setting_1 = __importDefault(require("../button/magagement_setting"));
 exports.data = new discord_js_1.SlashCommandBuilder()
     .setName('setup')
     .setDescription('botを使い始める準備をします')
@@ -62,14 +68,12 @@ function createManagementChannel(guild, channelName, categoryId) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         yield guild.channels.create({ name: channelName, parent: categoryId });
-        // コンポーネント定義
-        const button = new discord_js_1.ButtonBuilder().setCustomId('management_setting').setStyle(discord_js_1.ButtonStyle.Primary).setLabel("設定");
         const channelId = (_a = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _a === void 0 ? void 0 : _a.id;
         const channel = guild.channels.cache.get(channelId !== null && channelId !== void 0 ? channelId : '');
         if (channel === null || channel === void 0 ? void 0 : channel.isTextBased()) {
             yield channel.send({
                 components: [
-                    new discord_js_1.ActionRowBuilder().addComponents(button).toJSON()
+                    new discord_js_1.ActionRowBuilder().addComponents(magagement_setting_1.default.data).toJSON()
                 ]
             });
         }
@@ -97,8 +101,6 @@ function createBossChannel(guild, roleName, channelName, categoryId) {
             name: '凸宣言者',
             value: 'hogehoge:TODO'
         });
-        const buttonDeclaration = new discord_js_1.ButtonBuilder().setCustomId('declaration').setStyle(discord_js_1.ButtonStyle.Primary).setLabel("凸宣言");
-        const buttonRemainingHP = new discord_js_1.ButtonBuilder().setCustomId('remainingHP').setStyle(discord_js_1.ButtonStyle.Danger).setLabel("残HP");
         const channel = guild.channels.cache.get((_b = (_a = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : '');
         if (channel === null || channel === void 0 ? void 0 : channel.isTextBased()) {
             yield channel.send({
@@ -106,7 +108,7 @@ function createBossChannel(guild, roleName, channelName, categoryId) {
                     embed.toJSON()
                 ],
                 components: [
-                    new discord_js_1.ActionRowBuilder().addComponents(buttonDeclaration, buttonRemainingHP).toJSON(),
+                    new discord_js_1.ActionRowBuilder().addComponents(declaration_1.default.data, remaining_hp_1.default.data).toJSON(),
                 ]
             });
         }

@@ -11,22 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.execute = exports.data = exports.customId = void 0;
 const discord_js_1 = require("discord.js");
-exports.customId = 'declaration';
+exports.customId = 'management_setting';
 exports.data = new discord_js_1.ButtonBuilder()
-    .setCustomId(exports.customId)
+    .setCustomId('management_setting')
     .setStyle(discord_js_1.ButtonStyle.Primary)
-    .setLabel("凸宣言");
+    .setLabel("設定");
 function execute(interaction) {
     return __awaiter(this, void 0, void 0, function* () {
-        let guild;
-        if (interaction.guild != null) {
-            guild = interaction.guild;
-        }
-        else {
-            return;
-        }
-        const user = guild.members.cache.get(interaction.user.id);
-        yield interaction.reply({ content: (user === null || user === void 0 ? void 0 : user.nickname) + 'が凸宣言しました' });
+        yield interaction.reply({ content: '凸管理の設定ボタンが押されました', ephemeral: true });
     });
 }
 exports.execute = execute;

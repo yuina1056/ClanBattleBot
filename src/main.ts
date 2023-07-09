@@ -10,6 +10,7 @@ import dice from './commands/slash/dice';
 import setup from './commands/slash/setup';
 import declaration from './commands/button/declaration';
 import remainingHP from './commands/button/remaining_hp';
+import magagement_setting from './commands/button/magagement_setting';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -70,16 +71,23 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
   // ボタンの処理
   if (interaction.isButton()) {
     switch (interaction.customId) {
-      case 'declaration':
+      case declaration.customId:
         try {
           await declaration.execute(interaction);
         } catch (error) {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }
         break;
-      case 'remainingHP':
+      case remainingHP.customId:
         try {
           await remainingHP.execute(interaction);
+        } catch (error) {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
+        break;
+      case magagement_setting.customId:
+        try {
+          await magagement_setting.execute(interaction);
         } catch (error) {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }

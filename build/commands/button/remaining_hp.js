@@ -9,7 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.execute = void 0;
+exports.execute = exports.data = exports.customId = void 0;
+const discord_js_1 = require("discord.js");
+exports.customId = 'remainingHP';
+exports.data = new discord_js_1.ButtonBuilder()
+    .setCustomId(exports.customId)
+    .setStyle(discord_js_1.ButtonStyle.Danger)
+    .setLabel("残HP");
 function execute(interaction) {
     return __awaiter(this, void 0, void 0, function* () {
         yield interaction.reply({ content: '残HPが表示されました', ephemeral: true });
@@ -17,5 +23,7 @@ function execute(interaction) {
 }
 exports.execute = execute;
 exports.default = {
+    customId: exports.customId,
+    data: exports.data,
     execute
 };

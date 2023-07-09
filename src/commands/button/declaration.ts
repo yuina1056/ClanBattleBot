@@ -1,4 +1,10 @@
-import { ButtonInteraction,Guild } from 'discord.js';
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
+export const customId = 'declaration'
+export const data = new ButtonBuilder()
+  .setCustomId(customId)
+  .setStyle(ButtonStyle.Primary)
+  .setLabel("凸宣言")
+
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild
@@ -12,5 +18,7 @@ export async function execute(interaction: ButtonInteraction) {
 }
 
 export default {
+  customId,
+  data,
   execute
 };

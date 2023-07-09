@@ -22,6 +22,7 @@ const dice_1 = __importDefault(require("./commands/slash/dice"));
 const setup_1 = __importDefault(require("./commands/slash/setup"));
 const declaration_1 = __importDefault(require("./commands/button/declaration"));
 const remaining_hp_1 = __importDefault(require("./commands/button/remaining_hp"));
+const magagement_setting_1 = __importDefault(require("./commands/button/magagement_setting"));
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new discord_js_1.Client({ intents: [discord_js_1.GatewayIntentBits.Guilds, discord_js_1.GatewayIntentBits.GuildMembers] });
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
@@ -85,7 +86,7 @@ client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void
     // ボタンの処理
     if (interaction.isButton()) {
         switch (interaction.customId) {
-            case 'declaration':
+            case declaration_1.default.customId:
                 try {
                     yield declaration_1.default.execute(interaction);
                 }
@@ -93,9 +94,17 @@ client.on(discord_js_1.Events.InteractionCreate, (interaction) => __awaiter(void
                     yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
                 }
                 break;
-            case 'remainingHP':
+            case remaining_hp_1.default.customId:
                 try {
                     yield remaining_hp_1.default.execute(interaction);
+                }
+                catch (error) {
+                    yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+                }
+                break;
+            case magagement_setting_1.default.customId:
+                try {
+                    yield magagement_setting_1.default.execute(interaction);
                 }
                 catch (error) {
                     yield interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
