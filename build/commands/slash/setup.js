@@ -21,11 +21,10 @@ function execute(interaction) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         let roleName;
-        if (interaction.options.data[0].role != null && interaction.options.data[0].role.managed) {
+        if (interaction.options.data[0].role != null) {
             roleName = interaction.options.data[0].role.name;
         }
         else {
-            yield interaction.reply({ content: '指定されたロールはユーザーで作成したロールではありません', ephemeral: true });
             return;
         }
         let guild;

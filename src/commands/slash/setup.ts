@@ -11,10 +11,9 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: CommandInteraction) {
   let roleName: string
-  if (interaction.options.data[0].role != null && interaction.options.data[0].role.managed) {
+  if (interaction.options.data[0].role != null) {
     roleName = interaction.options.data[0].role.name
   } else {
-    await interaction.reply({ content: '指定されたロールはユーザーで作成したロールではありません', ephemeral: true })
     return
   }
 
@@ -53,16 +52,16 @@ export default {
 async function createManagementChannel(guild: Guild, channelName: string, categoryId: string) {
   await guild.channels.create({ name: channelName, parent: categoryId })
 
-  const button = new ButtonBuilder().setCustomId('hoge').setStyle(ButtonStyle.Primary).setLabel("にゃーん").setEmoji("🐈")
-  const row = new ActionRowBuilder().addComponents(button).toJSON() as any
+  // コンポーネント定義
+  const button = new ButtonBuilder().setCustomId('management_setting').setStyle(ButtonStyle.Primary).setLabel("設定")
 
   const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
   const channel = guild.channels.cache.get(channelId ?? '')
+
   if (channel?.isTextBased()) {
     await channel.send({
-      content: "猫になりたい",
       components: [
-        row
+        new ActionRowBuilder().addComponents(button).toJSON() as any
       ]
     })
   }
@@ -80,11 +79,11 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
     },
     {
       name: '段階',
-      value: "hoge段階目"
+      value: "1段階目"
     },
     {
       name: '周回数',
-      value: "hoge周目"
+      value: "1周目"
     },
     {
       name: 'HP',
