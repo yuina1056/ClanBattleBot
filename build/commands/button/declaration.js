@@ -12,7 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.execute = void 0;
 function execute(interaction) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield interaction.reply({ content: '凸宣言されました', ephemeral: true });
+        let guild;
+        if (interaction.guild != null) {
+            guild = interaction.guild;
+        }
+        else {
+            return;
+        }
+        const user = guild.members.cache.get(interaction.user.id);
+        yield interaction.reply({ content: (user === null || user === void 0 ? void 0 : user.nickname) + 'が凸宣言しました' });
     });
 }
 exports.execute = execute;

@@ -62,15 +62,14 @@ function createManagementChannel(guild, channelName, categoryId) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         yield guild.channels.create({ name: channelName, parent: categoryId });
-        const button = new discord_js_1.ButtonBuilder().setCustomId('hoge').setStyle(discord_js_1.ButtonStyle.Primary).setLabel("にゃーん").setEmoji("🐈");
-        const row = new discord_js_1.ActionRowBuilder().addComponents(button).toJSON();
+        // コンポーネント定義
+        const button = new discord_js_1.ButtonBuilder().setCustomId('management_setting').setStyle(discord_js_1.ButtonStyle.Primary).setLabel("設定");
         const channelId = (_a = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _a === void 0 ? void 0 : _a.id;
         const channel = guild.channels.cache.get(channelId !== null && channelId !== void 0 ? channelId : '');
         if (channel === null || channel === void 0 ? void 0 : channel.isTextBased()) {
             yield channel.send({
-                content: "猫になりたい",
                 components: [
-                    row
+                    new discord_js_1.ActionRowBuilder().addComponents(button).toJSON()
                 ]
             });
         }
@@ -87,10 +86,10 @@ function createBossChannel(guild, roleName, channelName, categoryId) {
             value: roleName
         }, {
             name: '段階',
-            value: "hoge段階目"
+            value: "1段階目"
         }, {
             name: '周回数',
-            value: "hoge周目"
+            value: "1周目"
         }, {
             name: 'HP',
             value: 'hogehoge:TODO'
