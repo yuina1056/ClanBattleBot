@@ -20,15 +20,15 @@ exports.data = new discord_js_1.SlashCommandBuilder()
 function execute(interaction) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        var roleName;
+        let roleName;
         if (interaction.options.data[0].role != null && interaction.options.data[0].role.managed) {
             roleName = interaction.options.data[0].role.name;
         }
         else {
-            yield interaction.reply({ content: '指定されたロールは作成したロールではありません', ephemeral: true });
+            yield interaction.reply({ content: '指定されたロールはユーザーで作成したロールではありません', ephemeral: true });
             return;
         }
-        var guild;
+        let guild;
         if (interaction.guild != null) {
             guild = interaction.guild;
         }
@@ -45,11 +45,11 @@ function execute(interaction) {
         const categoryId = (_b = (_a = guild.channels.cache.find((channel) => channel.name === categoryName)) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : '';
         // 作成したカテゴリ内にチャンネル作成
         yield createManagementChannel(guild, '凸管理', categoryId);
-        yield createBossChannel(guild, '1ボス', categoryId);
-        // await createBossChannel(guild, '2ボス', categoryId)
-        // await createBossChannel(guild, '3ボス', categoryId)
-        // await createBossChannel(guild, '4ボス', categoryId)
-        // await createBossChannel(guild, '5ボス', categoryId)
+        yield createBossChannel(guild, roleName, '1ボス', categoryId);
+        // await createBossChannel(guild, roleName, '2ボス', categoryId)
+        // await createBossChannel(guild, roleName, '3ボス', categoryId)
+        // await createBossChannel(guild, roleName, '4ボス', categoryId)
+        // await createBossChannel(guild, roleName, '5ボス', categoryId)
         yield interaction.reply({ content: 'チャンネルを作成しました', ephemeral: true });
     });
 }
@@ -78,16 +78,35 @@ function createManagementChannel(guild, channelName, categoryId) {
     });
 }
 // 各ボス用チャンネル作成
-function createBossChannel(guild, channelName, categoryId) {
-    var _a, _b, _c;
+function createBossChannel(guild, roleName, channelName, categoryId) {
+    var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
-        yield (guild === null || guild === void 0 ? void 0 : guild.channels.create({ name: channelName, parent: categoryId }));
+        yield guild.channels.create({ name: channelName, parent: categoryId });
         // コンポーネント定義
+        const embed = new discord_js_1.EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields({
+            name: 'クラン名',
+            value: roleName
+        }, {
+            name: '段階',
+            value: "hoge段階目"
+        }, {
+            name: '周回数',
+            value: "hoge周目"
+        }, {
+            name: 'HP',
+            value: 'hogehoge:TODO'
+        }, {
+            name: '凸宣言者',
+            value: 'hogehoge:TODO'
+        });
         const buttonDeclaration = new discord_js_1.ButtonBuilder().setCustomId('declaration').setStyle(discord_js_1.ButtonStyle.Primary).setLabel("凸宣言");
         const buttonRemainingHP = new discord_js_1.ButtonBuilder().setCustomId('remainingHP').setStyle(discord_js_1.ButtonStyle.Danger).setLabel("残HP");
-        const channel = (_a = guild === null || guild === void 0 ? void 0 : guild.channels) === null || _a === void 0 ? void 0 : _a.cache.get((_c = (_b = guild === null || guild === void 0 ? void 0 : guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _b === void 0 ? void 0 : _b.id) !== null && _c !== void 0 ? _c : '');
+        const channel = guild.channels.cache.get((_b = (_a = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)) === null || _a === void 0 ? void 0 : _a.id) !== null && _b !== void 0 ? _b : '');
         if (channel === null || channel === void 0 ? void 0 : channel.isTextBased()) {
             yield channel.send({
+                embeds: [
+                    embed.toJSON()
+                ],
                 components: [
                     new discord_js_1.ActionRowBuilder().addComponents(buttonDeclaration, buttonRemainingHP).toJSON(),
                 ]
