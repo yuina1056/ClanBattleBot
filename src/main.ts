@@ -11,6 +11,8 @@ import setup from './commands/slash/setup';
 import declaration from './commands/button/declaration';
 import remainingHP from './commands/button/remaining_hp';
 import magagement_setting from './commands/button/magagement_setting';
+import declaration_shave from './commands/button/declaration_shave';
+import declaration_defeat from './commands/button/declaration_defeat';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -88,6 +90,20 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
       case magagement_setting.customId:
         try {
           await magagement_setting.execute(interaction);
+        } catch (error) {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
+        break;
+      case declaration_shave.customId:
+        try {
+          await declaration_shave.execute(interaction);
+        } catch (error) {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
+        break;
+      case declaration_defeat.customId:
+        try {
+          await declaration_defeat.execute(interaction);
         } catch (error) {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }

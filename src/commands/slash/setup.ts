@@ -3,6 +3,8 @@ import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilde
 import button_declaration from '../button/declaration';
 import button_remainingHP from '../button/remaining_hp';
 import button_magagement_setting from '../button/magagement_setting';
+import button_declaration_shave from '../button/declaration_shave';
+import button_declaration_defeat from '../button/declaration_defeat';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')
@@ -38,9 +40,11 @@ export async function execute(interaction: CommandInteraction) {
   const categoryId = guild.channels.cache.find((channel) => channel.name === categoryName)?.id ?? ''
 
   // 作成したカテゴリ内にチャンネル作成
-  await createManagementChannel(guild, '凸管理', categoryId)
-  await createBossChannel(guild, roleName, '1ボス', categoryId)
-  // await createBossChannel(guild, roleName, '2ボス', categoryId)
+  await createDeclarationChannel(guild, '凸宣言', categoryId)
+
+  // await createManagementChannel(guild, '凸管理', categoryId)
+  // await createBossChannel(guild, roleName, '1ボス', categoryId)
+  // // await createBossChannel(guild, roleName, '2ボス', categoryId)
   // await createBossChannel(guild, roleName, '3ボス', categoryId)
   // await createBossChannel(guild, roleName, '4ボス', categoryId)
   // await createBossChannel(guild, roleName, '5ボス', categoryId)
@@ -52,6 +56,21 @@ export default {
   data,
   execute
 };
+
+async function createDeclarationChannel(guild: Guild, channelName: string, categoryId: string) {
+  await guild.channels.create({ name: channelName, parent: categoryId })
+  const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
+  const channel = guild.channels.cache.get(channelId ?? '')
+
+  if (channel?.isTextBased()) {
+    await channel.send({
+      components: [
+        new ActionRowBuilder().addComponents(button_declaration_shave.data).toJSON() as any,
+        new ActionRowBuilder().addComponents(button_declaration_defeat.data).toJSON() as any
+      ]
+    })
+  }
+}
 
 // 凸管理用チャンネル作成
 async function createManagementChannel(guild: Guild, channelName: string, categoryId: string) {
