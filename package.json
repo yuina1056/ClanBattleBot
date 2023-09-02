@@ -7,7 +7,8 @@
     "test": "ts-node src/main.ts",
     "start": "node build/main.js",
     "compile": "tsc -p .",
-    "deploy-command": "node build/deploy-command.js"
+    "deploy-command": "node build/deploy-command.js",
+    "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",
   "license": "ISC",
