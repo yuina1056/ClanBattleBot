@@ -59,51 +59,31 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
 
   // ボタンの処理
   if (interaction.isButton()) {
+    let action:any = null
     switch (interaction.customId) {
       case declaration.customId:
-        try {
-          await declaration.execute(interaction);
-        } catch (error) {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
+        action = declaration
         break;
       case declaration_cancel.customId:
-        try {
-          await declaration_cancel.execute(interaction);
-        } catch (error) {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
-        break;
-      case remainingHP.customId:
-        try {
-          await remainingHP.execute(interaction);
-        } catch (error) {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
-        break;
-      case magagement_setting.customId:
-        try {
-          await magagement_setting.execute(interaction);
-        } catch (error) {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
+        action = declaration_cancel
         break;
       case report_shave.customId:
-        try {
-          await report_shave.execute(interaction);
-        } catch (error) {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
+        action = report_shave
         break;
       case report_defeat.customId:
-        try {
-          await report_defeat.execute(interaction);
-        } catch (error) {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
+        action = report_defeat
         break;
       default:
         console.error(`${interaction.customId}というボタンには対応していません。`);
+    }
+    if (action != null) {
+      try {
+        await action.execute(interaction);
+      } catch (error) {
+        await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+      }
+    } else {
+      await interaction.reply({ content: 'コマンドが登録されていません。', ephemeral: true });
     }
   }
 });
