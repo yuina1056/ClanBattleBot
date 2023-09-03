@@ -4,13 +4,11 @@ import { Routes } from 'discord-api-types/v10';
 
 dotenv.config();
 
-import heyFile from './commands/slash/hey';
 import diceFile from './commands/slash/dice';
 import setupFile from './commands/slash/setup';
 
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [
-  heyFile.data.toJSON(),
   diceFile.data.toJSON(),
   setupFile.data.toJSON()
 ];
