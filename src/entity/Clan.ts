@@ -10,6 +10,8 @@ export class Clan {
   name: string
   @Column()
   discordRoleId: string
+  @Column()
+  discordCategoryId: string
   @CreateDateColumn()
   CreatedAt?: Date
   @UpdateDateColumn()
@@ -18,8 +20,9 @@ export class Clan {
   @OneToMany(() => User, user => user.clan)
   users?: User[];
 
-  constructor(name: string, roleID: string) {
+  constructor(name: string, roleId: string, categoryId: string) {
     this.name = name
-    this.discordRoleId = roleID
+    this.discordRoleId = roleId
+    this.discordCategoryId = categoryId
   }
 }
