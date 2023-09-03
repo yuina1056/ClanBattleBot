@@ -1,8 +1,8 @@
 import { ButtonInteraction } from 'discord.js';
-import declaration_start from './declaration_start';
-import declaration_cancel from './declaration_cancel';
-import report_shave from './report_shave';
-import report_defeat from './report_defeat';
+import declaration_start from './button/declaration_start';
+import declaration_cancel from './button/declaration_cancel';
+import report_shave from './button/report_shave';
+import report_defeat from './button/report_defeat';
 
 export async function action(interaction: ButtonInteraction) {
   let action: any = null
