@@ -2,7 +2,7 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js
 export const customId = 'report_shave'
 export const data = new ButtonBuilder()
   .setCustomId(customId)
-  .setStyle(ButtonStyle.Primary)
+  .setStyle(ButtonStyle.Secondary)
   .setLabel("削り")
 
 

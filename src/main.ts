@@ -12,6 +12,7 @@ import remainingHP from './commands/button/remaining_hp';
 import magagement_setting from './commands/button/magagement_setting';
 import report_shave from './commands/button/report_shave';
 import report_defeat from './commands/button/report_defeat';
+import declaration_cancel from './commands/button/declaration_cancel';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -62,6 +63,13 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
       case declaration.customId:
         try {
           await declaration.execute(interaction);
+        } catch (error) {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
+        break;
+      case declaration_cancel.customId:
+        try {
+          await declaration_cancel.execute(interaction);
         } catch (error) {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }

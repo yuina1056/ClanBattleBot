@@ -2,7 +2,7 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js
 export const customId = 'declaration_cancel'
 export const data = new ButtonBuilder()
   .setCustomId(customId)
-  .setStyle(ButtonStyle.Primary)
+  .setStyle(ButtonStyle.Danger)
   .setLabel("取消")
 
 
