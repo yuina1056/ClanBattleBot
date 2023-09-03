@@ -1,19 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany , ManyToOne} from "typeorm"
+import { Report } from "./Report"
+import { Clan } from "./Clan"
 
 @Entity()
+// ユーザー
 export class User {
     @PrimaryGeneratedColumn()
     id?: number
     @Column()
-    firstName: string
+    clanId: number
+    @ManyToOne(() => Clan, clan => clan.users)
+    clan!: Clan;
     @Column()
-    lastName: string
+    name: string
     @Column()
-    age: number
+    discordUserId: string
+    @CreateDateColumn()
+    CreatedAt?: Date
+    @UpdateDateColumn()
+    UpdatedAt?: Date
+    @OneToMany(() => Report, report => report.user)
+    reports?: Report[];
 
-    constructor(firstName: string, lastName: string, age: number) {
-        this.firstName = firstName
-        this.lastName = lastName
-        this.age = age
+    constructor(clanId: number, name: string, discordUserId: string) {
+        this.clanId = clanId
+        this.name = name
+        this.discordUserId = discordUserId
     }
 }

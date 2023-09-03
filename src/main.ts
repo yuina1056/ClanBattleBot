@@ -5,7 +5,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // default exportsのインポート
-import hey from './commands/slash/hey';
 import dice from './commands/slash/dice';
 import setup from './commands/slash/setup';
 import declaration from './commands/button/declaration';
@@ -26,19 +25,6 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
   // スラッシュコマンドの処理
   if (interaction.isChatInputCommand()) {
     switch (interaction.commandName) {
-      case hey.data.name:
-        // heyコマンドに対する処理
-        try {
-          await hey.execute(interaction);
-        } catch (error) {
-          console.error(error);
-          if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-          } else {
-            await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-          }
-        }
-        break;
       case dice.data.name:
         // diceコマンドに対する処理
         try {
