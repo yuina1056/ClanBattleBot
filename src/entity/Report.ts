@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from "typeorm"
-import { User } from "./User"
+import User from "./User"
 
 @Entity()
 // 凸報告
-export class Report {
+export default class Report {
   @PrimaryGeneratedColumn()
   id?: number
   @Column()

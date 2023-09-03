@@ -1,10 +1,13 @@
 import "reflect-metadata"
 import { DataSource } from "typeorm"
 import dotenv from 'dotenv';
+import clan from "./entity/Clan"
+import user from "./entity/User"
+import report from "./entity/Report"
 
 dotenv.config();
 
-export default new DataSource({
+const dataSource = new DataSource({
     type: "mysql",
     host: process.env.DB_HOST!,
     port: Number(process.env.DB_PORT!),
@@ -13,6 +16,10 @@ export default new DataSource({
     database: process.env.DB_NAME!,
     synchronize: false,
     logging: false,
-    entities: ["src/entity/*.ts"],
+    entities: [clan, user, report],
     migrations: ["migration/*.ts"],
 })
+
+dataSource.initialize();
+
+export default dataSource;
