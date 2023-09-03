@@ -1,10 +1,10 @@
 import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilder, CommandInteraction, ButtonStyle, EmbedBuilder } from 'discord.js';
 
 import button_declaration from '../button/declaration';
-import button_remainingHP from '../button/remaining_hp';
 import button_magagement_setting from '../button/magagement_setting';
 import button_declaration_shave from '../button/declaration_shave';
 import button_declaration_defeat from '../button/declaration_defeat';
+import button_declaration_cancel from '../button/declaration_cancel';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')
@@ -40,11 +40,9 @@ export async function execute(interaction: CommandInteraction) {
   const categoryId = guild.channels.cache.find((channel) => channel.name === categoryName)?.id ?? ''
 
   // 作成したカテゴリ内にチャンネル作成
-  await createDeclarationChannel(guild, '凸宣言', categoryId)
-
   // await createManagementChannel(guild, '凸管理', categoryId)
-  // await createBossChannel(guild, roleName, '1ボス', categoryId)
-  // // await createBossChannel(guild, roleName, '2ボス', categoryId)
+  await createBossChannel(guild, roleName, '1ボス', categoryId)
+  // await createBossChannel(guild, roleName, '2ボス', categoryId)
   // await createBossChannel(guild, roleName, '3ボス', categoryId)
   // await createBossChannel(guild, roleName, '4ボス', categoryId)
   // await createBossChannel(guild, roleName, '5ボス', categoryId)
@@ -56,21 +54,6 @@ export default {
   data,
   execute
 };
-
-async function createDeclarationChannel(guild: Guild, channelName: string, categoryId: string) {
-  await guild.channels.create({ name: channelName, parent: categoryId })
-  const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
-  const channel = guild.channels.cache.get(channelId ?? '')
-
-  if (channel?.isTextBased()) {
-    await channel.send({
-      components: [
-        new ActionRowBuilder().addComponents(button_declaration_shave.data).toJSON() as any,
-        new ActionRowBuilder().addComponents(button_declaration_defeat.data).toJSON() as any
-      ]
-    })
-  }
-}
 
 // 凸管理用チャンネル作成
 async function createManagementChannel(guild: Guild, channelName: string, categoryId: string) {
@@ -93,37 +76,17 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
   await guild.channels.create({ name: channelName, parent: categoryId })
 
   // コンポーネント定義
-  const embed = new EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields(
-    {
-      name: 'クラン名',
-      value: roleName
-    },
-    {
-      name: '段階',
-      value: "1段階目"
-    },
-    {
-      name: '周回数',
-      value: "1周目"
-    },
-    {
-      name: 'HP',
-      value: 'hogehoge:TODO'
-    },
-    {
-      name: '凸宣言者',
-      value: 'hogehoge:TODO'
-    }
-  )
 
   const channel = guild.channels.cache.get(guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id ?? '')
   if (channel?.isTextBased()) {
     await channel.send({
-      embeds: [
-        embed.toJSON() as any
-      ],
       components: [
-        new ActionRowBuilder().addComponents(button_declaration.data, button_remainingHP.data).toJSON() as any,
+        new ActionRowBuilder().addComponents(
+          button_declaration.data,
+          button_declaration_shave.data,
+          button_declaration_defeat.data,
+          button_declaration_cancel.data
+        ).toJSON() as any,
       ]
     })
   }

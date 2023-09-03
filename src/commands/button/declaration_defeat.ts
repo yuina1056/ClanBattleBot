@@ -14,7 +14,7 @@ export async function execute(interaction: ButtonInteraction) {
     return
   }
   const user = guild.members.cache.get(interaction.user.id)
-  await interaction.reply({ content: user?.nickname + 'が凸宣言しました' });
+  await interaction.reply({ content: user?.nickname + 'が撃破しました' });
 }
 
 export default {
