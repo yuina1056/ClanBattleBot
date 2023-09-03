@@ -1,9 +1,9 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
-export const customId = 'declaration_defeat'
+export const customId = 'report_shave'
 export const data = new ButtonBuilder()
   .setCustomId(customId)
   .setStyle(ButtonStyle.Primary)
-  .setLabel("撃破")
+  .setLabel("削り")
 
 
 export async function execute(interaction: ButtonInteraction) {
@@ -14,7 +14,7 @@ export async function execute(interaction: ButtonInteraction) {
     return
   }
   const user = guild.members.cache.get(interaction.user.id)
-  await interaction.reply({ content: user?.nickname + 'が撃破しました' });
+  await interaction.reply({ content: user?.nickname + 'が削りました' });
 }
 
 export default {

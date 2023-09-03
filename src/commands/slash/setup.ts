@@ -1,9 +1,9 @@
 import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilder, CommandInteraction, ButtonStyle, EmbedBuilder } from 'discord.js';
 
-import button_declaration from '../button/declaration';
+import button_declaration from '../button/declaration_start';
 import button_magagement_setting from '../button/magagement_setting';
-import button_declaration_shave from '../button/declaration_shave';
-import button_declaration_defeat from '../button/declaration_defeat';
+import button_report_shave from '../button/report_shave';
+import button_report_defeat from '../button/report_defeat';
 import button_declaration_cancel from '../button/declaration_cancel';
 
 export const data = new SlashCommandBuilder()
@@ -83,8 +83,8 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
       components: [
         new ActionRowBuilder().addComponents(
           button_declaration.data,
-          button_declaration_shave.data,
-          button_declaration_defeat.data,
+          button_report_shave.data,
+          button_report_defeat.data,
           button_declaration_cancel.data
         ).toJSON() as any,
       ]

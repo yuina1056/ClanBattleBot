@@ -7,11 +7,11 @@ dotenv.config();
 // default exportsのインポート
 import dice from './commands/slash/dice';
 import setup from './commands/slash/setup';
-import declaration from './commands/button/declaration';
+import declaration from './commands/button/declaration_start';
 import remainingHP from './commands/button/remaining_hp';
 import magagement_setting from './commands/button/magagement_setting';
-import declaration_shave from './commands/button/declaration_shave';
-import declaration_defeat from './commands/button/declaration_defeat';
+import report_shave from './commands/button/report_shave';
+import report_defeat from './commands/button/report_defeat';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -80,16 +80,16 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }
         break;
-      case declaration_shave.customId:
+      case report_shave.customId:
         try {
-          await declaration_shave.execute(interaction);
+          await report_shave.execute(interaction);
         } catch (error) {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }
         break;
-      case declaration_defeat.customId:
+      case report_defeat.customId:
         try {
-          await declaration_defeat.execute(interaction);
+          await report_defeat.execute(interaction);
         } catch (error) {
           await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
         }
