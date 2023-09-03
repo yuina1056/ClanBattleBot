@@ -5,8 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // default exportsのインポート
-import slash from './commands/slash/slash';
-import button from './commands/button/button';
+import slash from './commands/slash';
+import button from './commands/button';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
