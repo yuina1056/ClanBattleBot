@@ -5,14 +5,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // default exportsのインポート
-import dice from './commands/slash/dice';
-import setup from './commands/slash/setup';
-import declaration from './commands/button/declaration_start';
-import remainingHP from './commands/button/remaining_hp';
-import magagement_setting from './commands/button/magagement_setting';
-import report_shave from './commands/button/report_shave';
-import report_defeat from './commands/button/report_defeat';
-import declaration_cancel from './commands/button/declaration_cancel';
+import slash from './commands/slash/slash';
+import button from './commands/button/button';
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
@@ -25,61 +19,11 @@ client.once(Events.ClientReady, () => {
 client.on(Events.InteractionCreate, async (interaction: Interaction) => {
   // スラッシュコマンドの処理
   if (interaction.isChatInputCommand()) {
-    let action: any = null
-    switch (interaction.commandName) {
-      case dice.data.name:
-        action = dice
-        break;
-      case setup.data.name:
-        action = setup
-        break;
-      default:
-        console.error(`${interaction.commandName}というコマンドには対応していません。`);
-    }
-    if (action != null) {
-      try {
-        await action.execute(interaction);
-      } catch (error) {
-        console.error(error);
-        if (interaction.replied || interaction.deferred) {
-          await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        } else {
-          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-        }
-      }
-    } else {
-      await interaction.reply({ content: 'コマンドが登録されていません。', ephemeral: true });
-    }
+    slash.action(interaction);
   }
-
   // ボタンの処理
   if (interaction.isButton()) {
-    let action:any = null
-    switch (interaction.customId) {
-      case declaration.customId:
-        action = declaration
-        break;
-      case declaration_cancel.customId:
-        action = declaration_cancel
-        break;
-      case report_shave.customId:
-        action = report_shave
-        break;
-      case report_defeat.customId:
-        action = report_defeat
-        break;
-      default:
-        console.error(`${interaction.customId}というボタンには対応していません。`);
-    }
-    if (action != null) {
-      try {
-        await action.execute(interaction);
-      } catch (error) {
-        await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-      }
-    } else {
-      await interaction.reply({ content: 'コマンドが登録されていません。', ephemeral: true });
-    }
+    button.action(interaction);
   }
 });
 
