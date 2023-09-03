@@ -25,35 +25,30 @@ client.once(Events.ClientReady, () => {
 client.on(Events.InteractionCreate, async (interaction: Interaction) => {
   // スラッシュコマンドの処理
   if (interaction.isChatInputCommand()) {
+    let action: any = null
     switch (interaction.commandName) {
       case dice.data.name:
-        // diceコマンドに対する処理
-        try {
-          await dice.execute(interaction);
-        } catch (error) {
-          console.error(error);
-          if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-          } else {
-            await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-          }
-        }
+        action = dice
         break;
       case setup.data.name:
-        // setupコマンドに対する処理
-        try {
-          await setup.execute(interaction);
-        } catch (error) {
-          console.error(error);
-          if (interaction.replied || interaction.deferred) {
-            await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-          } else {
-            await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
-          }
-        }
+        action = setup
         break;
       default:
         console.error(`${interaction.commandName}というコマンドには対応していません。`);
+    }
+    if (action != null) {
+      try {
+        await action.execute(interaction);
+      } catch (error) {
+        console.error(error);
+        if (interaction.replied || interaction.deferred) {
+          await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        } else {
+          await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        }
+      }
+    } else {
+      await interaction.reply({ content: 'コマンドが登録されていません。', ephemeral: true });
     }
   }
 
