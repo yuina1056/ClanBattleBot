@@ -23,6 +23,7 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case reload_attack_status.customId:
       action = reload_attack_status
+      break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
   }

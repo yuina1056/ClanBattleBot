@@ -1,7 +1,7 @@
 import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilder, CommandInteraction, ButtonStyle, EmbedBuilder } from 'discord.js';
 
 import button_declaration from '../button/declaration_start';
-import button_magagement_setting from '../button/reload_attack_status';
+import reload_attack_status from '../button/reload_attack_status';
 import button_report_shave from '../button/report_shave';
 import button_report_defeat from '../button/report_defeat';
 import button_declaration_cancel from '../button/declaration_cancel';
@@ -98,39 +98,8 @@ async function createManagementChannel(guild: Guild, channelName: string, catego
   const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
   const channel = guild.channels.cache.get(channelId ?? '')
 
-  // コンポーネント定義
-  const embed = new EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields(
-    {
-      name: '凸完了者',
-      value: 'なし'
-    },
-    {
-      name: '2凸完了者',
-      value: 'なし'
-    },
-    {
-      name: '1凸完了者',
-      value: 'なし'
-    },
-    {
-      name: '無凸',
-      value: 'なし'
-    },
-    {
-      name: '持ち越し',
-      value: 'なし'
-    }
-  )
-
   if (channel?.isTextBased()) {
-    await channel.send({
-      embeds: [
-        embed.toJSON() as any
-      ],
-      components: [
-        new ActionRowBuilder().addComponents(button_magagement_setting.data).toJSON() as any
-      ]
-    })
+    await reload_attack_status.sendDefaultMessage(channel!, channelName)
   }
 }
 
