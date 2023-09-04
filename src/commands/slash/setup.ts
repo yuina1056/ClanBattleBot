@@ -8,6 +8,7 @@ import button_declaration_cancel from '../button/declaration_cancel';
 
 import DataSource from '../../datasource';
 import Clan from '../../entity/Clan';
+import User from '../../entity/User';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')
@@ -35,6 +36,7 @@ export async function execute(interaction: CommandInteraction) {
   } else {
     return
   }
+
   const categoryName = 'クランバトル管理(' + roleName + ')'
   if (guild.channels.cache.find((channel) => channel.name === categoryName) != null) {
     await interaction.reply({content: '既にチャンネルのセットアップが完了しています', ephemeral: true })
@@ -45,10 +47,33 @@ export async function execute(interaction: CommandInteraction) {
   await guild.channels.create({ name: categoryName, type: ChannelType.GuildCategory })
   const categoryId = guild.channels.cache.find((channel) => channel.name === categoryName)?.id ?? ''
 
-  // DBにクラン情報保存
+    // DBにクラン情報保存
   const clan = new Clan(roleName, roleId, categoryId)
   const clanRepository = DataSource.getRepository(Clan)
-  await clanRepository.save(clan)
+  const saveClan = await clanRepository.save(clan)
+  if (saveClan == null) {
+    await interaction.reply({ content: 'クランの初期設定が完了しませんでした', ephemeral: true })
+    return
+  }
+
+  // Roleからユーザーを取得してDBに保存
+  const guildMembers = interaction.guild?.roles.cache.get(roleId)?.members
+  if (guildMembers != null) {
+    guildMembers.forEach(async (guildMember) => {
+      let userName: string = ""
+      // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
+      if (guildMember.nickname != null) {
+        userName = guildMember.nickname
+      } else if (guildMember.user.globalName != null) {
+        userName = guildMember.user.globalName
+      } else {
+        userName = guildMember.user.username
+      }
+      const user = new User(saveClan.id!, userName, guildMember.user.id)
+      const userRepository = DataSource.getRepository(User)
+      await userRepository.save(user)
+    })
+  }
 
   // 作成したカテゴリ内にチャンネル作成
   // await createManagementChannel(guild, '凸管理', categoryId)
@@ -92,10 +117,11 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
       name: 'クラン名',
       value: roleName
     },
-    {
-      name: '周回数',
-      value: "1周目"
-    },
+    // TODO: 今後実装
+    // {
+    //   name: '周回数',
+    //   value: "1周目"
+    // },
     // TODO: 今後実装
     // {
     //   name: 'HP',
