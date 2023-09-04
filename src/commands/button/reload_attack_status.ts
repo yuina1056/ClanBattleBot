@@ -7,10 +7,10 @@ export const data = new ButtonBuilder()
 
 export async function execute(interaction: ButtonInteraction) {
   await interaction.message.delete()
-  await sendDefaultMessage(interaction.channel!, "凸状況")
+  await sendDefaultMessage(interaction.channel!, "凸状況", false)
 }
 
-export async function sendDefaultMessage(channel: TextBasedChannel, channelName: string) {
+export async function sendDefaultMessage(channel: TextBasedChannel, channelName: string,isInit: boolean) {
   // コンポーネント定義
   const embed = new EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields(
     {

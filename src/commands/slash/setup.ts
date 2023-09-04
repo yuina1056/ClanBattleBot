@@ -99,7 +99,7 @@ async function createManagementChannel(guild: Guild, channelName: string, catego
   const channel = guild.channels.cache.get(channelId ?? '')
 
   if (channel?.isTextBased()) {
-    await reload_attack_status.sendDefaultMessage(channel!, channelName)
+    await reload_attack_status.sendDefaultMessage(channel!, channelName, true)
   }
 }
 
