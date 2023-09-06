@@ -1,4 +1,8 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
+
+import DataSource from '../../datasource';
+import User from '../../entity/User';
+
 export const customId = 'report_defeat'
 export const data = new ButtonBuilder()
   .setCustomId(customId)
@@ -13,8 +17,17 @@ export async function execute(interaction: ButtonInteraction) {
   } else {
     return
   }
-  const user = guild.members.cache.get(interaction.user.id)
-  await interaction.reply({ content: user?.nickname + 'が撃破しました' });
+  // ユーザー取得
+  const userRepository = DataSource.getRepository(User)
+  const user = await userRepository.findOneBy({ discordUserId: interaction.user.id })
+  if (user == null) {
+    return
+  }
+  console.log(user)
+  // DBに保存
+
+
+  await interaction.reply({ content: user.name + 'が撃破しました' });
 }
 
 export default {

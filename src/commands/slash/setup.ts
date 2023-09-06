@@ -21,6 +21,10 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: CommandInteraction) {
+  await interaction.deferReply({
+    ephemeral: true
+  });
+
   let roleName: string
   let roleId: string
   if (interaction.options.data[0].role != null) {
@@ -83,7 +87,7 @@ export async function execute(interaction: CommandInteraction) {
   await createBossChannel(guild, roleName, '4ボス', categoryId)
   await createBossChannel(guild, roleName, '5ボス', categoryId)
 
-  await interaction.reply({ content: 'チャンネルを作成しました', ephemeral: true });
+  await interaction.followUp({ content: 'チャンネルを作成しました', ephemeral: true });
 }
 
 export default {
