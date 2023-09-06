@@ -1,8 +1,10 @@
 import { ButtonInteraction } from 'discord.js';
-import declaration_start from './declaration_start';
-import declaration_cancel from './declaration_cancel';
-import report_shave from './report_shave';
-import report_defeat from './report_defeat';
+
+import declaration_start from './button/declaration_start';
+import declaration_cancel from './button/declaration_cancel';
+import report_shave from './button/report_shave';
+import report_defeat from './button/report_defeat';
+import reload_attack_status from './button/reload_attack_status';
 
 export async function action(interaction: ButtonInteraction) {
   let action: any = null
@@ -18,6 +20,9 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case report_defeat.customId:
       action = report_defeat
+      break;
+    case reload_attack_status.customId:
+      action = reload_attack_status
       break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
