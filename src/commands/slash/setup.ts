@@ -102,8 +102,7 @@ export default {
 async function createManagementChannel(guild: Guild, channelName: string, clan: Clan) {
   await guild.channels.create({ name: channelName, parent: clan.discordCategoryId })
 
-  const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)?.id
-  const channel = guild.channels.cache.get(channelId ?? '')
+  const channel = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)
   if (channel == null) {
     return
   }
