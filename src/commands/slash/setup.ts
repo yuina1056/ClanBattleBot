@@ -9,6 +9,7 @@ import button_declaration_cancel from '../button/declaration_cancel';
 import DataSource from '../../datasource';
 import Clan from '../../entity/Clan';
 import User from '../../entity/User';
+import Boss from '../../entity/Boss';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')
@@ -80,12 +81,12 @@ export async function execute(interaction: CommandInteraction) {
   }
 
   // 作成したカテゴリ内にチャンネル作成
-  await createManagementChannel(guild, '凸状況', categoryId)
-  await createBossChannel(guild, roleName, '1ボス', categoryId)
-  await createBossChannel(guild, roleName, '2ボス', categoryId)
-  await createBossChannel(guild, roleName, '3ボス', categoryId)
-  await createBossChannel(guild, roleName, '4ボス', categoryId)
-  await createBossChannel(guild, roleName, '5ボス', categoryId)
+  await createManagementChannel(guild, '凸状況', clan)
+  await createBossChannel(guild, roleName, 1, '1ボス', clan)
+  await createBossChannel(guild, roleName, 2, '2ボス', clan)
+  await createBossChannel(guild, roleName, 3, '3ボス', clan)
+  await createBossChannel(guild, roleName, 4, '4ボス', clan)
+  await createBossChannel(guild, roleName, 5, '5ボス', clan)
 
   await interaction.followUp({ content: 'チャンネルを作成しました', ephemeral: true });
 }
@@ -96,10 +97,10 @@ export default {
 };
 
 // 凸管理用チャンネル作成
-async function createManagementChannel(guild: Guild, channelName: string, categoryId: string) {
-  await guild.channels.create({ name: channelName, parent: categoryId })
+async function createManagementChannel(guild: Guild, channelName: string, clan: Clan) {
+  await guild.channels.create({ name: channelName, parent: clan.discordCategoryId })
 
-  const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id
+  const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)?.id
   const channel = guild.channels.cache.get(channelId ?? '')
 
   if (channel?.isTextBased()) {
@@ -108,8 +109,16 @@ async function createManagementChannel(guild: Guild, channelName: string, catego
 }
 
 // 各ボス用チャンネル作成
-async function createBossChannel(guild: Guild, roleName: string, channelName: string, categoryId: string) {
-  await guild.channels.create({ name: channelName, parent: categoryId })
+async function createBossChannel(guild: Guild, roleName: string, bossId: number, channelName: string, clan: Clan) {
+  await guild.channels.create({ name: channelName, parent: clan.discordCategoryId })
+
+  const channel = guild.channels.cache.get(guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)?.id ?? '')
+  if (channel == null) {
+    return
+  }
+  const boss = new Boss(clan.id!, bossId, channel.id)
+  const bossRepository = DataSource.getRepository(Boss)
+  await bossRepository.save(boss)
 
   // コンポーネント定義
   const embed = new EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields(
@@ -133,7 +142,6 @@ async function createBossChannel(guild: Guild, roleName: string, channelName: st
     }
   )
 
-  const channel = guild.channels.cache.get(guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === categoryId)?.id ?? '')
   if (channel?.isTextBased()) {
     await channel.send({
       embeds: [
