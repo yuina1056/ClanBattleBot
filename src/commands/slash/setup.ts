@@ -10,6 +10,8 @@ import DataSource from '../../datasource';
 import Clan from '../../entity/Clan';
 import User from '../../entity/User';
 import Boss from '../../entity/Boss';
+import management_message from '../../messages/ManagementChannelMessage';
+import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')
@@ -102,9 +104,12 @@ async function createManagementChannel(guild: Guild, channelName: string, clan: 
 
   const channelId = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)?.id
   const channel = guild.channels.cache.get(channelId ?? '')
+  if (channel == null) {
+    return
+  }
 
-  if (channel?.isTextBased()) {
-    await reload_attack_status.sendDefaultMessage(channel!, channelName, true)
+  if (channel.isTextBased()) {
+    await management_message.sendMessage(channel!, true)
   }
 }
 
@@ -120,41 +125,7 @@ async function createBossChannel(guild: Guild, roleName: string, bossId: number,
   const bossRepository = DataSource.getRepository(Boss)
   await bossRepository.save(boss)
 
-  // コンポーネント定義
-  const embed = new EmbedBuilder().setTitle(channelName).setColor("#00ff00").setFields(
-    {
-      name: 'クラン名',
-      value: roleName
-    },
-    // TODO: 今後実装
-    // {
-    //   name: '周回数',
-    //   value: "1周目"
-    // },
-    // TODO: 今後実装
-    // {
-    //   name: 'HP',
-    //   value: 'hogehoge:TODO'
-    // },
-    {
-      name: '凸宣言者',
-      value: '宣言者なし'
-    }
-  )
-
   if (channel?.isTextBased()) {
-    await channel.send({
-      embeds: [
-        embed.toJSON() as any
-      ],
-      components: [
-        new ActionRowBuilder().addComponents(
-          button_declaration.data,
-          button_report_shave.data,
-          button_report_defeat.data,
-          button_declaration_cancel.data
-        ).toJSON() as any,
-      ]
-    })
+    await BossChannelMessage.sendMessage(channel, clan, boss, true)
   }
 }
