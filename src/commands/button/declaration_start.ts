@@ -1,5 +1,5 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
-export const customId = 'declaration'
+export const customId = 'declaration_start'
 export const data = new ButtonBuilder()
   .setCustomId(customId)
   .setStyle(ButtonStyle.Primary)

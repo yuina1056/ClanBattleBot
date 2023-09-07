@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
 @Entity()
 // ボス情報

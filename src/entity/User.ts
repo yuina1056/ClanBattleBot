@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany , ManyToOne } from "typeorm"
 import Report from "./Report"
 import Clan from "./Clan"
+import Declaration from "./Declaration"
 
 @Entity()
 // ユーザー
@@ -21,6 +22,8 @@ export default class User {
     UpdatedAt?: Date
     @OneToMany(() => Report, report => report.user)
     reports?: Report[];
+    @OneToMany(() => Declaration, declaration => declaration.user)
+    declarations?: Declaration[];
 
     constructor(clanId: number, name: string, discordUserId: string) {
         this.clanId = clanId
