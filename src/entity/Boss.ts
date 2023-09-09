@@ -4,6 +4,8 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 // ボス情報
 export default class Boss {
   @PrimaryGeneratedColumn()
+  id?: number
+  @Column()
   bossid: number
   @Column()
   clanId: number

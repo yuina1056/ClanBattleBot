@@ -14,7 +14,7 @@ const dataSource = new DataSource({
     synchronize: false,
     logging: process.env.DB_LOGGING === 'true' ? true : false,
     entities: ["src/entity/*.ts"],
-    migrations: ["migration/*.ts"],
+    migrations: ["src/migration/*.ts"],
 })
 
 dataSource.initialize();
