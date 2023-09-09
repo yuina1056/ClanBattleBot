@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class AddInitialize1694220431881 implements MigrationInterface {
-    name = 'AddInitialize1694220431881'
+export class AddInitialize1694221451071 implements MigrationInterface {
+    name = 'AddInitialize1694221451071'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`
@@ -13,6 +13,22 @@ export class AddInitialize1694220431881 implements MigrationInterface {
                 \`lap\` int NOT NULL,
                 \`damage\` int NOT NULL,
                 \`isCarryOver\` tinyint NOT NULL,
+                \`CreatedAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+                \`UpdatedAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
+                PRIMARY KEY (\`id\`)
+            ) ENGINE = InnoDB
+        `);
+        await queryRunner.query(`
+            CREATE TABLE \`clan\` (
+                \`id\` int NOT NULL AUTO_INCREMENT,
+                \`name\` varchar(255) NOT NULL,
+                \`discordRoleId\` varchar(255) NOT NULL,
+                \`discordCategoryId\` varchar(255) NOT NULL,
+                \`boss1Lap\` int NOT NULL DEFAULT '0',
+                \`boss2Lap\` int NOT NULL DEFAULT '0',
+                \`boss3Lap\` int NOT NULL DEFAULT '0',
+                \`boss4Lap\` int NOT NULL DEFAULT '0',
+                \`boss5Lap\` int NOT NULL DEFAULT '0',
                 \`CreatedAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
                 \`UpdatedAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
                 PRIMARY KEY (\`id\`)
@@ -43,27 +59,12 @@ export class AddInitialize1694220431881 implements MigrationInterface {
             ) ENGINE = InnoDB
         `);
         await queryRunner.query(`
-            CREATE TABLE \`clan\` (
-                \`id\` int NOT NULL AUTO_INCREMENT,
-                \`name\` varchar(255) NOT NULL,
-                \`discordRoleId\` varchar(255) NOT NULL,
-                \`discordCategoryId\` varchar(255) NOT NULL,
-                \`boss1Lap\` int NOT NULL DEFAULT '0',
-                \`boss2Lap\` int NOT NULL DEFAULT '0',
-                \`boss3Lap\` int NOT NULL DEFAULT '0',
-                \`boss4Lap\` int NOT NULL DEFAULT '0',
-                \`boss5Lap\` int NOT NULL DEFAULT '0',
-                \`CreatedAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
-                \`UpdatedAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6) ON UPDATE CURRENT_TIMESTAMP(6),
-                PRIMARY KEY (\`id\`)
-            ) ENGINE = InnoDB
-        `);
-        await queryRunner.query(`
             CREATE TABLE \`boss\` (
-                \`bossid\` int NOT NULL AUTO_INCREMENT,
+                \`id\` int NOT NULL AUTO_INCREMENT,
+                \`bossid\` int NOT NULL,
                 \`clanId\` int NOT NULL,
                 \`discordChannelId\` varchar(255) NOT NULL,
-                PRIMARY KEY (\`bossid\`)
+                PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
         await queryRunner.query(`
@@ -94,13 +95,13 @@ export class AddInitialize1694220431881 implements MigrationInterface {
             DROP TABLE \`boss\`
         `);
         await queryRunner.query(`
-            DROP TABLE \`clan\`
-        `);
-        await queryRunner.query(`
             DROP TABLE \`user\`
         `);
         await queryRunner.query(`
             DROP TABLE \`declaration\`
+        `);
+        await queryRunner.query(`
+            DROP TABLE \`clan\`
         `);
         await queryRunner.query(`
             DROP TABLE \`report\`

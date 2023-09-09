@@ -1,11 +1,5 @@
 import { ChannelType, SlashCommandBuilder, Guild, ButtonBuilder, ActionRowBuilder, CommandInteraction, ButtonStyle, EmbedBuilder } from 'discord.js';
 
-import button_declaration from '../button/declaration_start';
-import reload_attack_status from '../button/reload_attack_status';
-import button_report_shave from '../button/report_shave';
-import button_report_defeat from '../button/report_defeat';
-import button_declaration_cancel from '../button/declaration_cancel';
-
 import DataSource from '../../datasource';
 import Clan from '../../entity/Clan';
 import User from '../../entity/User';
