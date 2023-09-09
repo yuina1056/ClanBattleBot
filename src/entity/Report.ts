@@ -19,18 +19,18 @@ export default class Report {
   @Column()
   damage: number
   @Column()
-  isDefeated: boolean
+  isCarryOver: boolean
   @CreateDateColumn()
   CreatedAt?: Date
   @UpdateDateColumn()
   UpdatedAt?: Date
 
-  constructor(clanId: number, userId: number, bossId: number, lap: number, damage: number, isDefeated: boolean) {
+  constructor(clanId: number, userId: number, bossId: number, lap: number, damage: number, isDefeated: boolean, isCarryOver: boolean) {
     this.clanId = clanId
     this.userId = userId
     this.bossId = bossId
     this.lap = lap
     this.damage = damage
-    this.isDefeated = isDefeated
+    this.isCarryOver = isCarryOver
   }
 }

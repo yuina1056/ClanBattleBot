@@ -12,6 +12,16 @@ export default class Clan {
   discordRoleId: string
   @Column()
   discordCategoryId: string
+  @Column({ default: 0 })
+  boss1Lap?: number
+  @Column({ default: 0 })
+  boss2Lap?: number
+  @Column({ default: 0 })
+  boss3Lap?: number
+  @Column({ default: 0 })
+  boss4Lap?: number
+  @Column({default: 0})
+  boss5Lap?: number
   @CreateDateColumn()
   CreatedAt?: Date
   @UpdateDateColumn()

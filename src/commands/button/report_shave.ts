@@ -33,10 +33,10 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   // DBに保存
-  const report = new Report(user.clanId, user.id!, boss.bossid, 0, 0, false)
+  const report = new Report(user.clanId, user.id!, boss.bossid, 0, 0, false, false)
   const reportRepository = DataSource.getRepository(Report)
   await reportRepository.save(report)
-  
+
   await interaction.reply({ content: user.name + 'が削りました' });
 }
 
