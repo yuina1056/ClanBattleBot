@@ -12,7 +12,7 @@ const dataSource = new DataSource({
     password: process.env.DB_PASS!,
     database: process.env.DB_NAME!,
     synchronize: false,
-    logging: true,
+    logging: process.env.DB_LOGGING === 'true' ? true : false,
     entities: ["src/entity/*.ts"],
     migrations: ["migration/*.ts"],
 })
