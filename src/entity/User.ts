@@ -32,40 +32,49 @@ export default class User {
         this.discordUserId = discordUserId
     }
     public getAttackStatus(event: Event): string {
-        let res: string = ''
+        let res: string = this.name + ' [－/－/－]'
         if (this.reports == null || this.reports.length === 0) {
-            // bot登録から一度も凸したことがない場合
-            res = this.name+' [－/－/－]'
         } else {
-            // bot登録してから一度凸したことがある
             const thisMonthReports = this.reports.filter(report => report.month === event.month)
-            if (thisMonthReports.length === 0) {
-                // クラバト期間内無凸
-                res = this.name + ' [－/－/－]'
-            } else {
-                // クラバト期間内凸あり
+            if (thisMonthReports.length !== 0) {
                 const todayReports = thisMonthReports.filter(report => report.event.getClanBattleDay() === event.getClanBattleDay())
-                if (todayReports.length === 0) {
-                    // 当日無凸
-                    res = this.name + ' [－/－/－]'
-                } else {
+                if (todayReports.length !== 0) {
                     // 当日凸あり
-                    const boss1Reports = todayReports.filter(report => report.bossId === 1)
-                    const boss2Reports = todayReports.filter(report => report.bossId === 2)
-                    const boss3Reports = todayReports.filter(report => report.bossId === 3)
-                    const boss4Reports = todayReports.filter(report => report.bossId === 4)
-                    const boss5Reports = todayReports.filter(report => report.bossId === 5)
-                    const boss1Damage = boss1Reports.reduce((sum, report) => sum + report.damage, 0)
-                    const boss2Damage = boss2Reports.reduce((sum, report) => sum + report.damage, 0)
-                    const boss3Damage = boss3Reports.reduce((sum, report) => sum + report.damage, 0)
-                    const boss4Damage = boss4Reports.reduce((sum, report) => sum + report.damage, 0)
-                    const boss5Damage = boss5Reports.reduce((sum, report) => sum + report.damage, 0)
-                    res = this.name + ' [' + boss1Damage + '/' + boss2Damage + '/' + boss3Damage + '/' + boss4Damage + '/' + boss5Damage + ']'
+                    res = this.name + ' ['
+                    for (let index = 1; index <= 3; index++) {
+                        const todayAttackCountReports = todayReports.filter(report => report.attackCount === index)
+                        if (todayAttackCountReports.length === 0) {
+                            // 凸なし
+                            res += '－'
+                        } else {
+                            // 凸あり
+                            if (todayAttackCountReports.length === 0) {
+                                // 凸なし
+                                res += '－'
+                            } else {
+                                // 凸あり
+                                let resDefeat: string = ''
+                                let resShave: string = ''
+                                todayAttackCountReports.forEach(report => {
+                                    if (!report.isCarryOver) {
+                                        resShave = report.bossId + '削り'
+                                    } else {
+                                        resDefeat += report.bossId + '撃破'
+                                    }
+                                })
+                                if (resDefeat === '') {
+                                    res += resShave
+                                } else {
+                                    res += resDefeat + resShave
+                                }
+                            }
+                        }
+                        res += '/'
+                    }
+                    res += ']'
                 }
             }
         }
-
-
         return res
     }
 }
