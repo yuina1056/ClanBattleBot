@@ -1,5 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from "typeorm"
 import User from "./User"
+import Event from "./Event"
 
 @Entity()
 // 凸宣言
@@ -13,9 +14,17 @@ export default class Declaration {
   @ManyToOne(() => User, user => user.declarations)
   user!: User;
   @Column()
+  month: string
+  @ManyToOne(() => Event, event => event.declarations)
+  event!: Event;
+  @Column()
   bossId: number
   @Column()
   lap: number
+  @Column()
+  day: number
+  @Column()
+  attackCount: number
   @Column()
   isFinished: boolean
   @CreateDateColumn()
@@ -23,11 +32,14 @@ export default class Declaration {
   @UpdateDateColumn()
   UpdatedAt?: Date
 
-  constructor(clanId: number, userId: number, bossId: number, lap: number, isFinished: boolean) {
+  constructor(clanId: number, userId: number,month: string, bossId: number, lap: number,day: number,attackCount: number, isFinished: boolean) {
     this.clanId = clanId
     this.userId = userId
+    this.month = month
     this.bossId = bossId
     this.lap = lap
+    this.day = day
+    this.attackCount = attackCount
     this.isFinished = isFinished
   }
 }

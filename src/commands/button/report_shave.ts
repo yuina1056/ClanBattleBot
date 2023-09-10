@@ -33,7 +33,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   // DBに保存
-  const report = new Report(user.clanId, user.id!, boss.bossid, 0, 0, false, false)
+  const report = new Report(user.clanId, user.id!, '202308', boss.bossid, 0, 1, 1, 0, false)
   const reportRepository = DataSource.getRepository(Report)
   await reportRepository.save(report)
 

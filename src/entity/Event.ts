@@ -1,6 +1,8 @@
-import { Entity, Column, PrimaryColumn } from "typeorm"
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm"
 import dayjs from "dayjs"
 
+import Report from "./Report"
+import Declaration from "./Declaration"
 
 @Entity()
 // クランバトル開催情報
@@ -11,6 +13,11 @@ export default class Event {
   fromDate: Date
   @Column()
   toDate: Date
+
+  @OneToMany(() => Report, report => report.event)
+  reports?: Report[];
+  @OneToMany(() => Declaration, declaration => declaration.event)
+  declarations?: Declaration[];
 
   constructor(month: string, fromDate: Date, toDate: Date) {
     this.month = month
