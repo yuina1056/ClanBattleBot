@@ -14,7 +14,7 @@ export default class Report {
   @ManyToOne(() => User, user => user.reports)
   user!: User;
   @Column()
-  month: string
+  eventId: number
   @ManyToOne(() => Event, event => event.reports)
   event!: Event;
   @Column()
@@ -34,10 +34,10 @@ export default class Report {
   @UpdateDateColumn()
   UpdatedAt?: Date
 
-  constructor(clanId: number, userId: number, month: string, bossId: number, lap: number, day: number, attackCount: number, damage: number, isCarryOver: boolean) {
+  constructor(clanId: number, userId: number, eventId: number, bossId: number, lap: number, day: number, attackCount: number, damage: number, isCarryOver: boolean) {
     this.clanId = clanId
     this.userId = userId
-    this.month = month
+    this.eventId = eventId
     this.bossId = bossId
     this.lap = lap
     this.day = day

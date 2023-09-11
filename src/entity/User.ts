@@ -1,4 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany , ManyToOne } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany, ManyToOne } from "typeorm"
+import dayjs from "dayjs"
+
 import Report from "./Report"
 import Clan from "./Clan"
 import Event from "./Event"
@@ -31,13 +33,21 @@ export default class User {
         this.name = name
         this.discordUserId = discordUserId
     }
-    public getAttackStatus(event: Event): string {
+    public getAttackStatus(event: Event | null): string {
         let res: string = this.name + ' [－/－/－]'
+        if (event == null) {
+            return res
+        }
         if (this.reports == null || this.reports.length === 0) {
+            return res
         } else {
-            const thisMonthReports = this.reports.filter(report => report.month === event.month)
+            const thisMonthReports = this.reports.filter((report) => {
+                return report.eventId == event.id
+            })
             if (thisMonthReports.length !== 0) {
-                const todayReports = thisMonthReports.filter(report => report.event.getClanBattleDay() === event.getClanBattleDay())
+                const todayReports = thisMonthReports.filter((report) => {
+                    return report.day == event.getClanBattleDay()
+                })
                 if (todayReports.length !== 0) {
                     // 当日凸あり
                     res = this.name + ' ['
@@ -69,11 +79,16 @@ export default class User {
                                 }
                             }
                         }
-                        res += '/'
+                        if (index !== 3) {
+                            res += '/'
+                        }
                     }
                     res += ']'
                 }
             }
+            const maxId = Math.max(...this.reports.map(report => report.id) as number[]);
+            const latestReport = this.reports.find(report => report.id === maxId);
+            res += '('+dayjs(latestReport?.CreatedAt!).format('MM/DD HH:mm')+')'
         }
         return res
     }

@@ -1,13 +1,16 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm"
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from "typeorm"
 import dayjs from "dayjs"
 
 import Report from "./Report"
 import Declaration from "./Declaration"
 
 @Entity()
+@Unique(["month"])
 // クランバトル開催情報
 export default class Event {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id?: number
+  @Column()
   month: string // yyyymmで入力
   @Column()
   fromDate: Date

@@ -14,7 +14,7 @@ export default class Declaration {
   @ManyToOne(() => User, user => user.declarations)
   user!: User;
   @Column()
-  month: string
+  eventId: number
   @ManyToOne(() => Event, event => event.declarations)
   event!: Event;
   @Column()
@@ -32,10 +32,10 @@ export default class Declaration {
   @UpdateDateColumn()
   UpdatedAt?: Date
 
-  constructor(clanId: number, userId: number,month: string, bossId: number, lap: number,day: number,attackCount: number, isFinished: boolean) {
+  constructor(clanId: number, userId: number,eventId: number, bossId: number, lap: number,day: number,attackCount: number, isFinished: boolean) {
     this.clanId = clanId
     this.userId = userId
-    this.month = month
+    this.eventId = eventId
     this.bossId = bossId
     this.lap = lap
     this.day = day
