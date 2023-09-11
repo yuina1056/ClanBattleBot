@@ -34,10 +34,9 @@ export async function execute(interaction: ButtonInteraction) {
       }
     }
   })
-  // await interaction.message.delete()
-  await ManagementMessage.sendMessage(interaction.channel!, users, event, false)
-  const reply = await interaction.reply({ content: '更新しました', ephemeral: true })
-  await setTimeout(() =>{},10000);
+  await ManagementMessage.sendMessage(interaction.channel!, interaction.message, users, event, false)
+  const reply = await interaction.reply({ content: 'reload', ephemeral: true })
+  await setTimeout(() =>{},20000);
   await reply.delete()
 }
 

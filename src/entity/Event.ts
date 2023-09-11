@@ -29,6 +29,12 @@ export default class Event {
   }
 
   public getClanBattleDay(): number {
-    return dayjs().diff(dayjs(this.fromDate), 'day') + 1;
+    const now = dayjs()
+    if (now.isBefore(dayjs(this.fromDate))) {
+      throw new Error('クランバトル期間外です。');
+    }
+    const dayDifference = now.diff(dayjs(this.fromDate), 'day');
+
+    return dayDifference + 1;
   }
 }

@@ -53,7 +53,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   // DBに保存
-  const report = new Report(user.clanId, user.id!, event!.id!, boss.bossid, 0, 1, 1, 0, true)
+  const report = new Report(user.clanId, user.id!, event!.id!, boss.bossid, 0, event.getClanBattleDay(), 1, 0, true)
   await DataSource.getRepository(Report).save(report).catch((err) => {
     console.log(err)
   })

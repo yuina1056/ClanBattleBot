@@ -103,7 +103,7 @@ async function createManagementChannel(guild: Guild, channelName: string, clan: 
   const users = await DataSource.getRepository(User).findBy({ clanId: clan.id })
 
   if (channel.isTextBased()) {
-    await management_message.sendMessage(channel!,users, null, true)
+    await management_message.sendMessage(channel!, null,users, null, true)
   }
 }
 

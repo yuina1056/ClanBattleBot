@@ -27,6 +27,9 @@ export async function execute(interaction: ButtonInteraction) {
     .where('event.fromDate <= :today', { today })
     .andWhere('event.toDate >= :today', { today })
     .getOne();
+  if (event == null) {
+    return
+  }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss)
   const boss = await bossRepository.findOneBy({ discordChannelId: interaction.channel!.id })
@@ -41,7 +44,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   // DBに保存
-  const declaration = new Declaration(user.clanId, user.id!,event!.id!, boss.bossid, 0, 1, 1, false)
+  const declaration = new Declaration(user.clanId, user.id!,event!.id!, boss.bossid, 0, event.getClanBattleDay(), 1, false)
   const declarationRepository = DataSource.getRepository(Declaration)
   await declarationRepository.save(declaration)
 

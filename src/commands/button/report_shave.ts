@@ -28,6 +28,9 @@ export async function execute(interaction: ButtonInteraction) {
     .where('event.fromDate <= :today', { today })
     .andWhere('event.toDate >= :today', { today })
     .getOne();
+  if (event == null) {
+    return
+  }
   const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id)
   const clan = await DataSource.getRepository(Clan).findOneBy({ discordCategoryId: channel!.parentId! })
   // ボス情報取得
@@ -47,7 +50,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   // DBに保存
-  const report = new Report(user.clanId, user.id!, event!.id!, boss.bossid, 0, 1, 1, 0, false)
+  const report = new Report(user.clanId, user.id!, event!.id!, boss.bossid, 0, event.getClanBattleDay(), 1, 0, false)
   const reportRepository = DataSource.getRepository(Report)
   await reportRepository.save(report)
 
