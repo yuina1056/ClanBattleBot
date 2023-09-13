@@ -7,6 +7,7 @@ import Report from '../../entity/Report';
 import Boss from '../../entity/Boss';
 import Clan from '../../entity/Clan';
 import Event from '../../entity/Event';
+import Declaration from '../../entity/Declaration';
 
 export const customId = 'report_defeat'
 export const data = new ButtonBuilder()
@@ -16,6 +17,7 @@ export const data = new ButtonBuilder()
 
 
 export async function execute(interaction: ButtonInteraction) {
+  let content: string = ''
   let guild: Guild
   if (interaction.guild != null) {
     guild = interaction.guild
@@ -48,14 +50,22 @@ export async function execute(interaction: ButtonInteraction) {
   if (user == null) {
     throw new Error('user is null')
   }
+  const declarationRepository = DataSource.getRepository(Declaration)
+  const declaration = await declarationRepository.findOneBy({ isFinished: false })
+  if (declaration == null) {
+    content = '凸宣言がされていません'
+    await interaction.reply({ content: content });
+    return
+  }
+  await declarationRepository.update(declaration!.id!, { isFinished: true })
 
   // DBに保存
   const report = new Report(user.clanId, user.id!, event!.id!, boss.bossid, 0, event.getClanBattleDay(), 1, 0, true)
   await DataSource.getRepository(Report).save(report).catch((err) => {
     console.log(err)
   })
-
-  await interaction.reply({ content: user.name + 'が撃破しました' });
+  content = user.name + 'が撃破しました'
+  await interaction.reply({ content: content });
 }
 
 export default {

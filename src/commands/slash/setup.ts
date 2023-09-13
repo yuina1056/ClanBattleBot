@@ -6,6 +6,7 @@ import User from '../../entity/User';
 import Boss from '../../entity/Boss';
 import management_message from '../../messages/ManagementChannelMessage';
 import BossChannelMessage from '../../messages/BossChannelMessage';
+import Declaration from '../../entity/Declaration';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')
@@ -119,7 +120,8 @@ async function createBossChannel(guild: Guild, roleName: string, bossId: number,
   const bossRepository = DataSource.getRepository(Boss)
   await bossRepository.save(boss)
 
+  const declaration: Declaration[] = []
   if (channel?.isTextBased()) {
-    await BossChannelMessage.sendMessage(channel, clan, boss, true)
+    await BossChannelMessage.sendMessage(channel, clan, boss, declaration, true)
   }
 }

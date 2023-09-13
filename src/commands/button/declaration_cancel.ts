@@ -36,7 +36,8 @@ export async function execute(interaction: ButtonInteraction) {
   const declarationRepository = DataSource.getRepository(Declaration)
   const declaration = await declarationRepository.findOneBy({ userId: user.id, isFinished: false })
   if (declaration == null) {
-    throw new Error('declaration is null')
+    await interaction.reply({ content: '取り消しする凸宣言がありません' });
+    return
   }
   await declarationRepository.delete(declaration.id!)
 

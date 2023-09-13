@@ -7,6 +7,7 @@ import Report from '../../entity/Report';
 import Boss from '../../entity/Boss';
 import Clan from '../../entity/Clan';
 import Event from '../../entity/Event';
+import Declaration from '../../entity/Declaration';
 
 export const customId = 'report_shave'
 export const data = new ButtonBuilder()
@@ -48,6 +49,13 @@ export async function execute(interaction: ButtonInteraction) {
   if (user == null) {
     throw new Error('user is null')
   }
+  const declarationRepository = DataSource.getRepository(Declaration)
+  const declaration = await declarationRepository.findOneBy({ isFinished: false })
+  if (declaration == null) {
+    await interaction.reply({ content: '凸宣言がされていません' });
+    return
+  }
+  await declarationRepository.update(declaration!.id!, { isFinished: true })
 
   // DBに保存
   const report = new Report(user.clanId, user.id!, event!.id!, boss.bossid, 0, event.getClanBattleDay(), 1, 0, false)

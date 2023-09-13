@@ -6,8 +6,10 @@ import button_report_defeat from "../commands/button/report_defeat"
 import button_declaration_cancel from "../commands/button/declaration_cancel"
 import Clan from "../entity/Clan"
 import Boss from "../entity/Boss"
+import Declaration from "../entity/Declaration"
 
-export async function sendMessage(channel: TextBasedChannel, clan: Clan,boss: Boss, isInit: boolean) {
+export async function sendMessage(channel: TextBasedChannel, clan: Clan, boss: Boss, declaration: Declaration[], isInit: boolean) {
+  let declarationMember = '凸宣言者なし'
   // コンポーネント定義
   const embed = new EmbedBuilder().setTitle(boss.bossid +"ボス").setColor("#00ff00").setFields(
     {
@@ -26,7 +28,7 @@ export async function sendMessage(channel: TextBasedChannel, clan: Clan,boss: Bo
     // },
     {
       name: '凸宣言者',
-      value: '宣言者なし'
+      value: declarationMember
     }
   )
 
