@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from 'discord.js';
 
-import Declaration from '../../model/Declaration';
+import Declaration from '../../app/model/Declaration';
 import DataSource from '../../datasource';
 import Boss from '../../entity/Boss';
 

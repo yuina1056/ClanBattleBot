@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 
-import DataSource from '../datasource';
-import User from '../entity/User';
-import Boss from '../entity/Boss';
-import Declaration from '../entity/Declaration';
-import Event from '../entity/Event';
+import DataSource from '../../datasource';
+import User from '../../entity/User';
+import Boss from '../../entity/Boss';
+import Declaration from '../../entity/Declaration';
+import Event from '../../entity/Event';
 
 export async function regist(boss:Boss, discordUserId: string, attackCount: number): Promise<User | Error> {
   const today = dayjs().format()
