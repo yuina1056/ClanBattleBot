@@ -14,9 +14,7 @@ export const data = new ButtonBuilder()
   .setLabel("凸状況更新")
 
 export async function execute(interaction: ButtonInteraction) {
-  await interaction.deferReply({
-    ephemeral: true
-  });
+  await interaction.deferUpdate();
   const guild = interaction.guild
   if (guild == null) {
     throw new Error('guild is null')
@@ -38,7 +36,6 @@ export async function execute(interaction: ButtonInteraction) {
     }
   })
   await ManagementMessage.sendMessage(interaction.channel!, interaction.message, users, event, false)
-  await interaction.followUp({ content: 'reload', ephemeral: true })
 }
 
 export default {

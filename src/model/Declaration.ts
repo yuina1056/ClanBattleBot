@@ -6,7 +6,7 @@ import Boss from '../entity/Boss';
 import Declaration from '../entity/Declaration';
 import Event from '../entity/Event';
 
-export async function regist(discordChannelId: string, discordUserId: string, attackCount: number): Promise<User | Error> {
+export async function regist(boss:Boss, discordUserId: string, attackCount: number): Promise<User | Error> {
   const today = dayjs().format()
   const event = await DataSource.getRepository(Event)
     .createQueryBuilder('event')
@@ -15,12 +15,6 @@ export async function regist(discordChannelId: string, discordUserId: string, at
     .getOne();
   if (event == null) {
     return new Error('クランバトル開催情報が取得できませんでした')
-  }
-  // ボス情報取得
-  const bossRepository = DataSource.getRepository(Boss)
-  const boss = await bossRepository.findOneBy({ discordChannelId: discordChannelId })
-  if (boss == null) {
-    return new Error('ボス情報が取得できませんでした')
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User)
@@ -49,12 +43,12 @@ async function validate(user: User, event: Event, attackCount: number): Promise<
   }
   const declared = declaration.filter((declaration) => declaration.isFinished === false)
   if (declared.length > 0) {
-    return new Error('すでに凸宣言済みです')
+    return new Error('既に'+ declared[0].bossId +'ボスに凸宣言済みです')
   }
   const attackCountDeclaration = declaration.filter((declaration) => declaration.attackCount === attackCount)
   console.log(attackCountDeclaration.length)
   if (attackCountDeclaration.length >= 2) {
-    return new Error(attackCount+'凸目は完了しています')
+    return new Error('既に'+ attackCount +'凸目は完了しています')
   }
   return null
 }
