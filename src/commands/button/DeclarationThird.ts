@@ -9,9 +9,14 @@ export const data = new ButtonBuilder()
   .setLabel("3凸目")
 
 export async function execute(interaction: ButtonInteraction) {
+  let content: string = ''
   const user = await Declaration.regist(interaction.channel?.id!, interaction.user.id, 3)
-
-  await interaction.reply({ content: user!.name + 'が凸宣言しました' });
+  if (user instanceof Error) {
+    content = user.message
+  } else {
+    content = user!.name + 'が凸宣言しました'
+  }
+  await interaction.reply({ content: content });
 }
 
 export default {

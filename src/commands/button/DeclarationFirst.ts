@@ -10,22 +10,13 @@ export const data = new ButtonBuilder()
 
 export async function execute(interaction: ButtonInteraction) {
   let content: string = ''
-  try {
-    const user = await Declaration.regist(interaction.channel?.id!, interaction.user.id, 1)
+  const user = await Declaration.regist(interaction.channel?.id!, interaction.user.id, 1)
+  if (user instanceof Error) {
+    content = user.message
+  } else {
     content = user!.name + 'が凸宣言しました'
-  } catch (error) {
-    if (error instanceof Error) {
-      content = error.message
-    } else if (typeof error === 'string') {
-      console.log(error)
-    } else {
-      console.log("unexpected error")
-    }
-    throw error
-  } finally {
-    await interaction.reply({ content: content });
   }
-
+    await interaction.reply({ content: content });
 }
 
 export default {
