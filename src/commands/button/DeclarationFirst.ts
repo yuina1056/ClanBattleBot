@@ -22,7 +22,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (user instanceof Error) {
     content = user.message
   } else {
-    content = user!.name + 'が凸宣言しました'
+    content = user!.name + 'が'+ boss.bossid +'ボスに凸宣言しました'
   }
     await interaction.reply({ content: content });
 }

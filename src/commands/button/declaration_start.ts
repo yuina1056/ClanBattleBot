@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild, ActionRowBuilder } from 'discord.js';
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from 'discord.js';
 
 import button_attack_first from './DeclarationFirst'
 import button_attack_second from './DeclarationSecond'
