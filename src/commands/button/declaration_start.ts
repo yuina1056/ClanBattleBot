@@ -1,11 +1,4 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild, ActionRowBuilder } from 'discord.js';
-import dayjs from 'dayjs';
-
-import DataSource from '../../datasource';
-import User from '../../entity/User';
-import Boss from '../../entity/Boss';
-import Declaration from '../../entity/Declaration';
-import Event from '../../entity/Event';
 
 import button_attack_first from './DeclarationFirst'
 import button_attack_second from './DeclarationSecond'
@@ -23,11 +16,11 @@ export async function execute(interaction: ButtonInteraction) {
     content: '凸宣言する凸を選択してください',
     ephemeral: true,
     components: [
-      new ActionRowBuilder().addComponents(
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
         button_attack_first.data,
         button_attack_second.data,
         button_attack_third.data,
-      ).toJSON() as any,
+      ),
     ]
   });
 }

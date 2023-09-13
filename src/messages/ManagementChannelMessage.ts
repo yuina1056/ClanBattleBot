@@ -1,4 +1,4 @@
-import { ActionRowBuilder, Message, TextBasedChannel } from "discord.js"
+import { ActionRowBuilder, Message, TextBasedChannel, ButtonBuilder } from "discord.js"
 
 import button_reload_attack_status from "../commands/button/reload_attack_status"
 
@@ -12,7 +12,7 @@ export async function sendMessage(channel: TextBasedChannel,message: Message | n
   })
   const content: string = '```' + userStatus + '```'
   const components = [
-    new ActionRowBuilder().addComponents(button_reload_attack_status.data).toJSON() as any
+    new ActionRowBuilder<ButtonBuilder>().addComponents(button_reload_attack_status.data)
   ]
   if (isInit) {
     await channel.send({

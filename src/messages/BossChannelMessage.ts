@@ -1,4 +1,4 @@
-import { ActionRowBuilder, EmbedBuilder, TextBasedChannel } from "discord.js"
+import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder} from "discord.js"
 
 import button_declaration from "../commands/button/declaration_start"
 import button_report_shave from "../commands/button/report_shave"
@@ -35,12 +35,12 @@ export async function sendMessage(channel: TextBasedChannel, clan: Clan,boss: Bo
       embed.toJSON() as any
     ],
     components: [
-      new ActionRowBuilder().addComponents(
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
         button_declaration.data,
         button_report_shave.data,
         button_report_defeat.data,
         button_declaration_cancel.data
-      ).toJSON() as any,
+      ),
     ]
   })
 }
