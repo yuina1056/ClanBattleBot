@@ -9,12 +9,23 @@ export const data = new ButtonBuilder()
   .setLabel("1凸目")
 
 export async function execute(interaction: ButtonInteraction) {
-  await interaction.deferReply({
-    ephemeral: true
-  });
-  const user = await Declaration.regist(interaction.channel?.id!,interaction.user.id, 1)
+  let content: string = ''
+  try {
+    const user = await Declaration.regist(interaction.channel?.id!, interaction.user.id, 1)
+    content = user!.name + 'が凸宣言しました'
+  } catch (error) {
+    if (error instanceof Error) {
+      content = error.message
+    } else if (typeof error === 'string') {
+      console.log(error)
+    } else {
+      console.log("unexpected error")
+    }
+    throw error
+  } finally {
+    await interaction.reply({ content: content });
+  }
 
-  await interaction.followUp({ content: user!.name + 'が凸宣言しました' });
 }
 
 export default {

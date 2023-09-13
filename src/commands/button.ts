@@ -43,6 +43,7 @@ export async function action(interaction: ButtonInteraction) {
     try {
       await action.execute(interaction);
     } catch (error) {
+      console.error(error);
       await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
     }
   } else {
