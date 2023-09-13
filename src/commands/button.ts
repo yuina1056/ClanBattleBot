@@ -5,6 +5,9 @@ import declaration_cancel from './button/declaration_cancel';
 import report_shave from './button/report_shave';
 import report_defeat from './button/report_defeat';
 import reload_attack_status from './button/reload_attack_status';
+import attack_first from './button/DeclarationFirst';
+import attack_second from './button/DeclarationSecond';
+import attack_third from './button/DeclarationThird';
 
 export async function action(interaction: ButtonInteraction) {
   let action: any = null
@@ -23,6 +26,15 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case reload_attack_status.customId:
       action = reload_attack_status
+      break;
+    case attack_first.customId:
+      action = attack_first
+      break;
+    case attack_second.customId:
+      action = attack_second
+      break;
+    case attack_third.customId:
+      action = attack_third
       break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
