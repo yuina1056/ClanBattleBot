@@ -41,8 +41,16 @@ export async function execute(interaction: ButtonInteraction) {
     content = user!.name + 'が'+ boss.bossid +'ボスに凸宣言しました'
   }
 
-  const declarations = await DataSource.getRepository(DeclarationRepository).findBy({ bossId: boss.id })
-  // await interaction.message.delete()
+  const declarations = await DataSource.getRepository(DeclarationRepository).find(
+    {
+      where: {
+        bossId: boss.id,
+        isFinished: false
+      },
+      relations: {
+        user: true
+      }
+    })
   await BossChannelMessage.sendMessage(interaction.channel!, clan, boss,declarations,false)
   await interaction.reply({ content: content });
 }

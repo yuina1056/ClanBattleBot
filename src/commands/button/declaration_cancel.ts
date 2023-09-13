@@ -3,7 +3,9 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js
 import DataSource from '../../datasource';
 import User from '../../entity/User';
 import Boss from '../../entity/Boss';
+import Clan from '../../entity/Clan';
 import Declaration from '../../entity/Declaration';
+import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const customId = 'declaration_cancel'
 export const data = new ButtonBuilder()
@@ -41,6 +43,22 @@ export async function execute(interaction: ButtonInteraction) {
   }
   await declarationRepository.delete(declaration.id!)
 
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id)
+  const clan = await DataSource.getRepository(Clan).findOneBy({ discordCategoryId: channel!.parentId! })
+  if (clan == null) {
+    throw new Error('クラン情報が取得できませんでした')
+  }
+  const declarations = await declarationRepository.find(
+    {
+      where: {
+        bossId: boss.id,
+        isFinished: false
+      },
+      relations: {
+        user: true
+      }
+    })
+  await BossChannelMessage.sendMessage(interaction.channel!, clan, boss,declarations,false)
   await interaction.reply({ content: user.name + 'が凸宣言取消しました' });
 }
 

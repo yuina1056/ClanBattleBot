@@ -10,6 +10,12 @@ import Declaration from "../entity/Declaration"
 
 export async function sendMessage(channel: TextBasedChannel, clan: Clan, boss: Boss, declaration: Declaration[], isInit: boolean) {
   let declarationMember = '凸宣言者なし'
+  if (declaration.length > 0) {
+    declarationMember = ''
+    declaration.forEach((declaration) => {
+      declarationMember = declarationMember + '\n' + declaration.user.name
+    })
+  }
   // コンポーネント定義
   const embed = new EmbedBuilder().setTitle(boss.bossid +"ボス").setColor("#00ff00").setFields(
     {
