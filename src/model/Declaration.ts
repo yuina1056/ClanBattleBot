@@ -14,19 +14,19 @@ export async function regist(discordChannelId: string, discordUserId: string,att
     .andWhere('event.toDate >= :today', { today })
     .getOne();
   if (event == null) {
-    return
+    throw new Error('event is null')
   }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss)
   const boss = await bossRepository.findOneBy({ discordChannelId: discordChannelId })
   if (boss == null) {
-    return
+    throw new Error('boss is null')
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User)
   const user = await userRepository.findOneBy({ discordUserId: discordUserId })
   if (user == null) {
-    return
+    throw new Error('user is null')
   }
 
   // DBに保存

@@ -28,20 +28,20 @@ export async function execute(interaction: CommandInteraction) {
     roleName = interaction.options.data[0].role.name
     roleId = interaction.options.data[0].role.id
   } else {
-    return
+    throw new Error('role is null')
   }
 
   let guild: Guild
   if (interaction.guild != null) {
     guild = interaction.guild
   } else {
-    return
+    throw new Error('interaction.guild is null')
   }
 
   const categoryName = 'クランバトル管理(' + roleName + ')'
   if (guild.channels.cache.find((channel) => channel.name === categoryName) != null) {
     await interaction.reply({content: '既にチャンネルのセットアップが完了しています', ephemeral: true })
-    return
+    throw new Error("既にチャンネルのセットアップが完了しています")
   }
 
   // カテゴリ作成
@@ -54,7 +54,7 @@ export async function execute(interaction: CommandInteraction) {
   const saveClan = await clanRepository.save(clan)
   if (saveClan == null) {
     await interaction.reply({ content: 'クランの初期設定が完了しませんでした', ephemeral: true })
-    return
+    throw new Error('saveClan is null')
   }
 
   // Roleからユーザーを取得してDBに保存
@@ -98,7 +98,7 @@ async function createManagementChannel(guild: Guild, channelName: string, clan: 
 
   const channel = guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)
   if (channel == null) {
-    return
+    throw new Error('channel is null')
   }
   const users = await DataSource.getRepository(User).findBy({ clanId: clan.id })
 
@@ -113,7 +113,7 @@ async function createBossChannel(guild: Guild, roleName: string, bossId: number,
 
   const channel = guild.channels.cache.get(guild.channels.cache.find((channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId)?.id ?? '')
   if (channel == null) {
-    return
+    throw new Error('channel is null')
   }
   const boss = new Boss(clan.id!, bossId, channel.id)
   const bossRepository = DataSource.getRepository(Boss)

@@ -19,7 +19,7 @@ export async function execute(interaction: ButtonInteraction) {
   });
   const guild = interaction.guild
   if (guild == null) {
-    return
+    throw new Error('guild is null')
   }
   const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id)
   const today = dayjs().format()

@@ -20,7 +20,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.guild != null) {
     guild = interaction.guild
   } else {
-    return
+    throw new Error('interaction.guild is null')
   }
   const today = dayjs().format()
   const event = await DataSource.getRepository(Event)
@@ -29,7 +29,7 @@ export async function execute(interaction: ButtonInteraction) {
     .andWhere('event.toDate >= :today', { today })
     .getOne();
   if (event == null) {
-    return
+    throw new Error('event is null')
   }
   const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id)
   const clan = await DataSource.getRepository(Clan).findOneBy({ discordCategoryId: channel!.parentId! })
@@ -37,7 +37,7 @@ export async function execute(interaction: ButtonInteraction) {
   const bossRepository = DataSource.getRepository(Boss)
   const boss = await bossRepository.findOneBy({ discordChannelId: interaction.channel!.id })
   if (boss == null) {
-    return
+    throw new Error('boss is null')
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User)
@@ -46,7 +46,7 @@ export async function execute(interaction: ButtonInteraction) {
     clanId: clan?.id!
   })
   if (user == null) {
-    return
+    throw new Error('user is null')
   }
 
   // DBに保存

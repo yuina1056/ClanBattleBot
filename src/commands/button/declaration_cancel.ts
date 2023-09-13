@@ -17,26 +17,26 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.guild != null) {
     guild = interaction.guild
   } else {
-    return
+    throw new Error('interaction.guild is null')
   }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss)
   const boss = await bossRepository.findOneBy({ discordChannelId: interaction.channel!.id })
   if (boss == null) {
-    return
+    throw new Error('boss is null')
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User)
   const user = await userRepository.findOneBy({ discordUserId: interaction.user.id })
   if (user == null) {
-    return
+    throw new Error('user is null')
   }
 
   // DBから削除
   const declarationRepository = DataSource.getRepository(Declaration)
   const declaration = await declarationRepository.findOneBy({ userId: user.id, isFinished: false })
   if (declaration == null) {
-    return
+    throw new Error('declaration is null')
   }
   await declarationRepository.delete(declaration.id!)
 
