@@ -1,10 +1,10 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
 export class Initialize1694437113363 implements MigrationInterface {
-    name = 'Initialize1694437113363'
+  name = "Initialize1694437113363";
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             CREATE TABLE \`event\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`month\` varchar(255) NOT NULL,
@@ -14,7 +14,7 @@ export class Initialize1694437113363 implements MigrationInterface {
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE \`report\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`clanId\` int NOT NULL,
@@ -31,7 +31,7 @@ export class Initialize1694437113363 implements MigrationInterface {
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE \`clan\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`name\` varchar(255) NOT NULL,
@@ -47,7 +47,7 @@ export class Initialize1694437113363 implements MigrationInterface {
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE \`user\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`clanId\` int NOT NULL,
@@ -58,7 +58,7 @@ export class Initialize1694437113363 implements MigrationInterface {
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE \`declaration\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`clanId\` int NOT NULL,
@@ -74,7 +74,7 @@ export class Initialize1694437113363 implements MigrationInterface {
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             CREATE TABLE \`boss\` (
                 \`id\` int NOT NULL AUTO_INCREMENT,
                 \`bossid\` int NOT NULL,
@@ -83,65 +83,64 @@ export class Initialize1694437113363 implements MigrationInterface {
                 PRIMARY KEY (\`id\`)
             ) ENGINE = InnoDB
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`report\`
             ADD CONSTRAINT \`FK_e347c56b008c2057c9887e230aa\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`report\`
             ADD CONSTRAINT \`FK_14521222f07669fd22af92a244a\` FOREIGN KEY (\`eventId\`) REFERENCES \`event\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`user\`
             ADD CONSTRAINT \`FK_5601c634625bad156dbfd888831\` FOREIGN KEY (\`clanId\`) REFERENCES \`clan\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`declaration\`
             ADD CONSTRAINT \`FK_9688f3408a93c875e94d3e6d9ed\` FOREIGN KEY (\`userId\`) REFERENCES \`user\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`declaration\`
             ADD CONSTRAINT \`FK_def6ea3323b4ceeadb166afdad8\` FOREIGN KEY (\`eventId\`) REFERENCES \`event\`(\`id\`) ON DELETE NO ACTION ON UPDATE NO ACTION
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.query(`
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`
             ALTER TABLE \`declaration\` DROP FOREIGN KEY \`FK_def6ea3323b4ceeadb166afdad8\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`declaration\` DROP FOREIGN KEY \`FK_9688f3408a93c875e94d3e6d9ed\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`user\` DROP FOREIGN KEY \`FK_5601c634625bad156dbfd888831\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`report\` DROP FOREIGN KEY \`FK_14521222f07669fd22af92a244a\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             ALTER TABLE \`report\` DROP FOREIGN KEY \`FK_e347c56b008c2057c9887e230aa\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE \`boss\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE \`declaration\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE \`user\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE \`clan\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE \`report\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP INDEX \`IDX_9b79ed9f4cc8e44256302ea21d\` ON \`event\`
         `);
-        await queryRunner.query(`
+    await queryRunner.query(`
             DROP TABLE \`event\`
         `);
-    }
-
+  }
 }

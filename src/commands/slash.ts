@@ -1,18 +1,20 @@
-import { ChatInputCommandInteraction } from 'discord.js';
-import dice from './slash/dice';
-import setup from './slash/setup';
+import { ChatInputCommandInteraction } from "discord.js";
+import dice from "./slash/dice";
+import setup from "./slash/setup";
 
 export async function action(interaction: ChatInputCommandInteraction) {
-  let action: any = null
+  let action: any = null;
   switch (interaction.commandName) {
     case dice.data.name:
-      action = dice
+      action = dice;
       break;
     case setup.data.name:
-      action = setup
+      action = setup;
       break;
     default:
-      console.error(`${interaction.commandName}というコマンドには対応していません。`);
+      console.error(
+        `${interaction.commandName}というコマンドには対応していません。`
+      );
   }
   if (action != null) {
     try {
@@ -20,16 +22,25 @@ export async function action(interaction: ChatInputCommandInteraction) {
     } catch (error) {
       console.error(error);
       if (interaction.replied || interaction.deferred) {
-        await interaction.followUp({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        await interaction.followUp({
+          content: "コマンド実行時にエラーになりました。",
+          ephemeral: true,
+        });
       } else {
-        await interaction.reply({ content: 'コマンド実行時にエラーになりました。', ephemeral: true });
+        await interaction.reply({
+          content: "コマンド実行時にエラーになりました。",
+          ephemeral: true,
+        });
       }
     }
   } else {
-    await interaction.reply({ content: 'コマンドが登録されていません。', ephemeral: true });
+    await interaction.reply({
+      content: "コマンドが登録されていません。",
+      ephemeral: true,
+    });
   }
 }
 
 export default {
-  action
+  action,
 };

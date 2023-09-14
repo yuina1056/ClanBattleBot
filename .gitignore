@@ -145,3 +145,4 @@ dist
 build/*
 
 .data/*
+.vscode/*
