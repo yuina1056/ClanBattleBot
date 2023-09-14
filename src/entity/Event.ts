@@ -1,39 +1,45 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from "typeorm"
-import dayjs from "dayjs"
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  Unique,
+} from "typeorm";
+import dayjs from "dayjs";
 
-import Report from "./Report"
-import Declaration from "./Declaration"
+import Report from "./Report";
+import Declaration from "./Declaration";
 
 @Entity()
 @Unique(["month"])
 // クランバトル開催情報
 export default class Event {
   @PrimaryGeneratedColumn()
-  id?: number
+  id?: number;
   @Column()
-  month: string // yyyymmで入力
+  month: string; // yyyymmで入力
   @Column()
-  fromDate: Date
+  fromDate: Date;
   @Column()
-  toDate: Date
+  toDate: Date;
 
-  @OneToMany(() => Report, report => report.event)
+  @OneToMany(() => Report, (report) => report.event)
   reports?: Report[];
-  @OneToMany(() => Declaration, declaration => declaration.event)
+  @OneToMany(() => Declaration, (declaration) => declaration.event)
   declarations?: Declaration[];
 
   constructor(month: string, fromDate: Date, toDate: Date) {
-    this.month = month
-    this.fromDate = fromDate
-    this.toDate = toDate
+    this.month = month;
+    this.fromDate = fromDate;
+    this.toDate = toDate;
   }
 
   public getClanBattleDay(): number {
-    const now = dayjs()
+    const now = dayjs();
     if (now.isBefore(dayjs(this.fromDate))) {
-      throw new Error('クランバトル期間外です。');
+      throw new Error("クランバトル期間外です。");
     }
-    const dayDifference = now.diff(dayjs(this.fromDate), 'day');
+    const dayDifference = now.diff(dayjs(this.fromDate), "day");
 
     return dayDifference + 1;
   }

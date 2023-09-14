@@ -15,7 +15,7 @@ export async function sendMessage(
   message: Message | null,
   users: User[],
   event: Event | null,
-  isInit: boolean
+  isInit: boolean,
 ) {
   let userStatus: string = "";
   users.forEach((user) => {
@@ -24,7 +24,7 @@ export async function sendMessage(
   const content: string = "```" + userStatus + "```";
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
-      button_reload_attack_status.data
+      button_reload_attack_status.data,
     ),
   ];
   if (isInit) {

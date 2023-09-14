@@ -1,38 +1,45 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, OneToMany } from "typeorm"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+  OneToMany,
+} from "typeorm";
 import User from "./User";
 
 @Entity()
 // クラン
 export default class Clan {
   @PrimaryGeneratedColumn()
-  id?: number
+  id?: number;
   @Column()
-  name: string
+  name: string;
   @Column()
-  discordRoleId: string
+  discordRoleId: string;
   @Column()
-  discordCategoryId: string
+  discordCategoryId: string;
   @Column({ default: 1 })
-  boss1Lap?: number
+  boss1Lap?: number;
   @Column({ default: 1 })
-  boss2Lap?: number
+  boss2Lap?: number;
   @Column({ default: 1 })
-  boss3Lap?: number
+  boss3Lap?: number;
   @Column({ default: 1 })
-  boss4Lap?: number
-  @Column({default: 1 })
-  boss5Lap?: number
+  boss4Lap?: number;
+  @Column({ default: 1 })
+  boss5Lap?: number;
   @CreateDateColumn()
-  CreatedAt?: Date
+  CreatedAt?: Date;
   @UpdateDateColumn()
-  UpdatedAt?: Date
+  UpdatedAt?: Date;
 
-  @OneToMany(() => User, user => user.clan)
+  @OneToMany(() => User, (user) => user.clan)
   users?: User[];
 
   constructor(name: string, roleId: string, categoryId: string) {
-    this.name = name
-    this.discordRoleId = roleId
-    this.discordCategoryId = categoryId
+    this.name = name;
+    this.discordRoleId = roleId;
+    this.discordCategoryId = categoryId;
   }
 }

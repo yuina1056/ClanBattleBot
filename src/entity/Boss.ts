@@ -1,20 +1,20 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 // ボス情報
 export default class Boss {
   @PrimaryGeneratedColumn()
-  id?: number
+  id?: number;
   @Column()
-  bossid: number
+  bossid: number;
   @Column()
-  clanId: number
+  clanId: number;
   @Column()
-  discordChannelId: string
+  discordChannelId: string;
 
   constructor(clanId: number, bossId: number, discordChannelId: string) {
-    this.clanId = clanId
-    this.bossid = bossId
-    this.discordChannelId = discordChannelId
+    this.clanId = clanId;
+    this.bossid = bossId;
+    this.discordChannelId = discordChannelId;
   }
 }

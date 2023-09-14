@@ -23,7 +23,7 @@ export async function execute(interaction: ButtonInteraction) {
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         button_attack_first.data,
         button_attack_second.data,
-        button_attack_third.data
+        button_attack_third.data,
       ),
     ],
   });

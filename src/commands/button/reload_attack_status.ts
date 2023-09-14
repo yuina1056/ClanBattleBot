@@ -27,7 +27,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("guild is null");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id
+    (channel) => channel.id === interaction.channel!.id,
   );
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
@@ -51,7 +51,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.message,
     users,
     event,
-    false
+    false,
   );
 }
 

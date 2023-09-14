@@ -1,48 +1,65 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from "typeorm"
-import User from "./User"
-import Event from "./Event"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+  ManyToOne,
+} from "typeorm";
+import User from "./User";
+import Event from "./Event";
 
 @Entity()
 // 凸報告
 export default class Report {
   @PrimaryGeneratedColumn()
-  id?: number
+  id?: number;
   @Column()
-  clanId: number
+  clanId: number;
   @Column()
-  userId: number
-  @ManyToOne(() => User, user => user.reports)
+  userId: number;
+  @ManyToOne(() => User, (user) => user.reports)
   user!: User;
   @Column()
-  eventId: number
-  @ManyToOne(() => Event, event => event.reports)
+  eventId: number;
+  @ManyToOne(() => Event, (event) => event.reports)
   event!: Event;
   @Column()
-  bossId: number
+  bossId: number;
   @Column()
-  lap: number
+  lap: number;
   @Column()
-  day: number
+  day: number;
   @Column()
-  attackCount: number
+  attackCount: number;
   @Column()
-  damage: number
+  damage: number;
   @Column()
-  isCarryOver: boolean
+  isCarryOver: boolean;
   @CreateDateColumn()
-  CreatedAt?: Date
+  CreatedAt?: Date;
   @UpdateDateColumn()
-  UpdatedAt?: Date
+  UpdatedAt?: Date;
 
-  constructor(clanId: number, userId: number, eventId: number, bossId: number, lap: number, day: number, attackCount: number, damage: number, isCarryOver: boolean) {
-    this.clanId = clanId
-    this.userId = userId
-    this.eventId = eventId
-    this.bossId = bossId
-    this.lap = lap
-    this.day = day
-    this.attackCount = attackCount
-    this.damage = damage
-    this.isCarryOver = isCarryOver
+  constructor(
+    clanId: number,
+    userId: number,
+    eventId: number,
+    bossId: number,
+    lap: number,
+    day: number,
+    attackCount: number,
+    damage: number,
+    isCarryOver: boolean,
+  ) {
+    this.clanId = clanId;
+    this.userId = userId;
+    this.eventId = eventId;
+    this.bossId = bossId;
+    this.lap = lap;
+    this.day = day;
+    this.attackCount = attackCount;
+    this.damage = damage;
+    this.isCarryOver = isCarryOver;
   }
 }

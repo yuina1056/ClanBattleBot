@@ -9,7 +9,7 @@ import Event from "../../entity/Event";
 export async function regist(
   boss: Boss,
   discordUserId: string,
-  attackCount: number
+  attackCount: number,
 ): Promise<User | Error> {
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
@@ -41,7 +41,7 @@ export async function regist(
     0,
     event.getClanBattleDay(),
     attackCount,
-    false
+    false,
   );
   await DataSource.getRepository(Declaration).save(declaration);
 
@@ -51,7 +51,7 @@ export async function regist(
 async function validate(
   user: User,
   event: Event,
-  attackCount: number
+  attackCount: number,
 ): Promise<Error | null> {
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findBy({
@@ -63,13 +63,13 @@ async function validate(
     return null;
   }
   const declared = declaration.filter(
-    (declaration) => declaration.isFinished === false
+    (declaration) => declaration.isFinished === false,
   );
   if (declared.length > 0) {
     return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
   }
   const attackCountDeclaration = declaration.filter(
-    (declaration) => declaration.attackCount === attackCount
+    (declaration) => declaration.attackCount === attackCount,
   );
   console.log(attackCountDeclaration.length);
   if (attackCountDeclaration.length >= 2) {

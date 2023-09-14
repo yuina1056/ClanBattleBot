@@ -55,7 +55,7 @@ export async function execute(interaction: ButtonInteraction) {
   await declarationRepository.delete(declaration.id!);
 
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id
+    (channel) => channel.id === interaction.channel!.id,
   );
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
@@ -77,7 +77,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     declarations,
-    false
+    false,
   );
   await interaction.reply({ content: user.name + "が凸宣言取消しました" });
 }

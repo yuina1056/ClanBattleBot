@@ -38,7 +38,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("event is null");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id
+    (channel) => channel.id === interaction.channel!.id,
   );
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
@@ -83,7 +83,7 @@ export async function execute(interaction: ButtonInteraction) {
     event.getClanBattleDay(),
     1,
     0,
-    false
+    false,
   );
   const reportRepository = DataSource.getRepository(Report);
   await reportRepository.save(report);
@@ -102,7 +102,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan!,
     boss,
     declarations,
-    false
+    false,
   );
   await interaction.reply({ content: user.name + "が削りました" });
 }

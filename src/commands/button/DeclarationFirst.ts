@@ -35,7 +35,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("ボス情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id
+    (channel) => channel.id === interaction.channel!.id,
   );
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
@@ -53,7 +53,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   const declarations = await DataSource.getRepository(
-    DeclarationRepository
+    DeclarationRepository,
   ).find({
     where: {
       bossId: boss.id,
@@ -68,7 +68,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     declarations,
-    false
+    false,
   );
   await interaction.reply({ content: content });
 }
