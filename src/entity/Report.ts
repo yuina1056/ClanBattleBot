@@ -35,6 +35,8 @@ export default class Report {
   @Column()
   damage: number;
   @Column()
+  isDefeat: boolean;
+  @Column()
   isCarryOver: boolean;
   @CreateDateColumn()
   CreatedAt?: Date;
@@ -50,7 +52,8 @@ export default class Report {
     day: number,
     attackCount: number,
     damage: number,
-    isCarryOver: boolean,
+    isDefeat: boolean,
+    isCarryOver: boolean
   ) {
     this.clanId = clanId;
     this.userId = userId;
@@ -60,6 +63,7 @@ export default class Report {
     this.day = day;
     this.attackCount = attackCount;
     this.damage = damage;
+    this.isDefeat = isDefeat;
     this.isCarryOver = isCarryOver;
   }
 }

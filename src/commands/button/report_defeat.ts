@@ -91,7 +91,8 @@ export async function execute(interaction: ButtonInteraction) {
     event.getClanBattleDay(),
     1,
     0,
-    true
+    true,
+    false
   );
   await DataSource.getRepository(Report)
     .save(report)
