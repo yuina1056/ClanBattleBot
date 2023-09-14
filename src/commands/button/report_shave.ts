@@ -81,7 +81,7 @@ export async function execute(interaction: ButtonInteraction) {
     boss.bossid,
     0,
     event.getClanBattleDay(),
-    1,
+    declaration.attackCount,
     0,
     false,
     false

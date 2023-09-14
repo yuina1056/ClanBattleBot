@@ -50,9 +50,12 @@ export default class User {
       return res + " (記録なし)";
     }
     const maxId = Math.max(
-      ...(this.reports.map((report) => report.id) as number[]),
+      ...(this.reports.map((report) => report.id) as number[])
     );
     const latestReport = this.reports.find((report) => report.id === maxId);
+    if (latestReport == null) {
+      return res + " (記録なし)";
+    }
     const thisMonthReports = this.reports.filter((report) => {
       return report.eventId == event.id;
     });
@@ -61,7 +64,7 @@ export default class User {
       return (
         res +
         "(" +
-        dayjs(latestReport?.CreatedAt!).format("MM/DD HH:mm") +
+        dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") +
         ") 【当月凸なし】"
       );
     } else {
@@ -69,23 +72,28 @@ export default class User {
         return report.day == event.getClanBattleDay();
       });
       if (todayReports.length === 0) {
-        return res;
+        return (
+          res +
+          "(" +
+          dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") +
+          ") 【当日凸なし】"
+        );
       }
       // 当日凸あり
       res = this.name + " [";
       for (let index = 1; index <= 3; index++) {
         const todayAttackCountReports = todayReports.filter(
-          (report) => report.attackCount === index,
+          (report) => report.attackCount === index
         );
         if (todayAttackCountReports.length === 0) {
           // 凸なし
           res += "－";
         } else {
           // 凸あり
-          let resDefeat: string = "";
-          let resShave: string = "";
+          let resDefeat = "";
+          let resShave = "";
           todayAttackCountReports.forEach((report) => {
-            if (!report.isCarryOver) {
+            if (!report.isDefeat) {
               resShave = report.bossId + "削り";
             } else {
               resDefeat += report.bossId + "撃破";
@@ -102,7 +110,7 @@ export default class User {
         }
       }
       res +=
-        "] (" + dayjs(latestReport?.CreatedAt!).format("MM/DD HH:mm") + ")";
+        "] (" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ")";
     }
     return res;
   }

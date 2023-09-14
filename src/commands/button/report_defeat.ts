@@ -29,6 +29,9 @@ export async function execute(interaction: ButtonInteraction) {
   } else {
     throw new Error("interaction.guild is null");
   }
+  if (interaction.channel == null) {
+    throw new Error("interaction.channel is null");
+  }
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
     .createQueryBuilder("event")
@@ -79,20 +82,38 @@ export async function execute(interaction: ButtonInteraction) {
     await interaction.reply({ content: content });
     return;
   }
-  await declarationRepository.update(declaration.id!, { isFinished: true });
+  console.log(declaration);
+  if (declaration.id == null) {
+    throw new Error("declaration.id is null");
+  }
+  await declarationRepository.update(declaration.id, { isFinished: true });
+
+  // 持ち越しが発生しているかチェック
+  let isCarryOver = false;
+  const reports = await DataSource.getRepository(Report).find({
+    where: {
+      eventId: event.id,
+      day: declaration.day,
+      attackCount: declaration.attackCount,
+    },
+  });
+  console.log(reports);
+  if (reports.length === 0) {
+    isCarryOver = true;
+  }
 
   // DBに保存
   const report = new Report(
     user.clanId,
     user.id!,
-    event!.id!,
+    event.id!,
     boss.bossid,
     0,
     event.getClanBattleDay(),
-    1,
+    declaration.attackCount,
     0,
     true,
-    false
+    isCarryOver
   );
   await DataSource.getRepository(Report)
     .save(report)
@@ -111,8 +132,8 @@ export async function execute(interaction: ButtonInteraction) {
     },
   });
   await BossChannelMessage.sendMessage(
-    interaction.channel!,
-    clan!,
+    interaction.channel,
+    clan,
     boss,
     declarations
   );
