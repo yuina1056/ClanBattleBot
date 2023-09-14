@@ -1,11 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  TextBasedChannel,
-  EmbedBuilder,
-  ActionRowBuilder,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 import dayjs from "dayjs";
 
 import ManagementMessage from "../../messages/ManagementChannelMessage";
@@ -26,9 +19,18 @@ export async function execute(interaction: ButtonInteraction) {
   if (guild == null) {
     throw new Error("guild is null");
   }
+  if (interaction.channel == null) {
+    throw new Error("interaction.channel is null");
+  }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id,
+    (channel) => channel.id === interaction.channel?.id
   );
+  if (channel == null) {
+    throw new Error("channel is null");
+  }
+  if (channel.parentId == null) {
+    throw new Error("channel.parentId is null");
+  }
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
     .createQueryBuilder("event")
@@ -36,10 +38,13 @@ export async function execute(interaction: ButtonInteraction) {
     .andWhere("event.toDate >= :today", { today })
     .getOne();
   const clan = await DataSource.getRepository(Clan).findOneBy({
-    discordCategoryId: channel!.parentId!,
+    discordCategoryId: channel.parentId,
   });
+  if (clan == null) {
+    throw new Error("clan is null");
+  }
   const users = await DataSource.getRepository(User).find({
-    where: { clanId: clan?.id! },
+    where: { clanId: clan.id },
     relations: {
       reports: {
         event: true,
@@ -47,11 +52,11 @@ export async function execute(interaction: ButtonInteraction) {
     },
   });
   await ManagementMessage.sendMessage(
-    interaction.channel!,
+    interaction.channel,
     interaction.message,
     users,
     event,
-    false,
+    false
   );
 }
 

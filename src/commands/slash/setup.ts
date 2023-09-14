@@ -24,7 +24,7 @@ export const data = new SlashCommandBuilder()
     option
       .setName("ロール")
       .setDescription("作成するクランのロールを入力")
-      .setRequired(true),
+      .setRequired(true)
   );
 
 export async function execute(interaction: CommandInteraction) {
@@ -85,7 +85,7 @@ export async function execute(interaction: CommandInteraction) {
   const guildMembers = interaction.guild?.roles.cache.get(roleId)?.members;
   if (guildMembers != null) {
     guildMembers.forEach(async (guildMember) => {
-      let userName: string = "";
+      let userName = "";
       // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
       if (guildMember.nickname != null) {
         userName = guildMember.nickname;
@@ -123,7 +123,7 @@ export default {
 async function createManagementChannel(
   guild: Guild,
   channelName: string,
-  clan: Clan,
+  clan: Clan
 ) {
   await guild.channels.create({
     name: channelName,
@@ -133,7 +133,7 @@ async function createManagementChannel(
   const channel = guild.channels.cache.find(
     (channel) =>
       channel.name === channelName &&
-      channel.parentId === clan.discordCategoryId,
+      channel.parentId === clan.discordCategoryId
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -153,7 +153,7 @@ async function createBossChannel(
   roleName: string,
   bossId: number,
   channelName: string,
-  clan: Clan,
+  clan: Clan
 ) {
   await guild.channels.create({
     name: channelName,
@@ -164,8 +164,8 @@ async function createBossChannel(
     guild.channels.cache.find(
       (channel) =>
         channel.name === channelName &&
-        channel.parentId === clan.discordCategoryId,
-    )?.id ?? "",
+        channel.parentId === clan.discordCategoryId
+    )?.id ?? ""
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -176,12 +176,6 @@ async function createBossChannel(
 
   const declaration: Declaration[] = [];
   if (channel?.isTextBased()) {
-    await BossChannelMessage.sendMessage(
-      channel,
-      clan,
-      boss,
-      declaration,
-      true,
-    );
+    await BossChannelMessage.sendMessage(channel, clan, boss, declaration);
   }
 }

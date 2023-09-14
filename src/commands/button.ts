@@ -10,7 +10,7 @@ import attack_second from "./button/DeclarationSecond";
 import attack_third from "./button/DeclarationThird";
 
 export async function action(interaction: ButtonInteraction) {
-  let action: any = null;
+  let action = null;
   switch (interaction.customId) {
     case declaration_start.customId:
       action = declaration_start;
@@ -38,7 +38,7 @@ export async function action(interaction: ButtonInteraction) {
       break;
     default:
       console.error(
-        `${interaction.customId}というボタンには対応していません。`,
+        `${interaction.customId}というボタンには対応していません。`
       );
   }
   if (action != null) {

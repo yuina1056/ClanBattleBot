@@ -22,7 +22,7 @@ export const data = new ButtonBuilder()
   .setLabel("撃破");
 
 export async function execute(interaction: ButtonInteraction) {
-  let content: string = "";
+  let content = "";
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
@@ -39,15 +39,24 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("event is null");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id,
+    (channel) => channel.id === interaction.channel?.id
   );
+  if (channel == null) {
+    throw new Error("channel is null");
+  }
+  if (channel.parentId == null) {
+    throw new Error("channel.parentId is null");
+  }
   const clan = await DataSource.getRepository(Clan).findOneBy({
-    discordCategoryId: channel!.parentId!,
+    discordCategoryId: channel.parentId,
   });
+  if (clan == null) {
+    throw new Error("clan is null");
+  }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss);
   const boss = await bossRepository.findOneBy({
-    discordChannelId: interaction.channel!.id,
+    discordChannelId: interaction.channel?.id,
   });
   if (boss == null) {
     throw new Error("boss is null");
@@ -56,7 +65,7 @@ export async function execute(interaction: ButtonInteraction) {
   const userRepository = DataSource.getRepository(User);
   const user = await userRepository.findOneBy({
     discordUserId: interaction.user.id,
-    clanId: clan?.id!,
+    clanId: clan.id,
   });
   if (user == null) {
     throw new Error("user is null");
@@ -70,7 +79,7 @@ export async function execute(interaction: ButtonInteraction) {
     await interaction.reply({ content: content });
     return;
   }
-  await declarationRepository.update(declaration!.id!, { isFinished: true });
+  await declarationRepository.update(declaration.id!, { isFinished: true });
 
   // DBに保存
   const report = new Report(
@@ -82,7 +91,7 @@ export async function execute(interaction: ButtonInteraction) {
     event.getClanBattleDay(),
     1,
     0,
-    true,
+    true
   );
   await DataSource.getRepository(Report)
     .save(report)
@@ -104,8 +113,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel!,
     clan!,
     boss,
-    declarations,
-    false,
+    declarations
   );
   await interaction.reply({ content: content });
 }

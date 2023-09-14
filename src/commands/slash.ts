@@ -3,7 +3,7 @@ import dice from "./slash/dice";
 import setup from "./slash/setup";
 
 export async function action(interaction: ChatInputCommandInteraction) {
-  let action: any = null;
+  let action = null;
   switch (interaction.commandName) {
     case dice.data.name:
       action = dice;
@@ -13,7 +13,7 @@ export async function action(interaction: ChatInputCommandInteraction) {
       break;
     default:
       console.error(
-        `${interaction.commandName}というコマンドには対応していません。`,
+        `${interaction.commandName}というコマンドには対応していません。`
       );
   }
   if (action != null) {

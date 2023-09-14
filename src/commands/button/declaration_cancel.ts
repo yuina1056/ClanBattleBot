@@ -88,8 +88,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
-    declarations,
-    false
+    declarations
   );
   await interaction.reply({ content: user.name + "が凸宣言取消しました" });
 }
