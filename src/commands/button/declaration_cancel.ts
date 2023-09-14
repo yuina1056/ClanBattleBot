@@ -25,10 +25,13 @@ export async function execute(interaction: ButtonInteraction) {
   } else {
     throw new Error("interaction.guild is null");
   }
+  if (interaction.channel == null) {
+    throw new Error("interaction.channel is null");
+  }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss);
   const boss = await bossRepository.findOneBy({
-    discordChannelId: interaction.channel!.id,
+    discordChannelId: interaction.channel.id,
   });
   if (boss == null) {
     throw new Error("boss is null");
@@ -52,13 +55,22 @@ export async function execute(interaction: ButtonInteraction) {
     await interaction.reply({ content: "取り消しする凸宣言がありません" });
     return;
   }
-  await declarationRepository.delete(declaration.id!);
+  if (declaration.id == null) {
+    throw new Error("declaration.id is null");
+  }
+  await declarationRepository.delete(declaration.id);
 
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id,
-  );
+  const channel = guild.channels.cache.find((channel) => {
+    return channel.id === interaction.channel?.id;
+  });
+  if (channel == null) {
+    throw new Error("channel is null");
+  }
+  if (channel.parentId == null) {
+    throw new Error("channel.parentId is null");
+  }
   const clan = await DataSource.getRepository(Clan).findOneBy({
-    discordCategoryId: channel!.parentId!,
+    discordCategoryId: channel.parentId,
   });
   if (clan == null) {
     throw new Error("クラン情報が取得できませんでした");
@@ -73,11 +85,11 @@ export async function execute(interaction: ButtonInteraction) {
     },
   });
   await BossChannelMessage.sendMessage(
-    interaction.channel!,
+    interaction.channel,
     clan,
     boss,
     declarations,
-    false,
+    false
   );
   await interaction.reply({ content: user.name + "が凸宣言取消しました" });
 }
