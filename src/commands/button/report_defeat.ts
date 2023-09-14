@@ -8,6 +8,7 @@ import Boss from '../../entity/Boss';
 import Clan from '../../entity/Clan';
 import Event from '../../entity/Event';
 import Declaration from '../../entity/Declaration';
+import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const customId = 'report_defeat'
 export const data = new ButtonBuilder()
@@ -65,6 +66,18 @@ export async function execute(interaction: ButtonInteraction) {
     console.log(err)
   })
   content = user.name + 'が撃破しました'
+
+  const declarations = await DataSource.getRepository(Declaration).find(
+    {
+      where: {
+        bossId: boss.id,
+        isFinished: false
+      },
+      relations: {
+        user: true
+      }
+    })
+  await BossChannelMessage.sendMessage(interaction.channel!, clan!, boss, declarations,false)
   await interaction.reply({ content: content });
 }
 

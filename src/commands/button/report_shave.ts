@@ -8,6 +8,7 @@ import Boss from '../../entity/Boss';
 import Clan from '../../entity/Clan';
 import Event from '../../entity/Event';
 import Declaration from '../../entity/Declaration';
+import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const customId = 'report_shave'
 export const data = new ButtonBuilder()
@@ -34,6 +35,9 @@ export async function execute(interaction: ButtonInteraction) {
   }
   const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id)
   const clan = await DataSource.getRepository(Clan).findOneBy({ discordCategoryId: channel!.parentId! })
+  if (clan == null) {
+    throw new Error('clan is null')
+  }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss)
   const boss = await bossRepository.findOneBy({ discordChannelId: interaction.channel!.id })
@@ -62,6 +66,17 @@ export async function execute(interaction: ButtonInteraction) {
   const reportRepository = DataSource.getRepository(Report)
   await reportRepository.save(report)
 
+  const declarations = await DataSource.getRepository(Declaration).find(
+    {
+      where: {
+        bossId: boss.id,
+        isFinished: false
+      },
+      relations: {
+        user: true
+      }
+    })
+  await BossChannelMessage.sendMessage(interaction.channel!, clan!, boss, declarations,false)
   await interaction.reply({ content: user.name + 'が削りました' });
 }
 
