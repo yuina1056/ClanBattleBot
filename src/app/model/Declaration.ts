@@ -82,7 +82,6 @@ async function validate(
       isCarryOver: false,
     },
   });
-  console.log(reports);
   if (reports.length > 0) {
     return new Error("既に" + attackCount + "凸目は完了しています");
   }

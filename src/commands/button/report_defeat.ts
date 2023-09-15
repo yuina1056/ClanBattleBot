@@ -82,7 +82,6 @@ export async function execute(interaction: ButtonInteraction) {
     await interaction.reply({ content: content });
     return;
   }
-  console.log(declaration);
   if (declaration.id == null) {
     throw new Error("declaration.id is null");
   }
@@ -97,7 +96,6 @@ export async function execute(interaction: ButtonInteraction) {
       attackCount: declaration.attackCount,
     },
   });
-  console.log(reports);
   if (reports.length === 0) {
     isCarryOver = true;
   }
@@ -115,11 +113,7 @@ export async function execute(interaction: ButtonInteraction) {
     true,
     isCarryOver
   );
-  await DataSource.getRepository(Report)
-    .save(report)
-    .catch((err) => {
-      console.log(err);
-    });
+  await DataSource.getRepository(Report).save(report);
   content = user.name + "が撃破しました";
 
   const declarations = await DataSource.getRepository(Declaration).find({
