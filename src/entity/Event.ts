@@ -39,6 +39,9 @@ export default class Event {
     if (now.isBefore(dayjs(this.fromDate))) {
       throw new Error("クランバトル期間外です。");
     }
+    if (now.isAfter(dayjs(this.toDate))) {
+      throw new Error("クランバトル期間外です。");
+    }
     const dayDifference = now.diff(dayjs(this.fromDate), "day");
 
     return dayDifference + 1;
