@@ -3,10 +3,6 @@ import MockDate from "mockdate";
 import Event from "./Event";
 
 describe("Event", () => {
-  beforeEach(() => {
-    MockDate.set(new Date("2000-01-01T00:00:00.000Z"));
-  });
-
   afterEach(() => {
     MockDate.reset();
   });
