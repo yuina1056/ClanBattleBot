@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import dayjs from "dayjs";
 
 import DataSource from "../../datasource";
