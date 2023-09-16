@@ -34,7 +34,7 @@ export async function execute(interaction: ButtonInteraction) {
     discordChannelId: interaction.channel.id,
   });
   if (boss == null) {
-    throw new Error("boss is null");
+    throw new Error("ボス情報が取得できませんでした");
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
@@ -42,7 +42,7 @@ export async function execute(interaction: ButtonInteraction) {
     discordUserId: interaction.user.id,
   });
   if (user == null) {
-    throw new Error("user is null");
+    throw new Error("ユーザー情報が取得できませんでした");
   }
 
   // DBから削除
