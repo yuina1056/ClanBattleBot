@@ -1,15 +1,17 @@
 // discord.jsライブラリの中から必要な設定を呼び出し、変数に保存します
-import { Client, Events, GatewayIntentBits, Interaction } from 'discord.js';
-import dotenv from 'dotenv';
+import { Client, Events, GatewayIntentBits, Interaction } from "discord.js";
+import dotenv from "dotenv";
 
 dotenv.config();
 
 // default exportsのインポート
-import slash from './commands/slash';
-import button from './commands/button';
+import slash from "./commands/slash";
+import button from "./commands/button";
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers] });
+const client = new Client({
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
+});
 
 // クライアントオブジェクトが準備OKとなったとき一度だけ実行されます
 client.once(Events.ClientReady, () => {

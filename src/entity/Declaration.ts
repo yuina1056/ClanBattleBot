@@ -1,33 +1,61 @@
-import { Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, Column, ManyToOne } from "typeorm"
-import User from "./User"
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  Column,
+  ManyToOne,
+} from "typeorm";
+import User from "./User";
+import Event from "./Event";
 
 @Entity()
 // 凸宣言
 export default class Declaration {
   @PrimaryGeneratedColumn()
-  id?: number
+  id?: number;
   @Column()
-  clanId: number
+  clanId: number;
   @Column()
-  userId: number
-  @ManyToOne(() => User, user => user.declarations)
+  userId: number;
+  @ManyToOne(() => User, (user) => user.declarations)
   user!: User;
   @Column()
-  bossId: number
+  eventId: number;
+  @ManyToOne(() => Event, (event) => event.declarations)
+  event!: Event;
   @Column()
-  lap: number
+  bossId: number;
   @Column()
-  isFinished: boolean
+  lap: number;
+  @Column()
+  day: number;
+  @Column()
+  attackCount: number;
+  @Column()
+  isFinished: boolean;
   @CreateDateColumn()
-  CreatedAt?: Date
+  CreatedAt?: Date;
   @UpdateDateColumn()
-  UpdatedAt?: Date
+  UpdatedAt?: Date;
 
-  constructor(clanId: number, userId: number, bossId: number, lap: number, isFinished: boolean) {
-    this.clanId = clanId
-    this.userId = userId
-    this.bossId = bossId
-    this.lap = lap
-    this.isFinished = isFinished
+  constructor(
+    clanId: number,
+    userId: number,
+    eventId: number,
+    bossId: number,
+    lap: number,
+    day: number,
+    attackCount: number,
+    isFinished: boolean,
+  ) {
+    this.clanId = clanId;
+    this.userId = userId;
+    this.eventId = eventId;
+    this.bossId = bossId;
+    this.lap = lap;
+    this.day = day;
+    this.attackCount = attackCount;
+    this.isFinished = isFinished;
   }
 }

@@ -1,43 +1,47 @@
-import { ActionRowBuilder, EmbedBuilder, TextBasedChannel } from "discord.js"
+import {
+  ActionRowBuilder,
+  Message,
+  TextBasedChannel,
+  ButtonBuilder,
+} from "discord.js";
 
-import button_reload_attack_status from "../commands/button/reload_attack_status"
+import button_reload_attack_status from "../commands/button/reload_attack_status";
 
-export async function sendMessage(channel: TextBasedChannel, isInit: boolean) {
-  // コンポーネント定義
-  const embed = new EmbedBuilder().setTitle("凸状況").setColor("#00ff00").setFields(
-    {
-      name: '凸完了者',
-      value: 'なし'
-    },
-    {
-      name: '2凸完了者',
-      value: 'なし'
-    },
-    {
-      name: '1凸完了者',
-      value: 'なし'
-    },
-    {
-      name: '無凸',
-      value: 'なし'
-    },
-    {
-      name: '持ち越し',
-      value: 'なし'
+import User from "../entity/User";
+import Event from "../entity/Event";
+
+export async function sendMessage(
+  channel: TextBasedChannel,
+  message: Message | null,
+  users: User[],
+  event: Event | null,
+  isInit: boolean,
+) {
+  let userStatus: string = "";
+  users.forEach((user) => {
+    userStatus += user.getAttackStatus(event) + "\n";
+  });
+  const content: string = "```" + userStatus + "```";
+  const components = [
+    new ActionRowBuilder<ButtonBuilder>().addComponents(
+      button_reload_attack_status.data,
+    ),
+  ];
+  if (isInit) {
+    await channel.send({
+      content: content,
+      components: components,
+    });
+  } else {
+    if (message != null) {
+      await message.edit({
+        content: content,
+        components: components,
+      });
     }
-  )
-
-  await channel.send({
-    embeds: [
-      embed.toJSON() as any
-    ],
-    components: [
-      new ActionRowBuilder().addComponents(button_reload_attack_status.data).toJSON() as any
-    ]
-  })
-
+  }
 }
 
 export default {
-  sendMessage
-}
+  sendMessage,
+};
