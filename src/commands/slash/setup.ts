@@ -133,7 +133,7 @@ async function createManagementChannel(
   });
 
   if (channel.isTextBased()) {
-    await management_message.sendMessage(channel!, null, users, null, true);
+    await management_message.sendMessage(channel, null, users, null, true);
   }
 }
 
