@@ -40,30 +40,30 @@ export async function execute(interaction: CommandInteraction) {
     throw new Error("interaction.guild is null");
   }
 
-  // const categoryName = "クランバトル管理(" + roleName + ")";
-  // if (
-  //   guild.channels.cache.find((channel) => channel.name === categoryName) !=
-  //   null
-  // ) {
-  //   throw new Error("既にチャンネルのセットアップが完了しています");
-  // }
+  const categoryName = "クランバトル管理(" + roleName + ")";
+  if (
+    guild.channels.cache.find((channel) => channel.name === categoryName) !=
+    null
+  ) {
+    throw new Error("既にチャンネルのセットアップが完了しています");
+  }
 
-  // // カテゴリ作成
-  // await guild.channels.create({
-  //   name: categoryName,
-  //   type: ChannelType.GuildCategory,
-  // });
-  // const categoryId =
-  //   guild.channels.cache.find((channel) => channel.name === categoryName)?.id ??
-  //   "";
+  // カテゴリ作成
+  await guild.channels.create({
+    name: categoryName,
+    type: ChannelType.GuildCategory,
+  });
+  const categoryId =
+    guild.channels.cache.find((channel) => channel.name === categoryName)?.id ??
+    "";
 
-  // // DBにクラン情報保存
-  // const clan = new Clan(roleName, roleId, categoryId);
-  // const clanRepository = DataSource.getRepository(Clan);
-  // const saveClan = await clanRepository.save(clan);
-  // if (saveClan == null) {
-  //   throw new Error("クランの初期設定が完了しませんでした");
-  // }
+  // DBにクラン情報保存
+  const clan = new Clan(roleName, roleId, categoryId);
+  const clanRepository = DataSource.getRepository(Clan);
+  const saveClan = await clanRepository.save(clan);
+  if (saveClan == null) {
+    throw new Error("クランの初期設定が完了しませんでした");
+  }
 
   // Roleからユーザーを取得してDBに保存
   await interaction.guild.members.fetch();
@@ -84,19 +84,19 @@ export async function execute(interaction: CommandInteraction) {
         userName = guildMember.user.username;
       }
       console.log(userName);
-      // const user = new User(saveClan.id!, userName, guildMember.user.id);
-      // const userRepository = DataSource.getRepository(User);
-      // await userRepository.save(user);
+      const user = new User(saveClan.id!, userName, guildMember.user.id);
+      const userRepository = DataSource.getRepository(User);
+      await userRepository.save(user);
     });
   }
 
-  // // 作成したカテゴリ内にチャンネル作成
-  // await createManagementChannel(guild, "凸状況", clan);
-  // await createBossChannel(guild, roleName, 1, "1ボス", clan);
-  // await createBossChannel(guild, roleName, 2, "2ボス", clan);
-  // await createBossChannel(guild, roleName, 3, "3ボス", clan);
-  // await createBossChannel(guild, roleName, 4, "4ボス", clan);
-  // await createBossChannel(guild, roleName, 5, "5ボス", clan);
+  // 作成したカテゴリ内にチャンネル作成
+  await createManagementChannel(guild, "凸状況", clan);
+  await createBossChannel(guild, roleName, 1, "1ボス", clan);
+  await createBossChannel(guild, roleName, 2, "2ボス", clan);
+  await createBossChannel(guild, roleName, 3, "3ボス", clan);
+  await createBossChannel(guild, roleName, 4, "4ボス", clan);
+  await createBossChannel(guild, roleName, 5, "5ボス", clan);
 
   await interaction.followUp({
     content: "チャンネルを作成しました",
