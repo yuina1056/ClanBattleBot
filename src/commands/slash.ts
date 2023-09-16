@@ -18,17 +18,19 @@ export async function action(interaction: ChatInputCommandInteraction) {
   }
   if (action != null) {
     try {
+      await interaction.deferReply({
+        ephemeral: true,
+      });
       await action.execute(interaction);
     } catch (error) {
-      console.error(error);
       if (interaction.replied || interaction.deferred) {
         await interaction.followUp({
-          content: "コマンド実行時にエラーになりました。",
+          content: "コマンド実行時にエラーになりました。[" + error + "]",
           ephemeral: true,
         });
       } else {
-        await interaction.reply({
-          content: "コマンド実行時にエラーになりました。",
+        await interaction.followUp({
+          content: "コマンド実行時にエラーになりました。[" + error + "]",
           ephemeral: true,
         });
       }

@@ -4,7 +4,10 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-// default exportsのインポート
+import dataSource from "./datasource";
+
+dataSource.initialize();
+
 import slash from "./commands/slash";
 import button from "./commands/button";
 

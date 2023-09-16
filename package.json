@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "node build/main.js",
+    "start": "node build/src/main.js",
     "compile": "tsc -p .",
-    "deploy-command": "node build/deploy-command.js",
+    "deploy-command": "node build/src/deploy-command.js",
     "typeorm": "typeorm-ts-node-commonjs"
   },
   "author": "",

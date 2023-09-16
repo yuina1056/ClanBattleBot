@@ -24,10 +24,6 @@ export const data = new SlashCommandBuilder()
   );
 
 export async function execute(interaction: CommandInteraction) {
-  await interaction.deferReply({
-    ephemeral: true,
-  });
-
   let roleName: string;
   let roleId: string;
   if (interaction.options.data[0].role != null) {
@@ -49,10 +45,6 @@ export async function execute(interaction: CommandInteraction) {
     guild.channels.cache.find((channel) => channel.name === categoryName) !=
     null
   ) {
-    await interaction.reply({
-      content: "既にチャンネルのセットアップが完了しています",
-      ephemeral: true,
-    });
     throw new Error("既にチャンネルのセットアップが完了しています");
   }
 
@@ -70,11 +62,7 @@ export async function execute(interaction: CommandInteraction) {
   const clanRepository = DataSource.getRepository(Clan);
   const saveClan = await clanRepository.save(clan);
   if (saveClan == null) {
-    await interaction.reply({
-      content: "クランの初期設定が完了しませんでした",
-      ephemeral: true,
-    });
-    throw new Error("saveClan is null");
+    throw new Error("クランの初期設定が完了しませんでした");
   }
 
   // Roleからユーザーを取得してDBに保存
