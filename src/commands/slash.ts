@@ -9,6 +9,9 @@ export async function action(interaction: ChatInputCommandInteraction) {
       action = dice;
       break;
     case setup.data.name:
+      await interaction.deferReply({
+        ephemeral: true,
+      });
       action = setup;
       break;
     default:
@@ -18,9 +21,6 @@ export async function action(interaction: ChatInputCommandInteraction) {
   }
   if (action != null) {
     try {
-      await interaction.deferReply({
-        ephemeral: true,
-      });
       await action.execute(interaction);
     } catch (error) {
       if (interaction.replied || interaction.deferred) {

@@ -66,9 +66,14 @@ export async function execute(interaction: CommandInteraction) {
   }
 
   // Roleからユーザーを取得してDBに保存
-  const guildMembers = interaction.guild?.roles.cache.get(roleId)?.members;
+  await interaction.guild.members.fetch();
+  const role = await guild.roles.fetch(roleId);
+  console.log(role);
+  const guildMembers = await role?.members;
+  console.log(guildMembers);
   if (guildMembers != null) {
     guildMembers.forEach(async (guildMember) => {
+      console.log(guildMember);
       let userName = "";
       // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
       if (guildMember.nickname != null) {
@@ -78,6 +83,7 @@ export async function execute(interaction: CommandInteraction) {
       } else {
         userName = guildMember.user.username;
       }
+      console.log(userName);
       const user = new User(saveClan.id!, userName, guildMember.user.id);
       const userRepository = DataSource.getRepository(User);
       await userRepository.save(user);
