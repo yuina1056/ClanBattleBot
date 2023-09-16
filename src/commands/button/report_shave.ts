@@ -105,7 +105,9 @@ export async function execute(interaction: ButtonInteraction) {
     boss,
     declarations
   );
-  await interaction.reply({ content: user.name + "が削りました" });
+  await interaction.reply({
+    content: user.name + "が" + boss.bossid + "ボスを削りました",
+  });
 }
 
 export default {
