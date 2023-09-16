@@ -69,6 +69,7 @@ export async function execute(interaction: CommandInteraction) {
   const guildMembers = interaction.guild?.roles.cache.get(roleId)?.members;
   if (guildMembers != null) {
     guildMembers.forEach(async (guildMember) => {
+      console.log(guildMember);
       let userName = "";
       // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
       if (guildMember.nickname != null) {
