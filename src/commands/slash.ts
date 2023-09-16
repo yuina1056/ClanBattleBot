@@ -3,6 +3,9 @@ import dice from "./slash/dice";
 import setup from "./slash/setup";
 
 export async function action(interaction: ChatInputCommandInteraction) {
+  await interaction.deferReply({
+    ephemeral: true,
+  });
   let action = null;
   switch (interaction.commandName) {
     case dice.data.name:
@@ -18,9 +21,6 @@ export async function action(interaction: ChatInputCommandInteraction) {
   }
   if (action != null) {
     try {
-      await interaction.deferReply({
-        ephemeral: true,
-      });
       await action.execute(interaction);
     } catch (error) {
       if (interaction.replied || interaction.deferred) {

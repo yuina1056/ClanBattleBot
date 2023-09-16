@@ -66,7 +66,9 @@ export async function execute(interaction: CommandInteraction) {
   }
 
   // Roleからユーザーを取得してDBに保存
-  const guildMembers = interaction.guild?.roles.cache.get(roleId)?.members;
+  const role = await interaction.guild?.roles.fetch(roleId);
+  const guildMembers = await role?.members;
+  console.log(guildMembers);
   if (guildMembers != null) {
     guildMembers.forEach(async (guildMember) => {
       console.log(guildMember);
