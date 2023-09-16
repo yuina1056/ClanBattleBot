@@ -3,15 +3,15 @@ import dice from "./slash/dice";
 import setup from "./slash/setup";
 
 export async function action(interaction: ChatInputCommandInteraction) {
-  await interaction.deferReply({
-    ephemeral: true,
-  });
   let action = null;
   switch (interaction.commandName) {
     case dice.data.name:
       action = dice;
       break;
     case setup.data.name:
+      await interaction.deferReply({
+        ephemeral: true,
+      });
       action = setup;
       break;
     default:
