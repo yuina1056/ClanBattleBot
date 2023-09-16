@@ -47,13 +47,13 @@ export async function action(interaction: ButtonInteraction) {
     } catch (error) {
       console.error(error);
       await interaction.reply({
-        content: "コマンド実行時にエラーになりました。",
+        content: "コマンド実行時にエラーになりました。[" + error + "]",
         ephemeral: true,
       });
     }
   } else {
     await interaction.reply({
-      content: "コマンドが登録されていません。",
+      content: "コマンドが登録されていません。管理者にお問い合わせください。",
       ephemeral: true,
     });
   }
