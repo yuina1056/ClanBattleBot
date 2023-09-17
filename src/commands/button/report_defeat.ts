@@ -40,7 +40,7 @@ export async function execute(interaction: ButtonInteraction) {
     .andWhere("event.toDate >= :today", { today })
     .getOne();
   if (event == null) {
-    throw new Error("event is null");
+    throw new Error("クランバトル開催情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find(
     (channel) => channel.id === interaction.channel?.id
@@ -55,7 +55,7 @@ export async function execute(interaction: ButtonInteraction) {
     discordCategoryId: channel.parentId,
   });
   if (clan == null) {
-    throw new Error("clan is null");
+    throw new Error("クラン情報が取得できませんでした");
   }
   // ボス情報取得
   const bossRepository = DataSource.getRepository(Boss);
@@ -63,7 +63,7 @@ export async function execute(interaction: ButtonInteraction) {
     discordChannelId: interaction.channel?.id,
   });
   if (boss == null) {
-    throw new Error("boss is null");
+    throw new Error("ボス情報が取得できませんでした");
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
@@ -72,7 +72,7 @@ export async function execute(interaction: ButtonInteraction) {
     clanId: clan.id,
   });
   if (user == null) {
-    throw new Error("user is null");
+    throw new Error("ユーザー情報が取得できませんでした");
   }
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
@@ -115,7 +115,7 @@ export async function execute(interaction: ButtonInteraction) {
     isCarryOver
   );
   await DataSource.getRepository(Report).save(report);
-  content = user.name + "が撃破しました";
+  content = user.name + "が" + boss.bossid + "ボスを撃破しました";
 
   const declarations = await DataSource.getRepository(Declaration).find({
     where: {

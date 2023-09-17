@@ -78,6 +78,10 @@ export async function execute(interaction: ButtonInteraction) {
     boss,
     declarations
   );
+  const deleteMessage = await channel.messages.fetch(
+    interaction.message.reference?.messageId ?? ""
+  );
+  await deleteMessage.delete();
   await interaction.reply({ content: content });
 }
 

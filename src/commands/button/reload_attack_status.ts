@@ -41,7 +41,7 @@ export async function execute(interaction: ButtonInteraction) {
     discordCategoryId: channel.parentId,
   });
   if (clan == null) {
-    throw new Error("clan is null");
+    throw new Error("クラン情報が取得できませんでした");
   }
   const users = await DataSource.getRepository(User).find({
     where: { clanId: clan.id },
