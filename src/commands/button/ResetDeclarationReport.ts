@@ -1,4 +1,9 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
+import {
+  ButtonBuilder,
+  ButtonStyle,
+  ButtonInteraction,
+  ActionRowBuilder,
+} from "discord.js";
 
 export const customId = "reset_declaration_report";
 export const data = new ButtonBuilder()
@@ -6,10 +11,22 @@ export const data = new ButtonBuilder()
   .setStyle(ButtonStyle.Secondary)
   .setLabel("凸状況リセット");
 
+import button_reset_declaration_report_first from "./ResetDeclarationReportFirst";
+import button_reset_declaration_report_second from "./ResetDeclarationReportSecond";
+import button_reset_declaration_report_third from "./ResetDeclarationReportThird";
+
 export async function execute(interaction: ButtonInteraction) {
   await interaction.reply({
-    content: "凸状況をリセットしました",
     ephemeral: true,
+    content:
+      "どの凸をリセットしますか？(ボタンを押したらリセット処理が行われます)",
+    components: [
+      new ActionRowBuilder<ButtonBuilder>().addComponents(
+        button_reset_declaration_report_first.data,
+        button_reset_declaration_report_second.data,
+        button_reset_declaration_report_third.data
+      ),
+    ],
   });
 }
 
