@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 
 import button_reload_attack_status from "../commands/button/reload_attack_status";
+import button_manage_menu from "../commands/button/ManageMenu";
 
 import User from "../entity/User";
 import Event from "../entity/Event";
@@ -24,7 +25,8 @@ export async function sendMessage(
   const content: string = "```" + userStatus + "```";
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
-      button_reload_attack_status.data
+      button_reload_attack_status.data,
+      button_manage_menu.data
     ),
   ];
   if (isInit) {

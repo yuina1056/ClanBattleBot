@@ -8,6 +8,11 @@ import reload_attack_status from "./button/reload_attack_status";
 import attack_first from "./button/DeclarationFirst";
 import attack_second from "./button/DeclarationSecond";
 import attack_third from "./button/DeclarationThird";
+import manage_menu from "./button/ManageMenu";
+import reset_declaration_report from "./button/ResetDeclarationReport";
+import reset_declaration_report_first from "./button/ResetDeclarationReportFirst";
+import reset_declaration_report_second from "./button/ResetDeclarationReportSecond";
+import reset_declaration_report_third from "./button/ResetDeclarationReportThird";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -35,6 +40,21 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case attack_third.customId:
       action = attack_third;
+      break;
+    case manage_menu.customId:
+      action = manage_menu;
+      break;
+    case reset_declaration_report.customId:
+      action = reset_declaration_report;
+      break;
+    case reset_declaration_report_first.customId:
+      action = reset_declaration_report_first;
+      break;
+    case reset_declaration_report_second.customId:
+      action = reset_declaration_report_second;
+      break;
+    case reset_declaration_report_third.customId:
+      action = reset_declaration_report_third;
       break;
     default:
       console.error(
