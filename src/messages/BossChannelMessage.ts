@@ -20,7 +20,6 @@ export async function sendMessage(
   declaration: Declaration[]
 ) {
   let declarationMember = "凸宣言者なし";
-  console.log(declaration.length);
   if (declaration.length > 0) {
     declarationMember = "";
     declaration.forEach((declaration) => {
