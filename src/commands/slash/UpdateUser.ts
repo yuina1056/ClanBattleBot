@@ -1,0 +1,72 @@
+import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
+import dataSource from "../../datasource";
+import Clan from "../../entity/Clan";
+import User from "../../entity/User";
+
+export const data = new SlashCommandBuilder()
+  .setName("updateUser")
+  .setDescription("ユーザー情報を更新します")
+  .addRoleOption((option) =>
+    option
+      .setName("ロール")
+      .setDescription("ユーザー情報を更新するクランのロールを入力")
+      .setRequired(true)
+  );
+
+export async function execute(interaction: CommandInteraction) {
+  let roleId: string;
+  if (interaction.options.data[0].role != null) {
+    roleId = interaction.options.data[0].role.id;
+  } else {
+    throw new Error("role is null");
+  }
+
+  let guild: Guild;
+  if (interaction.guild != null) {
+    guild = interaction.guild;
+  } else {
+    throw new Error("interaction.guild is null");
+  }
+  const clan = await dataSource.getRepository(Clan).findOneBy({
+    discordRoleId: roleId,
+  });
+  if (clan == null) {
+    throw new Error("clan is null");
+  }
+  const userRepository = dataSource.getRepository(User);
+  const users = await userRepository.findBy({ clanId: clan.id });
+
+  await interaction.guild.members.fetch();
+  const role = await guild.roles.fetch(roleId);
+  const guildMembers = await role?.members;
+  if (guildMembers != null) {
+    guildMembers.forEach(async (guildMember) => {
+      let userName = "";
+      // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
+      if (guildMember.nickname != null) {
+        userName = guildMember.nickname;
+      } else if (guildMember.user.globalName != null) {
+        userName = guildMember.user.globalName;
+      } else {
+        userName = guildMember.user.username;
+      }
+      const user = users.find(
+        (user) => user.discordUserId === guildMember.user.id
+      );
+      if (user != null) {
+        user.name = userName;
+        await userRepository.save(user);
+      } else {
+        const user = new User(clan.id ?? 0, userName, guildMember.user.id);
+        await userRepository.save(user);
+      }
+    });
+  }
+
+  await interaction.followUp("ユーザー情報を更新しました");
+}
+
+export default {
+  data,
+  execute,
+};
