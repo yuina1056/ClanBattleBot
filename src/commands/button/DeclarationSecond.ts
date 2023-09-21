@@ -28,14 +28,6 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  // ボス情報取得
-  const bossRepository = DataSource.getRepository(Boss);
-  const boss = await bossRepository.findOneBy({
-    discordChannelId: interaction.channel.id,
-  });
-  if (boss == null) {
-    throw new Error("ボス情報が取得できませんでした");
-  }
   const channel = guild.channels.cache.find(
     (channel) => channel.id === interaction.channel?.id
   );
@@ -50,6 +42,15 @@ export async function execute(interaction: ButtonInteraction) {
   });
   if (clan == null) {
     throw new Error("クラン情報が取得できませんでした");
+  }
+  // ボス情報取得
+  const bossRepository = DataSource.getRepository(Boss);
+  const boss = await bossRepository.findOneBy({
+    clanId: clan.id,
+    discordChannelId: interaction.channel.id,
+  });
+  if (boss == null) {
+    throw new Error("ボス情報が取得できませんでした");
   }
 
   let content = "";

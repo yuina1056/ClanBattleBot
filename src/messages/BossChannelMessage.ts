@@ -17,7 +17,7 @@ export async function sendMessage(
   channel: TextBasedChannel,
   clan: Clan,
   boss: Boss,
-  declaration: Declaration[],
+  declaration: Declaration[]
 ) {
   let declarationMember = "凸宣言者なし";
   if (declaration.length > 0) {
