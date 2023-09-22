@@ -1,8 +1,8 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from 'discord.js';
 
-import button_attack_first from './DeclarationFirst';
-import button_attack_second from './DeclarationSecond';
-import button_attack_third from './DeclarationThird';
+import button_attack_first from './declarationFirst';
+import button_attack_second from './declarationSecond';
+import button_attack_third from './declarationThird';
 
 export const customId = 'declaration_start';
 export const data = new ButtonBuilder()

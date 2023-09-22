@@ -1,9 +1,9 @@
 import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from 'discord.js';
 
-import button_declaration from '../commands/button/declaration_start';
-import button_report_shave from '../commands/button/report_shave';
-import button_report_defeat from '../commands/button/report_defeat';
-import button_declaration_cancel from '../commands/button/declaration_cancel';
+import button_declaration from '../commands/button/declarationStart';
+import button_report_shave from '../commands/button/reportShave';
+import button_report_defeat from '../commands/button/reportDefeat';
+import button_declaration_cancel from '../commands/button/declarationCancel';
 import Clan from '../entity/clan';
 import Boss from '../entity/boss';
 import Declaration from '../entity/declaration';

@@ -6,9 +6,9 @@ export const data = new ButtonBuilder()
   .setStyle(ButtonStyle.Secondary)
   .setLabel('凸状況リセット');
 
-import button_reset_declaration_report_first from './ResetDeclarationReportFirst';
-import button_reset_declaration_report_second from './ResetDeclarationReportSecond';
-import button_reset_declaration_report_third from './ResetDeclarationReportThird';
+import button_reset_declaration_report_first from './resetDeclarationReportFirst';
+import button_reset_declaration_report_second from './resetDeclarationReportSecond';
+import button_reset_declaration_report_third from './resetDeclarationReportThird';
 
 export async function execute(interaction: ButtonInteraction) {
   await interaction.reply({
