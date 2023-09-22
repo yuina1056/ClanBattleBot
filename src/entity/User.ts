@@ -6,6 +6,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  DeleteDateColumn,
 } from "typeorm";
 import dayjs from "dayjs";
 
@@ -31,6 +32,8 @@ export default class User {
   CreatedAt?: Date;
   @UpdateDateColumn()
   UpdatedAt?: Date;
+  @DeleteDateColumn()
+  DeletedAt?: Date;
   @OneToMany(() => Report, (report) => report.user)
   reports?: Report[];
   @OneToMany(() => Declaration, (declaration) => declaration.user)
@@ -109,8 +112,7 @@ export default class User {
           res += "/";
         }
       }
-      res +=
-        "] (" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ")";
+      res += "] (" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ")";
     }
     return res;
   }

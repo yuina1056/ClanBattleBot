@@ -20,7 +20,7 @@ const dataSource = new DataSource({
   synchronize: false,
   logging: process.env.DB_LOGGING === "true" ? true : false,
   entities: [Boss, Clan, Declaration, Event, Report, User],
-  migrations: [`src/migration/*.${process.env.ENV === "local" ? "ts" : "js"}`],
+  migrations: [`src/migration/*`],
 });
 
 dataSource.initialize();

@@ -69,9 +69,7 @@ export async function execute(interaction: CommandInteraction) {
   // Roleからユーザーを取得してDBに保存
   await interaction.guild.members.fetch();
   const role = await guild.roles.fetch(roleId);
-  console.log(role);
   const guildMembers = await role?.members;
-  console.log(guildMembers);
   if (guildMembers != null) {
     guildMembers.forEach(async (guildMember) => {
       console.log(guildMember);
@@ -84,7 +82,6 @@ export async function execute(interaction: CommandInteraction) {
       } else {
         userName = guildMember.user.username;
       }
-      console.log(userName);
       const user = new User(saveClan.id!, userName, guildMember.user.id);
       const userRepository = DataSource.getRepository(User);
       await userRepository.save(user);
