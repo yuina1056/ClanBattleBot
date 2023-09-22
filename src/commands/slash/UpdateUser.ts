@@ -4,7 +4,7 @@ import Clan from "../../entity/Clan";
 import User from "../../entity/User";
 
 export const data = new SlashCommandBuilder()
-  .setName("updateUser")
+  .setName("updateuser")
   .setDescription("ユーザー情報を更新します")
   .addRoleOption((option) =>
     option
@@ -15,8 +15,10 @@ export const data = new SlashCommandBuilder()
 
 export async function execute(interaction: CommandInteraction) {
   let roleId: string;
+  let roleName: string;
   if (interaction.options.data[0].role != null) {
     roleId = interaction.options.data[0].role.id;
+    roleName = interaction.options.data[0].role.name;
   } else {
     throw new Error("role is null");
   }
@@ -35,6 +37,11 @@ export async function execute(interaction: CommandInteraction) {
   }
   const userRepository = dataSource.getRepository(User);
   const users = await userRepository.findBy({ clanId: clan.id });
+  await userRepository
+    .createQueryBuilder("user")
+    .softDelete()
+    .where("clanId = :clanId", { clanId: clan.id })
+    .execute();
 
   await interaction.guild.members.fetch();
   const role = await guild.roles.fetch(roleId);
@@ -55,6 +62,7 @@ export async function execute(interaction: CommandInteraction) {
       );
       if (user != null) {
         user.name = userName;
+        await userRepository.restore(user.id ?? 0);
         await userRepository.save(user);
       } else {
         const user = new User(clan.id ?? 0, userName, guildMember.user.id);
@@ -63,7 +71,9 @@ export async function execute(interaction: CommandInteraction) {
     });
   }
 
-  await interaction.followUp("ユーザー情報を更新しました");
+  await interaction.followUp(
+    "クランロール[" + roleName + "]のユーザー情報を更新しました"
+  );
 }
 
 export default {
