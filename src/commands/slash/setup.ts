@@ -2,12 +2,12 @@
 import { ChannelType, SlashCommandBuilder, Guild, CommandInteraction } from 'discord.js';
 
 import DataSource from '../../database/dataSource';
-import Clan from '../../entity/Clan';
-import User from '../../entity/User';
-import Boss from '../../entity/Boss';
+import Clan from '../../entityOld/Clan';
+import User from '../../entityOld/User';
+import Boss from '../../entityOld/Boss';
 import management_message from '../../messages/ManagementChannelMessage';
 import BossChannelMessage from '../../messages/BossChannelMessage';
-import Declaration from '../../entity/Declaration';
+import Declaration from '../../entityOld/Declaration';
 
 export const data = new SlashCommandBuilder()
   .setName('setup')

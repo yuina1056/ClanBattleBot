@@ -3,8 +3,8 @@ import { ActionRowBuilder, Message, TextBasedChannel, ButtonBuilder } from 'disc
 import button_reload_attack_status from '../commands/button/reload_attack_status';
 import button_manage_menu from '../commands/button/ManageMenu';
 
-import User from '../entity/User';
-import Event from '../entity/Event';
+import User from '../entityOld/User';
+import Event from '../entityOld/Event';
 
 export async function sendMessage(
   channel: TextBasedChannel,

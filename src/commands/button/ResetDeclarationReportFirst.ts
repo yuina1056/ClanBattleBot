@@ -8,11 +8,11 @@ export const data = new ButtonBuilder()
   .setLabel('1凸目リセット');
 
 import DataSource from '../../database/dataSource';
-import Clan from '../../entity/Clan';
-import User from '../../entity/User';
-import Declaration from '../../entity/Declaration';
-import Event from '../../entity/Event';
-import Report from '../../entity/Report';
+import Clan from '../../entityOld/Clan';
+import User from '../../entityOld/User';
+import Declaration from '../../entityOld/Declaration';
+import Event from '../../entityOld/Event';
+import Report from '../../entityOld/Report';
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;

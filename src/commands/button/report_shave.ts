@@ -3,12 +3,12 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js
 import dayjs from 'dayjs';
 
 import DataSource from '../../database/dataSource';
-import User from '../../entity/User';
-import Report from '../../entity/Report';
-import Boss from '../../entity/Boss';
-import Clan from '../../entity/Clan';
-import Event from '../../entity/Event';
-import Declaration from '../../entity/Declaration';
+import User from '../../entityOld/User';
+import Report from '../../entityOld/Report';
+import Boss from '../../entityOld/Boss';
+import Clan from '../../entityOld/Clan';
+import Event from '../../entityOld/Event';
+import Declaration from '../../entityOld/Declaration';
 import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const customId = 'report_shave';
