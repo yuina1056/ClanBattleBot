@@ -7,7 +7,7 @@ export const data = new ButtonBuilder()
   .setStyle(ButtonStyle.Secondary)
   .setLabel('1凸目リセット');
 
-import DataSource from '../../datasource';
+import DataSource from '../../database/dataSource';
 import Clan from '../../entity/Clan';
 import User from '../../entity/User';
 import Declaration from '../../entity/Declaration';

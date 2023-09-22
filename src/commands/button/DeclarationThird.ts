@@ -1,7 +1,7 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
 
 import Declaration from '../../app/model/Declaration';
-import DataSource from '../../datasource';
+import DataSource from '../../database/dataSource';
 import Boss from '../../entity/Boss';
 import Clan from '../../entity/Clan';
 import DeclarationRepository from '../../entity/Declaration';

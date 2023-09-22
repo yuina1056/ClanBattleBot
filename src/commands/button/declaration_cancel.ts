@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
 
-import DataSource from '../../datasource';
+import DataSource from '../../database/dataSource';
 import User from '../../entity/User';
 import Boss from '../../entity/Boss';
 import Clan from '../../entity/Clan';

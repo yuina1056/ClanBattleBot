@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-import dataSource from './datasource';
+import dataSource from './database/dataSource';
 
 dataSource.initialize();
 
