@@ -5,8 +5,8 @@ import {
   UpdateDateColumn,
   Column,
   OneToMany,
-} from "typeorm";
-import User from "./User";
+} from 'typeorm';
+import User from './User';
 
 @Entity()
 // クラン

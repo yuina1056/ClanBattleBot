@@ -5,9 +5,9 @@ import {
   UpdateDateColumn,
   Column,
   ManyToOne,
-} from "typeorm";
-import User from "./User";
-import Event from "./Event";
+} from 'typeorm';
+import User from './User';
+import Event from './Event';
 
 @Entity()
 // 凸報告

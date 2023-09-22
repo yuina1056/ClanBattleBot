@@ -1,17 +1,11 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  Unique,
-} from "typeorm";
-import dayjs from "dayjs";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from 'typeorm';
+import dayjs from 'dayjs';
 
-import Report from "./Report";
-import Declaration from "./Declaration";
+import Report from './Report';
+import Declaration from './Declaration';
 
 @Entity()
-@Unique(["month"])
+@Unique(['month'])
 // クランバトル開催情報
 export default class Event {
   @PrimaryGeneratedColumn()
@@ -37,12 +31,12 @@ export default class Event {
   public getClanBattleDay(): number {
     const now = dayjs();
     if (now.isBefore(dayjs(this.fromDate))) {
-      throw new Error("クランバトル期間外です。");
+      throw new Error('クランバトル期間外です。');
     }
     if (now.isAfter(dayjs(this.toDate))) {
-      throw new Error("クランバトル期間外です。");
+      throw new Error('クランバトル期間外です。');
     }
-    const dayDifference = now.diff(dayjs(this.fromDate), "day");
+    const dayDifference = now.diff(dayjs(this.fromDate), 'day');
 
     return dayDifference + 1;
   }

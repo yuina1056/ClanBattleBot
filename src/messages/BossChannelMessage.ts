@@ -1,17 +1,12 @@
-import {
-  ActionRowBuilder,
-  EmbedBuilder,
-  TextBasedChannel,
-  ButtonBuilder,
-} from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from 'discord.js';
 
-import button_declaration from "../commands/button/declaration_start";
-import button_report_shave from "../commands/button/report_shave";
-import button_report_defeat from "../commands/button/report_defeat";
-import button_declaration_cancel from "../commands/button/declaration_cancel";
-import Clan from "../entity/Clan";
-import Boss from "../entity/Boss";
-import Declaration from "../entity/Declaration";
+import button_declaration from '../commands/button/declaration_start';
+import button_report_shave from '../commands/button/report_shave';
+import button_report_defeat from '../commands/button/report_defeat';
+import button_declaration_cancel from '../commands/button/declaration_cancel';
+import Clan from '../entity/Clan';
+import Boss from '../entity/Boss';
+import Declaration from '../entity/Declaration';
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -19,20 +14,20 @@ export async function sendMessage(
   boss: Boss,
   declaration: Declaration[]
 ) {
-  let declarationMember = "凸宣言者なし";
+  let declarationMember = '凸宣言者なし';
   if (declaration.length > 0) {
-    declarationMember = "";
+    declarationMember = '';
     declaration.forEach((declaration) => {
-      declarationMember = declarationMember + "\n" + declaration.user.name;
+      declarationMember = declarationMember + '\n' + declaration.user.name;
     });
   }
   // コンポーネント定義
   const embed = new EmbedBuilder()
-    .setTitle(boss.bossid + "ボス")
-    .setColor("#00ff00")
+    .setTitle(boss.bossid + 'ボス')
+    .setColor('#00ff00')
     .setFields(
       {
-        name: "クラン名",
+        name: 'クラン名',
         value: clan.name,
       },
       // TODO: 今後実装
@@ -46,7 +41,7 @@ export async function sendMessage(
       //   value: 'hogehoge:TODO'
       // },
       {
-        name: "凸宣言者",
+        name: '凸宣言者',
         value: declarationMember,
       }
     );

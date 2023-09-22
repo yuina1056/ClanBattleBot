@@ -1,15 +1,10 @@
-import {
-  ActionRowBuilder,
-  Message,
-  TextBasedChannel,
-  ButtonBuilder,
-} from "discord.js";
+import { ActionRowBuilder, Message, TextBasedChannel, ButtonBuilder } from 'discord.js';
 
-import button_reload_attack_status from "../commands/button/reload_attack_status";
-import button_manage_menu from "../commands/button/ManageMenu";
+import button_reload_attack_status from '../commands/button/reload_attack_status';
+import button_manage_menu from '../commands/button/ManageMenu';
 
-import User from "../entity/User";
-import Event from "../entity/Event";
+import User from '../entity/User';
+import Event from '../entity/Event';
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -18,11 +13,11 @@ export async function sendMessage(
   event: Event | null,
   isInit: boolean
 ) {
-  let userStatus = "";
+  let userStatus = '';
   users.forEach((user) => {
-    userStatus += user.getAttackStatus(event) + "\n";
+    userStatus += user.getAttackStatus(event) + '\n';
   });
-  const content: string = "```" + userStatus + "```";
+  const content: string = '```' + userStatus + '```';
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,

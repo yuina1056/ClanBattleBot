@@ -1,15 +1,15 @@
-import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
-import dataSource from "../../datasource";
-import Clan from "../../entity/Clan";
-import User from "../../entity/User";
+import { SlashCommandBuilder, CommandInteraction, Guild } from 'discord.js';
+import dataSource from '../../datasource';
+import Clan from '../../entity/Clan';
+import User from '../../entity/User';
 
 export const data = new SlashCommandBuilder()
-  .setName("updateuser")
-  .setDescription("ユーザー情報を更新します")
+  .setName('updateuser')
+  .setDescription('ユーザー情報を更新します')
   .addRoleOption((option) =>
     option
-      .setName("ロール")
-      .setDescription("ユーザー情報を更新するクランのロールを入力")
+      .setName('ロール')
+      .setDescription('ユーザー情報を更新するクランのロールを入力')
       .setRequired(true)
   );
 
@@ -20,27 +20,27 @@ export async function execute(interaction: CommandInteraction) {
     roleId = interaction.options.data[0].role.id;
     roleName = interaction.options.data[0].role.name;
   } else {
-    throw new Error("role is null");
+    throw new Error('role is null');
   }
 
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
   } else {
-    throw new Error("interaction.guild is null");
+    throw new Error('interaction.guild is null');
   }
   const clan = await dataSource.getRepository(Clan).findOneBy({
     discordRoleId: roleId,
   });
   if (clan == null) {
-    throw new Error("clan is null");
+    throw new Error('clan is null');
   }
   const userRepository = dataSource.getRepository(User);
   const users = await userRepository.findBy({ clanId: clan.id });
   await userRepository
-    .createQueryBuilder("user")
+    .createQueryBuilder('user')
     .softDelete()
-    .where("clanId = :clanId", { clanId: clan.id })
+    .where('clanId = :clanId', { clanId: clan.id })
     .execute();
 
   await interaction.guild.members.fetch();
@@ -48,12 +48,10 @@ export async function execute(interaction: CommandInteraction) {
   const guildMembers = await role?.members;
   if (guildMembers != null) {
     if (guildMembers.size > 30) {
-      throw new Error(
-        "メンバー数が30人を超えています。ロール設定を見直しして再実行してください。"
-      );
+      throw new Error('メンバー数が30人を超えています。ロール設定を見直しして再実行してください。');
     }
     guildMembers.forEach(async (guildMember) => {
-      let userName = "";
+      let userName = '';
       // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
       if (guildMember.nickname != null) {
         userName = guildMember.nickname;
@@ -62,9 +60,7 @@ export async function execute(interaction: CommandInteraction) {
       } else {
         userName = guildMember.user.username;
       }
-      const user = users.find(
-        (user) => user.discordUserId === guildMember.user.id
-      );
+      const user = users.find((user) => user.discordUserId === guildMember.user.id);
       if (user != null) {
         user.name = userName;
         await userRepository.restore(user.id ?? 0);
@@ -76,9 +72,7 @@ export async function execute(interaction: CommandInteraction) {
     });
   }
 
-  await interaction.followUp(
-    "クランロール[" + roleName + "]のユーザー情報を更新しました"
-  );
+  await interaction.followUp('クランロール[' + roleName + ']のユーザー情報を更新しました');
 }
 
 export default {

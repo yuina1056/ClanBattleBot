@@ -1,18 +1,18 @@
-import { ButtonInteraction } from "discord.js";
+import { ButtonInteraction } from 'discord.js';
 
-import declaration_start from "./button/declaration_start";
-import declaration_cancel from "./button/declaration_cancel";
-import report_shave from "./button/report_shave";
-import report_defeat from "./button/report_defeat";
-import reload_attack_status from "./button/reload_attack_status";
-import attack_first from "./button/DeclarationFirst";
-import attack_second from "./button/DeclarationSecond";
-import attack_third from "./button/DeclarationThird";
-import manage_menu from "./button/ManageMenu";
-import reset_declaration_report from "./button/ResetDeclarationReport";
-import reset_declaration_report_first from "./button/ResetDeclarationReportFirst";
-import reset_declaration_report_second from "./button/ResetDeclarationReportSecond";
-import reset_declaration_report_third from "./button/ResetDeclarationReportThird";
+import declaration_start from './button/declaration_start';
+import declaration_cancel from './button/declaration_cancel';
+import report_shave from './button/report_shave';
+import report_defeat from './button/report_defeat';
+import reload_attack_status from './button/reload_attack_status';
+import attack_first from './button/DeclarationFirst';
+import attack_second from './button/DeclarationSecond';
+import attack_third from './button/DeclarationThird';
+import manage_menu from './button/ManageMenu';
+import reset_declaration_report from './button/ResetDeclarationReport';
+import reset_declaration_report_first from './button/ResetDeclarationReportFirst';
+import reset_declaration_report_second from './button/ResetDeclarationReportSecond';
+import reset_declaration_report_third from './button/ResetDeclarationReportThird';
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -57,9 +57,7 @@ export async function action(interaction: ButtonInteraction) {
       action = reset_declaration_report_third;
       break;
     default:
-      console.error(
-        `${interaction.customId}というボタンには対応していません。`
-      );
+      console.error(`${interaction.customId}というボタンには対応していません。`);
   }
   if (action != null) {
     try {
@@ -67,13 +65,13 @@ export async function action(interaction: ButtonInteraction) {
     } catch (error) {
       console.error(error);
       await interaction.reply({
-        content: "コマンド実行時にエラーになりました。[" + error + "]",
+        content: 'コマンド実行時にエラーになりました。[' + error + ']',
         ephemeral: true,
       });
     }
   } else {
     await interaction.reply({
-      content: "コマンドが登録されていません。管理者にお問い合わせください。",
+      content: 'コマンドが登録されていません。管理者にお問い合わせください。',
       ephemeral: true,
     });
   }

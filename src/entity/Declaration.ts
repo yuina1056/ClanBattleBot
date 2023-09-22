@@ -5,9 +5,9 @@ import {
   UpdateDateColumn,
   Column,
   ManyToOne,
-} from "typeorm";
-import User from "./User";
-import Event from "./Event";
+} from 'typeorm';
+import User from './User';
+import Event from './Event';
 
 @Entity()
 // 凸宣言
@@ -47,7 +47,7 @@ export default class Declaration {
     lap: number,
     day: number,
     attackCount: number,
-    isFinished: boolean,
+    isFinished: boolean
   ) {
     this.clanId = clanId;
     this.userId = userId;
