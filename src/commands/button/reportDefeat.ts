@@ -9,7 +9,7 @@ import Boss from '../../entity/boss';
 import Clan from '../../entity/clan';
 import Event from '../../entity/event';
 import Declaration from '../../entity/declaration';
-import BossChannelMessage from '../../messages/BossChannelMessage';
+import BossChannelMessage from '../../messages/bossChannelMessage';
 
 export const customId = 'report_defeat';
 export const data = new ButtonBuilder()

@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import dice from './slash/dice';
 import setup from './slash/setup';
-import updateUser from './slash/UpdateUser';
+import updateUser from './slash/updateUser';
 
 export async function action(interaction: ChatInputCommandInteraction) {
   let action = null;

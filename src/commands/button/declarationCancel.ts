@@ -5,7 +5,7 @@ import User from '../../entity/user';
 import Boss from '../../entity/boss';
 import Clan from '../../entity/clan';
 import Declaration from '../../entity/declaration';
-import BossChannelMessage from '../../messages/BossChannelMessage';
+import BossChannelMessage from '../../messages/bossChannelMessage';
 
 export const customId = 'declaration_cancel';
 export const data = new ButtonBuilder()

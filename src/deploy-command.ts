@@ -6,7 +6,7 @@ dotenv.config();
 
 import diceFile from './commands/slash/dice';
 import setupFile from './commands/slash/setup';
-import updateUserFile from './commands/slash/UpdateUser';
+import updateUserFile from './commands/slash/updateUser';
 
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [diceFile.data.toJSON(), setupFile.data.toJSON(), updateUserFile.data.toJSON()];
