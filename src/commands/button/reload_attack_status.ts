@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 
 import ManagementMessage from '../../messages/ManagementChannelMessage';
 import DataSource from '../../database/dataSource';
-import User from '../../entityOld/User';
-import Clan from '../../entityOld/Clan';
-import Event from '../../entityOld/Event';
+import User from '../../entity/user';
+import Clan from '../../entity/clan';
+import Event from '../../entity/event';
 
 export const customId = 'reload_attack_status';
 export const data = new ButtonBuilder()

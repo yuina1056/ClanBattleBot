@@ -6,8 +6,8 @@ import {
   Column,
   ManyToOne,
 } from 'typeorm';
-import User from './User';
-import Event from './Event';
+import User from './user';
+import Event from './event';
 
 @Entity()
 // 凸宣言

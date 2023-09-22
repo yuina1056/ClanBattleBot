@@ -4,9 +4,9 @@ import button_declaration from '../commands/button/declaration_start';
 import button_report_shave from '../commands/button/report_shave';
 import button_report_defeat from '../commands/button/report_defeat';
 import button_declaration_cancel from '../commands/button/declaration_cancel';
-import Clan from '../entityOld/Clan';
-import Boss from '../entityOld/Boss';
-import Declaration from '../entityOld/Declaration';
+import Clan from '../entity/clan';
+import Boss from '../entity/boss';
+import Declaration from '../entity/declaration';
 
 export async function sendMessage(
   channel: TextBasedChannel,

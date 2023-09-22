@@ -1,10 +1,10 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js';
 
 import DataSource from '../../database/dataSource';
-import User from '../../entityOld/User';
-import Boss from '../../entityOld/Boss';
-import Clan from '../../entityOld/Clan';
-import Declaration from '../../entityOld/Declaration';
+import User from '../../entity/user';
+import Boss from '../../entity/boss';
+import Clan from '../../entity/clan';
+import Declaration from '../../entity/declaration';
 import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const customId = 'declaration_cancel';

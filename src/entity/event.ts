@@ -1,8 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from 'typeorm';
 import dayjs from 'dayjs';
 
-import Report from './Report';
-import Declaration from './Declaration';
+import Report from './report';
+import Declaration from './declaration';
 
 @Entity()
 @Unique(['month'])

@@ -2,9 +2,9 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from 'discord.js
 
 import Declaration from '../../app/model/Declaration';
 import DataSource from '../../database/dataSource';
-import Boss from '../../entityOld/Boss';
-import Clan from '../../entityOld/Clan';
-import DeclarationRepository from '../../entityOld/Declaration';
+import Boss from '../../entity/boss';
+import Clan from '../../entity/clan';
+import DeclarationRepository from '../../entity/declaration';
 import BossChannelMessage from '../../messages/BossChannelMessage';
 
 export const customId = 'declaration_second';

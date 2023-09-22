@@ -8,11 +8,11 @@ export const data = new ButtonBuilder()
   .setLabel('3凸目リセット');
 
 import DataSource from '../../database/dataSource';
-import Clan from '../../entityOld/Clan';
-import User from '../../entityOld/User';
-import Declaration from '../../entityOld/Declaration';
-import Event from '../../entityOld/Event';
-import Report from '../../entityOld/Report';
+import Clan from '../../entity/clan';
+import User from '../../entity/user';
+import Declaration from '../../entity/declaration';
+import Event from '../../entity/event';
+import Report from '../../entity/report';
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;

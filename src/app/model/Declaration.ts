@@ -2,11 +2,11 @@
 import dayjs from 'dayjs';
 
 import DataSource from '../../database/dataSource';
-import User from '../../entityOld/User';
-import Boss from '../../entityOld/Boss';
-import Declaration from '../../entityOld/Declaration';
-import Event from '../../entityOld/Event';
-import Report from '../../entityOld/Report';
+import User from '../../entity/user';
+import Boss from '../../entity/boss';
+import Declaration from '../../entity/declaration';
+import Event from '../../entity/event';
+import Report from '../../entity/report';
 
 export async function regist(
   boss: Boss,

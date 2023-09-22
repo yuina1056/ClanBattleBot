@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
-import Boss from '../entityOld/Boss';
-import Clan from '../entityOld/Clan';
-import Declaration from '../entityOld/Declaration';
-import Event from '../entityOld/Event';
-import Report from '../entityOld/Report';
-import User from '../entityOld/User';
+import Boss from '../entity/boss';
+import Clan from '../entity/clan';
+import Declaration from '../entity/declaration';
+import Event from '../entity/event';
+import Report from '../entity/report';
+import User from '../entity/user';
 
 dotenv.config();
 

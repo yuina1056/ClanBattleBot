@@ -6,7 +6,7 @@ import {
   Column,
   OneToMany,
 } from 'typeorm';
-import User from './User';
+import User from './user';
 
 @Entity()
 // クラン
