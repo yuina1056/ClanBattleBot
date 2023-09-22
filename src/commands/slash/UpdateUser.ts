@@ -47,6 +47,11 @@ export async function execute(interaction: CommandInteraction) {
   const role = await guild.roles.fetch(roleId);
   const guildMembers = await role?.members;
   if (guildMembers != null) {
+    if (guildMembers.size > 30) {
+      throw new Error(
+        "メンバー数が30人を超えています。ロール設定を見直しして再実行してください。"
+      );
+    }
     guildMembers.forEach(async (guildMember) => {
       let userName = "";
       // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
