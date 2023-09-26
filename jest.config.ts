@@ -91,12 +91,7 @@ const config: Config = {
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/src/$1",
-    "^@/app/(.*)$": "<rootDir>/src/app/$1",
-    "^@/commands/(.*)$": "<rootDir>/src/commands/$1",
-    "^@/entity/(.*)$": "<rootDir>/src/entity/$1",
-    "^@/messages/(.*)$": "<rootDir>/src/messages/$1",
-    "^@/migration/(.*)$": "<rootDir>/src/migration/$1",
+    "^@/(.*)$": "<rootDir>/src/$1"
   },
 
   // An array of regexp pattern strings, matched against all module paths before considered 'visible' to the module loader
