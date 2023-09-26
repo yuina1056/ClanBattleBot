@@ -8,7 +8,8 @@
     "start": "node build/src/main.js",
     "compile": "tsc -p .",
     "deploy-command": "node build/src/deploy-command.js",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm": "typeorm-ts-node-commonjs",
+    "fixtures": "fixtures-ts-node-commonjs"
   },
   "author": "",
   "license": "ISC",
@@ -21,10 +22,15 @@
     "typeorm": "^0.3.17"
   },
   "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-typescript": "^7.23.0",
+    "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.4",
     "@types/node": "^20.5.6",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
+    "babel-jest": "^29.7.0",
     "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-config-standard-with-typescript": "^35.0.0",
