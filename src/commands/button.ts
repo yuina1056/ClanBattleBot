@@ -1,18 +1,18 @@
 import { ButtonInteraction } from "discord.js";
 
-import declaration_start from "./button/declaration_start";
-import declaration_cancel from "./button/declaration_cancel";
-import report_shave from "./button/report_shave";
-import report_defeat from "./button/report_defeat";
-import reload_attack_status from "./button/reload_attack_status";
-import attack_first from "./button/DeclarationFirst";
-import attack_second from "./button/DeclarationSecond";
-import attack_third from "./button/DeclarationThird";
-import manage_menu from "./button/ManageMenu";
-import reset_declaration_report from "./button/ResetDeclarationReport";
-import reset_declaration_report_first from "./button/ResetDeclarationReportFirst";
-import reset_declaration_report_second from "./button/ResetDeclarationReportSecond";
-import reset_declaration_report_third from "./button/ResetDeclarationReportThird";
+import declaration_start from "@/commands/button/declaration_start";
+import declaration_cancel from "@/commands/button/declaration_cancel";
+import report_shave from "@/commands/button/report_shave";
+import report_defeat from "@/commands/button/report_defeat";
+import reload_attack_status from "@/commands/button/reload_attack_status";
+import attack_first from "@/commands/button/DeclarationFirst";
+import attack_second from "@/commands/button/DeclarationSecond";
+import attack_third from "@/commands/button/DeclarationThird";
+import manage_menu from "@/commands/button/ManageMenu";
+import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
+import reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
+import reset_declaration_report_second from "@/commands/button/ResetDeclarationReportSecond";
+import reset_declaration_report_third from "@/commands/button/ResetDeclarationReportThird";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;

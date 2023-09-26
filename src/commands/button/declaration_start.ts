@@ -5,9 +5,9 @@ import {
   ActionRowBuilder,
 } from "discord.js";
 
-import button_attack_first from "./DeclarationFirst";
-import button_attack_second from "./DeclarationSecond";
-import button_attack_third from "./DeclarationThird";
+import button_attack_first from "@/commands/button/DeclarationFirst";
+import button_attack_second from "@/commands/button/DeclarationSecond";
+import button_attack_third from "@/commands/button/DeclarationThird";
 
 export const customId = "declaration_start";
 export const data = new ButtonBuilder()

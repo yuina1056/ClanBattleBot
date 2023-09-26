@@ -1,11 +1,11 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 import dayjs from "dayjs";
 
-import ManagementMessage from "../../messages/ManagementChannelMessage";
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Clan from "../../entity/Clan";
-import Event from "../../entity/Event";
+import ManagementMessage from "@/messages/ManagementChannelMessage";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
 
 export const customId = "reload_attack_status";
 export const data = new ButtonBuilder()

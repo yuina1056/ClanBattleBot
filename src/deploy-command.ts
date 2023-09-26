@@ -4,9 +4,9 @@ import { Routes } from "discord-api-types/v10";
 
 dotenv.config();
 
-import diceFile from "./commands/slash/dice";
-import setupFile from "./commands/slash/setup";
-import updateUserFile from "./commands/slash/UpdateUser";
+import diceFile from "@/commands/slash/dice";
+import setupFile from "@/commands/slash/setup";
+import updateUserFile from "@/commands/slash/UpdateUser";
 
 // 登録コマンドを呼び出してリスト形式で登録
 const commands = [

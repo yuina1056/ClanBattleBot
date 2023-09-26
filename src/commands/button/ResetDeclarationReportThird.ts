@@ -12,12 +12,12 @@ export const data = new ButtonBuilder()
   .setStyle(ButtonStyle.Secondary)
   .setLabel("3凸目リセット");
 
-import DataSource from "../../datasource";
-import Clan from "../../entity/Clan";
-import User from "../../entity/User";
-import Declaration from "../../entity/Declaration";
-import Event from "../../entity/Event";
-import Report from "../../entity/Report";
+import DataSource from "@/datasource";
+import Clan from "@/entity/Clan";
+import User from "@/entity/User";
+import Declaration from "@/entity/Declaration";
+import Event from "@/entity/Event";
+import Report from "@/entity/Report";
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;

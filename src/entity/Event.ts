@@ -7,8 +7,8 @@ import {
 } from "typeorm";
 import dayjs from "dayjs";
 
-import Report from "./Report";
-import Declaration from "./Declaration";
+import Report from "@/entity/Report";
+import Declaration from "@/entity/Declaration";
 
 @Entity()
 @Unique(["month"])

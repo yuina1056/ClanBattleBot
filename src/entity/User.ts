@@ -10,10 +10,10 @@ import {
 } from "typeorm";
 import dayjs from "dayjs";
 
-import Report from "./Report";
-import Clan from "./Clan";
-import Event from "./Event";
-import Declaration from "./Declaration";
+import Report from "@/entity/Report";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import Declaration from "@/entity/Declaration";
 
 @Entity()
 // ユーザー
