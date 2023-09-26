@@ -1,0 +1,6 @@
+entity: User
+items:
+  user{1..30}:
+    clan: '@clan1'
+    name: '{{internet.username}}'
+    discordUserId: '{{number.int}}'

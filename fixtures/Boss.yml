@@ -1,0 +1,22 @@
+entity: Boss
+items:
+  boss1:
+    bossid: 1
+    clanId: 1
+    discordChannelId: 1
+  boss2:
+    bossid: 2
+    clanId: 1
+    discordChannelId: 2
+  boss3:
+    bossid: 3
+    clanId: 1
+    discordChannelId: 3
+  boss4:
+    bossid: 4
+    clanId: 1
+    discordChannelId: 4
+  boss5:
+    bossid: 5
+    clanId: 1
+    discordChannelId: 5
