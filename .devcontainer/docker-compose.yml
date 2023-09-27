@@ -1,0 +1,28 @@
+version: '3'
+services:
+  app:
+    image: node:18-bullseye-slim
+    environment:
+      - DISCORDAPPBOTTOKEN=aaaaaa
+      - DISCORDAPPLICATIONID=aaaaaa
+      - DISCORDGUILDID=aaaaaa
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=test
+      - DB_PASS=test
+      - DB_NAME=clanbattle
+      - DB_LOGGING=false
+    volumes:
+      - ..:/workspaces:cached
+    command: /bin/sh -c "while sleep 1000; do :; done"
+  db:
+    image: mysql:8
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: clanbattle
+
