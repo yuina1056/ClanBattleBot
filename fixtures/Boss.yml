@@ -3,20 +3,20 @@ items:
   boss1:
     bossid: 1
     clanId: 1
-    discordChannelId: 1
+    discordChannelId: '{{lorem.word}}'
   boss2:
     bossid: 2
     clanId: 1
-    discordChannelId: 2
+    discordChannelId: '{{lorem.word}}'
   boss3:
     bossid: 3
     clanId: 1
-    discordChannelId: 3
+    discordChannelId: '{{lorem.word}}'
   boss4:
     bossid: 4
     clanId: 1
-    discordChannelId: 4
+    discordChannelId: '{{lorem.word}}'
   boss5:
     bossid: 5
     clanId: 1
-    discordChannelId: 5
+    discordChannelId: '{{lorem.word}}'

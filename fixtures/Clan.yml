@@ -2,8 +2,8 @@ entity: Clan
 items:
   clan1:
     name: 'oinu'
-    discordRoleId: 1
-    discordCategoryId: 1
+    discordRoleId: "xxx"
+    discordCategoryId: "xxx"
     boss1Lap: 0
     boss2Lap: 0
     boss3Lap: 0
@@ -12,8 +12,8 @@ items:
     users: '@user*'
   clan2:
     name: 'koneko'
-    discordRoleId: 2
-    discordCategoryId: 2
+    discordRoleId: "yyy"
+    discordCategoryId: "yyy"
     boss1Lap: 0
     boss2Lap: 0
     boss3Lap: 0

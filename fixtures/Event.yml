@@ -1,6 +1,6 @@
 entity: Event
 items:
   event:
-    month: 202309
-    fromDate: {{date.anytime("2023-09-25 05:00:00")}}
-    toDate: {{date.anytime("2023-09-29 23:59:59")}}
+    month: "202309"
+    fromDate: '{{date.anytime("2023-09-25T05:00:00.000Z")}}'
+    toDate: '{{date.anytime("2023-09-29T23:59:59.0000Z")}}'
