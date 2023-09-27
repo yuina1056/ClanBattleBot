@@ -1,0 +1,41 @@
+name: Unit Test
+on: pull_request
+
+jobs:
+  runner-job:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: mysql:8
+        ports:
+          - 13306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_DATABASE: clanbuttle
+          MYSQL_USER: test
+          MYSQL_PASSWORD: test
+
+    steps:
+        - name: Checkout Code
+          uses: actions/checkout@v2
+
+
+        - name: Setup node env 🏗
+          uses: actions/setup-node@v3
+          with:
+            node-version: v20
+            check-latest: true
+            cache: npm
+
+        - name: Install packages
+          run: npm ci
+
+        - name: Copy test datasource
+          run: cp .env.test .env
+
+        - name: Load fixtures
+          run: npm run fixtures load ./fixtures --dataSource=./src/datasource.ts --sync --require=ts-node/register --require=tsconfig-paths/register
+
+        - name: Run tests 🧪
+          run: npm run test

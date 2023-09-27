@@ -1,0 +1,6 @@
+entity: User
+items:
+  user{1..30}:
+    clanId: 1
+    name: '{{internet.username}}'
+    discordUserId: '{{lorem.word}}'

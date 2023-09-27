@@ -1,0 +1,21 @@
+entity: Clan
+items:
+  clan1:
+    name: 'oinu'
+    discordRoleId: "xxx"
+    discordCategoryId: "xxx"
+    boss1Lap: 0
+    boss2Lap: 0
+    boss3Lap: 0
+    boss4Lap: 0
+    boss5Lap: 0
+    users: '@user*'
+  clan2:
+    name: 'koneko'
+    discordRoleId: "yyy"
+    discordCategoryId: "yyy"
+    boss1Lap: 0
+    boss2Lap: 0
+    boss3Lap: 0
+    boss4Lap: 0
+    boss5Lap: 0
