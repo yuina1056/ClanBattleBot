@@ -5,12 +5,12 @@ import {
   Guild,
 } from "discord.js";
 
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Boss from "../../entity/Boss";
-import Clan from "../../entity/Clan";
-import Declaration from "../../entity/Declaration";
-import BossChannelMessage from "../../messages/BossChannelMessage";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Boss from "@/entity/Boss";
+import Clan from "@/entity/Clan";
+import Declaration from "@/entity/Declaration";
+import BossChannelMessage from "@/messages/BossChannelMessage";
 
 export const customId = "declaration_cancel";
 export const data = new ButtonBuilder()

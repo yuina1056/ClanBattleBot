@@ -8,8 +8,8 @@ import dataSource from "./datasource";
 
 dataSource.initialize();
 
-import slash from "./commands/slash";
-import button from "./commands/button";
+import slash from "@/commands/slash";
+import button from "@/commands/button";
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({

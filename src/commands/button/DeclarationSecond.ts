@@ -5,12 +5,12 @@ import {
   Guild,
 } from "discord.js";
 
-import Declaration from "../../app/model/Declaration";
-import DataSource from "../../datasource";
-import Boss from "../../entity/Boss";
-import Clan from "../../entity/Clan";
-import DeclarationRepository from "../../entity/Declaration";
-import BossChannelMessage from "../../messages/BossChannelMessage";
+import Declaration from "@/app/model/Declaration";
+import DataSource from "@/datasource";
+import Boss from "@/entity/Boss";
+import Clan from "@/entity/Clan";
+import DeclarationRepository from "@/entity/Declaration";
+import BossChannelMessage from "@/messages/BossChannelMessage";
 
 export const customId = "declaration_second";
 export const data = new ButtonBuilder()

@@ -7,14 +7,14 @@ import {
 } from "discord.js";
 import dayjs from "dayjs";
 
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Report from "../../entity/Report";
-import Boss from "../../entity/Boss";
-import Clan from "../../entity/Clan";
-import Event from "../../entity/Event";
-import Declaration from "../../entity/Declaration";
-import BossChannelMessage from "../../messages/BossChannelMessage";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Report from "@/entity/Report";
+import Boss from "@/entity/Boss";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import Declaration from "@/entity/Declaration";
+import BossChannelMessage from "@/messages/BossChannelMessage";
 
 export const customId = "report_defeat";
 export const data = new ButtonBuilder()

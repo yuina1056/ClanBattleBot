@@ -4,7 +4,7 @@ import {
   ButtonInteraction,
   ActionRowBuilder,
 } from "discord.js";
-import button_reset_declaration_report from "./ResetDeclarationReport";
+import button_reset_declaration_report from "@/commands/button/ResetDeclarationReport";
 
 export const customId = "manage_menu";
 export const data = new ButtonBuilder()

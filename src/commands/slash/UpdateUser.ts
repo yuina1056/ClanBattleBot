@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
-import dataSource from "../../datasource";
-import Clan from "../../entity/Clan";
-import User from "../../entity/User";
+import dataSource from "@/datasource";
+import Clan from "@/entity/Clan";
+import User from "@/entity/User";
 
 export const data = new SlashCommandBuilder()
   .setName("updateuser")
