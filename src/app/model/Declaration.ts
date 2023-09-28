@@ -61,21 +61,27 @@ async function validate(
     eventId: event.id,
     day: event.getClanBattleDay(),
   });
+  // 凸宣言がない場合
   if (declaration.length === 0) {
     return null;
   }
+  // 宣言済みの凸がある場合
   const declared = declaration.filter(
     (declaration) => declaration.isFinished === false
   );
   if (declared.length > 0) {
     return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
   }
+
+  // 既に2回凸宣言がある場合
   const attackCountDeclaration = declaration.filter(
     (declaration) => declaration.attackCount === attackCount
   );
-  if (attackCountDeclaration.length >= 2) {
+  if (attackCountDeclaration.length > 2) {
     return new Error("既に" + attackCount + "凸目は完了しています");
   }
+
+  // 持ち越し凸がある場合
   const reports = await DataSource.getRepository(Report).find({
     where: {
       attackCount: attackCount,
