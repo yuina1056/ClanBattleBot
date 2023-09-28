@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import dayjs from "dayjs";
 
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Boss from "../../entity/Boss";
-import Declaration from "../../entity/Declaration";
-import Event from "../../entity/Event";
-import Report from "../../entity/Report";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Boss from "@/entity/Boss";
+import Declaration from "@/entity/Declaration";
+import Event from "@/entity/Event";
+import Report from "@/entity/Report";
 
 export async function regist(
   boss: Boss,
