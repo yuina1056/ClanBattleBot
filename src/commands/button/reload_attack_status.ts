@@ -37,6 +37,9 @@ export async function execute(interaction: ButtonInteraction) {
     .where("event.fromDate <= :today", { today })
     .andWhere("event.toDate >= :today", { today })
     .getOne();
+  if (event == null) {
+    throw new Error("開催情報が取得できませんでした");
+  }
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel.parentId,
   });
@@ -54,6 +57,7 @@ export async function execute(interaction: ButtonInteraction) {
   await ManagementMessage.sendMessage(
     interaction.channel,
     interaction.message,
+    clan,
     users,
     event,
     false
