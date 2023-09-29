@@ -1,7 +1,7 @@
 {
   "name": "clanbattlebot",
   "version": "1.0.0",
-  "description": "クラバト簡易凸管理用bot試作品",
+  "description": "プリコネクランバトル凸管理用bot",
   "main": "index.js",
   "scripts": {
     "test": "jest",
