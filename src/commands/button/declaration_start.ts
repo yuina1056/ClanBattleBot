@@ -7,12 +7,13 @@ import {
 import dayjs from "dayjs";
 
 import DataSource from "@/datasource";
+import Boss from "@/entity/Boss";
 import Event from "@/entity/Event";
+import Report from "@/entity/Report";
 import User from "@/entity/User";
 import button_attack_first from "@/commands/button/DeclarationFirst";
 import button_attack_second from "@/commands/button/DeclarationSecond";
 import button_attack_third from "@/commands/button/DeclarationThird";
-import Boss from "@/entity/Boss";
 
 export const customId = "declaration_start";
 export const data = new ButtonBuilder()
@@ -20,6 +21,12 @@ export const data = new ButtonBuilder()
   .setStyle(ButtonStyle.Primary)
   .setLabel("凸宣言");
 
+  /**
+ * 凸宣言を実施するためのボタンを呼び出します。
+ *
+ * @param interaction 押されたボタン
+ * @return なし
+ */
 export async function execute(interaction: ButtonInteraction) {
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
@@ -83,52 +90,12 @@ export async function execute(interaction: ButtonInteraction) {
     return report.attackCount == 3;
   });
 
-  // 各凸状況完了判定
-  // 1凸目が完了しているかを判定する
-  const isFinishedOnFirstAttack = () => {
-    if (firstAttacks.length == 2) {
-      return true;
-    } else if (firstAttacks.length == 1 && firstAttacks[0].isDefeat == false) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  // 2凸目が完了しているかを判定する
-  const isFinishedOnSecondAttack = () => {
-    if (secondAttacks.length == 2) {
-      return true;
-    } else if (
-      secondAttacks.length == 1 &&
-      secondAttacks[0].isDefeat == false
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  // 3凸目が完了しているかを判定する
-  const isFinishedOnThirdAttack = () => {
-    if (secondAttacks.length == 2) {
-      return true;
-    } else if (
-      secondAttacks.length == 1 &&
-      secondAttacks[0].isDefeat == false
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   if (
     firstAttacks.length != 0 &&
     secondAttacks.length == 0 &&
     thirdAttacks.length == 0
   ) {
-    if (isFinishedOnFirstAttack()) {
+    if (isFinishedOnAttack(firstAttacks)) {
       await interaction.reply({
         content:
           "【宣言】" +
@@ -169,8 +136,8 @@ export async function execute(interaction: ButtonInteraction) {
     secondAttacks.length != 0 &&
     thirdAttacks.length == 0
   ) {
-    if (isFinishedOnFirstAttack()) {
-      if (isFinishedOnSecondAttack()) {
+    if (isFinishedOnAttack(firstAttacks)) {
+      if (isFinishedOnAttack(secondAttacks)) {
         // zz-
         await interaction.reply({
           content:
@@ -207,7 +174,7 @@ export async function execute(interaction: ButtonInteraction) {
         });
       }
     } else {
-      if (isFinishedOnSecondAttack()) {
+      if (isFinishedOnAttack(secondAttacks)) {
         // yz-
         await interaction.reply({
           content:
@@ -253,13 +220,13 @@ export async function execute(interaction: ButtonInteraction) {
     secondAttacks.length != 0 &&
     thirdAttacks.length != 0
   ) {
-    if (isFinishedOnFirstAttack()) {
-      if (isFinishedOnSecondAttack()) {
-        if (isFinishedOnThirdAttack()) {
+    if (isFinishedOnAttack(firstAttacks)) {
+      if (isFinishedOnAttack(secondAttacks)) {
+        if (isFinishedOnAttack(thirdAttacks)) {
           // zzz
           await interaction.reply({
             content: "本日の凸は完了しています",
-            ephemeral: true
+            ephemeral: true,
           });
         } else {
           // zzy
@@ -275,7 +242,7 @@ export async function execute(interaction: ButtonInteraction) {
           });
         }
       } else {
-        if (isFinishedOnThirdAttack()) {
+        if (isFinishedOnAttack(secondAttacks)) {
           // zyz
           await interaction.reply({
             content: "凸宣言する凸を選択してください",
@@ -283,7 +250,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               // 2凸目の持ち越しを消化してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                button_attack_second.data,
+                button_attack_second.data
               ),
             ],
           });
@@ -303,15 +270,15 @@ export async function execute(interaction: ButtonInteraction) {
         }
       }
     } else {
-      if (isFinishedOnSecondAttack()) {
-        if (isFinishedOnThirdAttack()) {
+      if (isFinishedOnAttack(secondAttacks)) {
+        if (isFinishedOnAttack(thirdAttacks)) {
           // yzz
           await interaction.reply({
             content: "凸宣言する凸を選択してください",
             ephemeral: true,
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                button_attack_first.data,
+                button_attack_first.data
               ),
             ],
           });
@@ -329,7 +296,7 @@ export async function execute(interaction: ButtonInteraction) {
           });
         }
       } else {
-        if (isFinishedOnThirdAttack()) {
+        if (isFinishedOnAttack(thirdAttacks)) {
           // yyz
           await interaction.reply({
             content: "凸宣言する凸を選択してください",
@@ -337,7 +304,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 button_attack_first.data,
-                button_attack_second.data,
+                button_attack_second.data
               ),
             ],
           });
@@ -357,6 +324,22 @@ export async function execute(interaction: ButtonInteraction) {
         }
       }
     }
+  }
+}
+
+/**
+ * 各凸における凸完了を判定します。
+ *
+ * @param attacks 判定する凸のレポート群
+ * @return 完了判定結果
+ */
+function isFinishedOnAttack(attacks: Report[]): boolean {
+  if (attacks.length == 2) {
+    return true;
+  } else if (attacks.length == 1 && attacks[0].isDefeat == false) {
+    return true;
+  } else {
+    return false;
   }
 }
 
