@@ -8,6 +8,9 @@ import reload_attack_status from "@/commands/button/reload_attack_status";
 import attack_first from "@/commands/button/DeclarationFirst";
 import attack_second from "@/commands/button/DeclarationSecond";
 import attack_third from "@/commands/button/DeclarationThird";
+import attackFirstAsCarryOver from "@/commands/button/DeclarationFirstAsCarryOver";
+import attackSecondAsCarryOver from "@/commands/button/DeclarationSecondAsCarryOver";
+import attackThirdAsCarryOver from "@/commands/button/DeclarationThirdAsCarryOver";
 import manage_menu from "@/commands/button/ManageMenu";
 import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
 import reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
@@ -40,6 +43,15 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case attack_third.customId:
       action = attack_third;
+      break;
+    case attackFirstAsCarryOver.customId:
+      action = attackFirstAsCarryOver;
+      break;
+    case attackSecondAsCarryOver.customId:
+      action = attackSecondAsCarryOver;
+      break;
+    case attackThirdAsCarryOver.customId:
+      action = attackThirdAsCarryOver;
       break;
     case manage_menu.customId:
       action = manage_menu;
