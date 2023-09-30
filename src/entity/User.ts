@@ -116,4 +116,13 @@ export default class User {
     }
     return res;
   }
+
+  public getTodayReports(event: Event, dayCount: number): Report[] | null {
+    if (this.reports == null) {
+      return null
+    }
+    return this.reports.filter((report) => {
+      return report.eventId == event.id && report.day == dayCount
+    })
+  }
 }
