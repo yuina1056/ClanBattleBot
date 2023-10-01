@@ -131,7 +131,14 @@ async function createManagementChannel(
   });
 
   if (channel.isTextBased()) {
-    await management_message.sendMessage(channel, null, users, null, true);
+    await management_message.sendMessage(
+      channel,
+      null,
+      clan,
+      users,
+      null,
+      true
+    );
   }
 }
 
@@ -164,6 +171,12 @@ async function createBossChannel(
 
   const declaration: Declaration[] = [];
   if (channel?.isTextBased()) {
-    await BossChannelMessage.sendMessage(channel, clan, boss, declaration);
+    await BossChannelMessage.sendMessage(
+      channel,
+      clan,
+      boss,
+      null,
+      declaration
+    );
   }
 }

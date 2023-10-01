@@ -4,12 +4,15 @@ import {
   ButtonInteraction,
   Guild,
 } from "discord.js";
+import dayjs from "dayjs";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/datasource";
 import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import DeclarationRepository from "@/entity/Declaration";
+import Lap from "@/entity/Lap";
+import Event from "@/entity/Event";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
 
@@ -54,6 +57,23 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("ボス情報が取得できませんでした");
   }
 
+  const today = dayjs().format();
+  const event = await DataSource.getRepository(Event)
+    .createQueryBuilder("event")
+    .where("event.fromDate <= :today", { today })
+    .andWhere("event.toDate >= :today", { today })
+    .getOne();
+  if (event == null) {
+    throw new Error("クランバトル開催情報が取得できませんでした");
+  }
+
+  // 周回数取得
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    eventId: event.id,
+    clanId: clan.id,
+  });
+
   let content = "";
   const user = await Declaration.regist(boss, interaction.user.id, 1);
   if (user instanceof Error) {
@@ -77,6 +97,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    lap,
     declarations
   );
   const deleteMessage = await channel.messages.fetch(

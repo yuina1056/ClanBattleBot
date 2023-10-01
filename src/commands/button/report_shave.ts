@@ -13,6 +13,7 @@ import Report from "@/entity/Report";
 import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
+import Lap from "@/entity/Lap";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 
@@ -55,6 +56,13 @@ export async function execute(interaction: ButtonInteraction) {
   if (boss == null) {
     throw new Error("ボス情報が取得できませんでした");
   }
+
+  // 周回数取得
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    eventId: event.id,
+    clanId: clan.id,
+  });
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
   const user = await userRepository.findOneBy({
@@ -103,6 +111,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel!,
     clan,
     boss,
+    lap,
     declarations
   );
   await interaction.reply({

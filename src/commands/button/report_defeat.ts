@@ -180,6 +180,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    lap,
     declarations
   );
   await interaction.reply({ content: content });

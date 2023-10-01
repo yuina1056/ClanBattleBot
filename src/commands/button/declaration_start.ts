@@ -3,6 +3,7 @@ import {
   ButtonStyle,
   ButtonInteraction,
   ActionRowBuilder,
+  Guild,
 } from "discord.js";
 import dayjs from "dayjs";
 
@@ -17,6 +18,8 @@ import buttonAttackThird from "@/commands/button/DeclarationThird";
 import buttonAttackFirstAsCarryOver from "@/commands/button/DeclarationFirstAsCarryOver";
 import buttonAttackSecondAsCarryOver from "@/commands/button/DeclarationSecondAsCarryOver";
 import buttonAttackThirdAsCarryOver from "@/commands/button/DeclarationThirdAsCarryOver";
+import Lap from "@/entity/Lap";
+import Clan from "@/entity/Clan";
 
 export const customId = "declaration_start";
 export const data = new ButtonBuilder()
@@ -42,10 +45,34 @@ export async function execute(interaction: ButtonInteraction) {
   }
   const dayCount = event.getClanBattleDay();
 
+  let guild: Guild;
+  if (interaction.guild != null) {
+    guild = interaction.guild;
+  } else {
+    throw new Error("interaction.guild is null");
+  }
+  const channel = guild.channels.cache.find(
+    (channel) => channel.id === interaction.channel?.id
+  );
+  if (channel == null) {
+    throw new Error("channel is null");
+  }
+  if (channel.parentId == null) {
+    throw new Error("channel.parentId is null");
+  }
+  // クラン取得
+  const clan = await DataSource.getRepository(Clan).findOneBy({
+    discordCategoryId: channel.parentId,
+  });
+  if (clan == null) {
+    throw new Error("クラン情報が取得できませんでした");
+  }
+
   const interactionUserId = interaction.user.id;
   const clanUser = await DataSource.getRepository(User)
     .createQueryBuilder("user")
     .where("user.discordUserId = :userId", { userId: interactionUserId })
+    .andWhere("user.clanId = :clanId", { clanId: clan.id })
     .getOne();
   if (clanUser == null) {
     return new Error("あなたはこのクランに所属していないよ");
@@ -62,6 +89,36 @@ export async function execute(interaction: ButtonInteraction) {
     return new Error("ボス情報を取得できません");
   }
 
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    eventId: event.id,
+    clanId: clan.id,
+  });
+  if (lap == null) {
+    return new Error("周回数情報を取得できません");
+  }
+
+  let bossLap = 0;
+
+  switch (boss.bossid) {
+    case 1:
+      bossLap = lap.boss1Lap ?? 1;
+      break;
+    case 2:
+      bossLap = lap.boss2Lap ?? 1;
+      break;
+    case 3:
+      bossLap = lap.boss3Lap ?? 1;
+      break;
+    case 4:
+      bossLap = lap.boss4Lap ?? 1;
+      break;
+    case 5:
+      bossLap = lap.boss5Lap ?? 1;
+      break;
+    default:
+      break;
+  }
   const todayReports = clanUser.getTodayReports(event, dayCount);
 
   // なし:- 持ち越しなし:x 持ち越しあり:y 持ち越し済み:z
@@ -72,7 +129,9 @@ export async function execute(interaction: ButtonInteraction) {
       content:
         "【宣言】" +
         clanUser.name +
-        "さんの x周目 " +
+        "さんの " +
+        bossLap +
+        "周目 " +
         boss.bossid +
         "ボス 宣言だよ。",
       ephemeral: true,
@@ -107,7 +166,9 @@ export async function execute(interaction: ButtonInteraction) {
         content:
           "【宣言】" +
           clanUser.name +
-          "さんの x周目 " +
+          "さんの " +
+          bossLap +
+          "周目 " +
           boss.bossid +
           "ボス 宣言だよ。",
         ephemeral: true,
@@ -124,7 +185,9 @@ export async function execute(interaction: ButtonInteraction) {
         content:
           "【宣言】" +
           clanUser.name +
-          "さんの x周目 " +
+          "さんの " +
+          bossLap +
+          "周目 " +
           boss.bossid +
           "ボス 宣言だよ。",
         ephemeral: true,
@@ -151,7 +214,9 @@ export async function execute(interaction: ButtonInteraction) {
           content:
             "【宣言】" +
             clanUser.name +
-            "さんの x周目 " +
+            "さんの " +
+            bossLap +
+            "周目 " +
             boss.bossid +
             "ボス 宣言だよ。",
           ephemeral: true,
@@ -168,7 +233,9 @@ export async function execute(interaction: ButtonInteraction) {
           content:
             "【宣言】" +
             clanUser.name +
-            "さんの x周目 " +
+            "さんの " +
+            bossLap +
+            "周目 " +
             boss.bossid +
             "ボス 宣言だよ。",
           ephemeral: true,
@@ -188,7 +255,9 @@ export async function execute(interaction: ButtonInteraction) {
           content:
             "【宣言】" +
             clanUser.name +
-            "さんの x周目 " +
+            "さんの " +
+            bossLap +
+            "周目 " +
             boss.bossid +
             "ボス 宣言だよ。",
           ephemeral: true,
@@ -206,7 +275,9 @@ export async function execute(interaction: ButtonInteraction) {
           content:
             "【宣言】" +
             clanUser.name +
-            "さんの x周目 " +
+            "さんの " +
+            bossLap +
+            "周目 " +
             boss.bossid +
             "ボス 宣言だよ。",
           ephemeral: true,
