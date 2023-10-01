@@ -72,9 +72,31 @@ export async function execute(interaction: ButtonInteraction) {
     eventId: event.id,
     clanId: clan.id,
   });
+  let bossLap = 0;
+  if (lap != null) {
+    switch (boss.bossid) {
+      case 1:
+        bossLap = lap.boss1Lap ?? 1;
+        break;
+      case 2:
+        bossLap = lap.boss2Lap ?? 1;
+        break;
+      case 3:
+        bossLap = lap.boss3Lap ?? 1;
+        break;
+      case 4:
+        bossLap = lap.boss4Lap ?? 1;
+        break;
+      case 5:
+        bossLap = lap.boss5Lap ?? 1;
+        break;
+      default:
+        break;
+    }
+  }
 
   let content = "";
-  const user = await Declaration.regist(boss, interaction.user.id, 2);
+  const user = await Declaration.regist(boss, interaction.user.id, bossLap, 2);
   if (user instanceof Error) {
     content = user.message;
   } else {

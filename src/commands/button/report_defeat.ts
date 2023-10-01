@@ -98,6 +98,7 @@ export async function execute(interaction: ButtonInteraction) {
     clanId: clan.id,
     eventId: event.id,
   });
+  let bossLap = 0;
   if (lap == null) {
     throw new Error("周回数情報が取得できませんでした");
   }
@@ -107,30 +108,35 @@ export async function execute(interaction: ButtonInteraction) {
         throw new Error("lap.boss1Lap is null");
       }
       lap.boss1Lap += 1;
+      bossLap = lap.boss1Lap;
       break;
     case 2:
       if (lap.boss2Lap == null) {
         throw new Error("lap.boss2Lap is null");
       }
       lap.boss2Lap += 1;
+      bossLap = lap.boss2Lap;
       break;
     case 3:
       if (lap.boss3Lap == null) {
         throw new Error("lap.boss3Lap is null");
       }
       lap.boss3Lap += 1;
+      bossLap = lap.boss3Lap;
       break;
     case 4:
       if (lap.boss4Lap == null) {
         throw new Error("lap.boss4Lap is null");
       }
       lap.boss4Lap += 1;
+      bossLap = lap.boss4Lap;
       break;
     case 5:
       if (lap.boss5Lap == null) {
         throw new Error("lap.boss5Lap is null");
       }
       lap.boss5Lap += 1;
+      bossLap = lap.boss5Lap;
       break;
     default:
       break;
@@ -156,7 +162,7 @@ export async function execute(interaction: ButtonInteraction) {
     user.id!,
     event.id!,
     boss.bossid,
-    0,
+    bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
     0,

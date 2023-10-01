@@ -11,6 +11,7 @@ import Report from "@/entity/Report";
 export async function regist(
   boss: Boss,
   discordUserId: string,
+  lap: number,
   attackCount: number
 ): Promise<User | Error> {
   const today = dayjs().format();
@@ -40,7 +41,7 @@ export async function regist(
     user.id!,
     event!.id!,
     boss.id ?? 0,
-    0,
+    lap,
     event.getClanBattleDay(),
     attackCount,
     false
