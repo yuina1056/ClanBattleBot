@@ -45,7 +45,7 @@ export async function execute(interaction: ButtonInteraction) {
   const interactionUserId = interaction.user.id;
   const clanUser = await DataSource.getRepository(User)
     .createQueryBuilder("user")
-    .where("user.discordUserId = :userId", { interactionUserId })
+    .where("user.discordUserId = :userId", { userId: interactionUserId })
     .getOne();
   if (clanUser == null) {
     return new Error("あなたはこのクランに所属していないよ");
@@ -54,7 +54,9 @@ export async function execute(interaction: ButtonInteraction) {
   const interactionChannelId = interaction.channelId;
   const boss = await DataSource.getRepository(Boss)
     .createQueryBuilder("boss")
-    .where("boss.discordChannelId = :channelId", { interactionChannelId })
+    .where("boss.discordChannelId = :channelId", {
+      channelId: interactionChannelId,
+    })
     .getOne();
   if (boss == null) {
     return new Error("ボス情報を取得できません");
@@ -62,7 +64,7 @@ export async function execute(interaction: ButtonInteraction) {
 
   const todayReports = clanUser.getTodayReports(event, dayCount);
 
-  // なし:- 持ち越しなし:x　持ち越しあり:y　持ち越し済み:z
+  // なし:- 持ち越しなし:x 持ち越しあり:y 持ち越し済み:z
 
   if (todayReports == null) {
     // ---
