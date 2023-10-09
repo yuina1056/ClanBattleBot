@@ -1,12 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
 import dotenv from "dotenv";
-import Boss from "@/entity/Boss";
-import Clan from "@/entity/Clan";
-import Declaration from "@/entity/Declaration";
-import Event from "@/entity/Event";
-import Report from "@/entity/Report";
-import User from "@/entity/User";
 
 dotenv.config();
 
@@ -19,7 +13,7 @@ const dataSource = new DataSource({
   database: process.env.DB_NAME ?? "",
   synchronize: false,
   logging: process.env.DB_LOGGING === "true" ? true : false,
-  entities: [Boss, Clan, Declaration, Event, Report, User],
+  entities: [`src/entity/*`],
   migrations: [`src/migration/*`],
 });
 

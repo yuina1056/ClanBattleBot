@@ -12,6 +12,9 @@ import Clan from "@/entity/Clan";
 import DeclarationRepository from "@/entity/Declaration";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
+import Lap from "@/entity/Lap";
+import Event from "@/entity/Event";
+import dayjs from "dayjs";
 
 export const customId = "declaration_first";
 export const data = new ButtonBuilder()
@@ -53,9 +56,47 @@ export async function execute(interaction: ButtonInteraction) {
   if (boss == null) {
     throw new Error("ボス情報が取得できませんでした");
   }
+  const today = dayjs().format();
+  const event = await DataSource.getRepository(Event)
+    .createQueryBuilder("event")
+    .where("event.fromDate <= :today", { today })
+    .andWhere("event.toDate >= :today", { today })
+    .getOne();
+  if (event == null) {
+    throw new Error("クランバトル開催情報が取得できませんでした");
+  }
+
+  // 周回数取得
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    eventId: event.id,
+    clanId: clan.id,
+  });
+  let bossLap = 0;
+  if (lap != null) {
+    switch (boss.bossid) {
+      case 1:
+        bossLap = lap.boss1Lap ?? 1;
+        break;
+      case 2:
+        bossLap = lap.boss2Lap ?? 1;
+        break;
+      case 3:
+        bossLap = lap.boss3Lap ?? 1;
+        break;
+      case 4:
+        bossLap = lap.boss4Lap ?? 1;
+        break;
+      case 5:
+        bossLap = lap.boss5Lap ?? 1;
+        break;
+      default:
+        break;
+    }
+  }
 
   let content = "";
-  const user = await Declaration.regist(boss, interaction.user.id, 1);
+  const user = await Declaration.regist(boss, interaction.user.id, bossLap, 1);
   if (user instanceof Error) {
     content = user.message;
   } else {
@@ -77,6 +118,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    lap,
     declarations
   );
   const deleteMessage = await channel.messages.fetch(

@@ -1,14 +1,16 @@
 {
   "name": "clanbattlebot",
   "version": "1.0.0",
-  "description": "クラバト簡易凸管理用bot試作品",
+  "description": "プリコネクランバトル凸管理用bot",
   "main": "index.js",
   "scripts": {
     "test": "jest",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "compile": "tsc -p .",
     "deploy-command": "ts-node -r tsconfig-paths/register src/deploy-command.ts",
-    "typeorm": "typeorm-ts-node-commonjs"
+    "typeorm:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/datasource.ts",
+    "typeorm:up": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/datasource.ts",
+    "typeorm:down": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/datasource.ts"
   },
   "author": "",
   "license": "ISC",

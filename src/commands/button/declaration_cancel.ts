@@ -4,11 +4,14 @@ import {
   ButtonInteraction,
   Guild,
 } from "discord.js";
+import dayjs from "dayjs";
 
 import DataSource from "@/datasource";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import Lap from "@/entity/Lap";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 
@@ -75,6 +78,23 @@ export async function execute(interaction: ButtonInteraction) {
   if (clan == null) {
     throw new Error("クラン情報が取得できませんでした");
   }
+  const today = dayjs().format();
+  const event = await DataSource.getRepository(Event)
+    .createQueryBuilder("event")
+    .where("event.fromDate <= :today", { today })
+    .andWhere("event.toDate >= :today", { today })
+    .getOne();
+  if (event == null) {
+    throw new Error("クランバトル開催情報が取得できませんでした");
+  }
+
+  // 周回数取得
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    eventId: event.id,
+    clanId: clan.id,
+  });
+
   const declarations = await declarationRepository.find({
     where: {
       bossId: boss.id,
@@ -88,6 +108,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    lap,
     declarations
   );
   await interaction.reply({ content: "凸宣言取消しました", ephemeral: true });
