@@ -97,6 +97,9 @@ export async function execute(interaction: ButtonInteraction) {
   if (lap == null) {
     return new Error("周回数情報を取得できません");
   }
+  if (!lap.isAttackPossible(boss.bossid)) {
+    return new Error("このボスは凸できません");
+  }
 
   let bossLap = 0;
 
