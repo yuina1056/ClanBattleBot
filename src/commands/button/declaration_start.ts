@@ -69,13 +69,17 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   const interactionUserId = interaction.user.id;
-  const clanUser = await DataSource.getRepository(User)
-    .createQueryBuilder("user")
-    .where("user.discordUserId = :userId", { userId: interactionUserId })
-    .andWhere("user.clanId = :clanId", { clanId: clan.id })
-    .getOne();
+  const clanUser = await DataSource.getRepository(User).findOne({
+    where: {
+      discordUserId: interactionUserId,
+      clanId: clan.id,
+    },
+    relations: {
+      reports: true,
+    },
+  });
   if (clanUser == null) {
-    return new Error("あなたはこのクランに所属していないよ");
+    throw new Error("あなたはこのクランに所属していないよ");
   }
 
   const interactionChannelId = interaction.channelId;
@@ -86,7 +90,7 @@ export async function execute(interaction: ButtonInteraction) {
     })
     .getOne();
   if (boss == null) {
-    return new Error("ボス情報を取得できません");
+    throw new Error("ボス情報を取得できません");
   }
 
   const lapRepository = DataSource.getRepository(Lap);
@@ -95,10 +99,10 @@ export async function execute(interaction: ButtonInteraction) {
     clanId: clan.id,
   });
   if (lap == null) {
-    return new Error("周回数情報を取得できません");
+    throw new Error("周回数情報を取得できません");
   }
   if (!lap.isAttackPossible(boss.bossid)) {
-    return new Error("このボスは凸できません");
+    throw new Error("このボスは凸できません");
   }
 
   let bossLap = 0;
