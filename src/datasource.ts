@@ -13,8 +13,8 @@ const dataSource = new DataSource({
   database: process.env.DB_NAME ?? "",
   synchronize: false,
   logging: process.env.DB_LOGGING === "true" ? true : false,
-  entities: [`src/entity/*`],
-  migrations: [`src/migration/*`],
+  entities: [`src/entity/*.ts`],
+  migrations: [`src/migration/*.ts`],
 });
 
 dataSource.initialize();
