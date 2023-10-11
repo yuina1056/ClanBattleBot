@@ -1,5 +1,7 @@
 # ClanBattleBot
 
+![ci workflow](https://github.com/yuina1056/ClanBattleBot/actions/workflows/ci.yml/badge.svg)
+
 プリンセスコネクト！Re:Diveのクランバトルを管理するためのDiscordBot
 
 ## 機能
