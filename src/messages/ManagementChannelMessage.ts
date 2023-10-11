@@ -27,9 +27,6 @@ export async function sendMessage(
   event: Event | null,
   isInit: boolean
 ) {
-  if (event == null) {
-    throw new Error("event is null");
-  }
 
   let userStatus = "メンバー(" + users.length + ")\n";
   users.forEach((user) => {
@@ -41,21 +38,30 @@ export async function sendMessage(
   const clanTitle: string = bold("凸状況") + "\n";
   const clanProfile: string = "# " + clan.name + " (" + users.length + "人)\n";
   const reportRepository = dataSource.getRepository(Report);
-  const todayReports = await reportRepository.find({
-    where: {
-      clanId: clan.id,
-      eventId: event.id,
-      day: event.getClanBattleDay(),
-    },
-  });
-  const latestReport = todayReports.reduce((a, b) =>
-    a.UpdatedAt! > b.UpdatedAt! ? a : b
-  );
-  const latestreportTime: string = latestReport.UpdatedAt
+
+  let todayReports: Report[] = [];
+  if (event !== null) {
+    todayReports = await reportRepository.find({
+      where: {
+        clanId: clan.id,
+        eventId: event.id,
+        day: event.getClanBattleDay(),
+      },
+    });
+  }
+  let latestReport: Report;
+  let latestReportTime: string;
+  if (todayReports.length !== 0) {
+    latestReport = todayReports.reduce((a, b) =>
+      a.UpdatedAt! > b.UpdatedAt! ? a : b
+    );
+    latestReportTime = latestReport.UpdatedAt
     ? time(latestReport.UpdatedAt)
     : "-";
-  const clanStatus: string =
-    clanTitle + codeBlock(clanProfile + latestreportTime);
+  }
+
+  // const clanStatus: string =
+  //   clanTitle + codeBlock(clanProfile + latestreportTime);
 
   // 凸数
   const attackedCount = todayReports.filter((report) => {
@@ -69,10 +75,16 @@ export async function sendMessage(
 
   // 周回数
   const lapRepository = dataSource.getRepository(Lap);
-  const lap = await lapRepository.findOneBy({
-    clanId: clan.id,
-    eventId: event.id,
-  });
+  let lap: Lap | null = null;
+  if (event !== null) {
+    lap = await lapRepository.findOneBy({
+      clanId: clan.id,
+      eventId: event.id,
+    });
+  } else {
+    lap = new Lap(clan.id??0,0);
+  }
+
   if (lap == null) {
     throw new Error("lap is null");
   }
@@ -81,7 +93,9 @@ export async function sendMessage(
   const bossRepository = dataSource.getRepository(Boss);
   const bosses = await bossRepository.find();
   // TODO ボスHP情報を盛り込む
-  const bossStatus = codeBlock(
+  let bossStatusCodeBlock = "";
+  if (event !== null) {
+    bossStatusCodeBlock = codeBlock(
     bosses[0].bossid +
       " (" +
       lap.boss1Lap +
@@ -108,9 +122,40 @@ export async function sendMessage(
       "周)\n" +
       "  xxxx / 00000 \n"
   );
+  } else {
+    bossStatusCodeBlock = codeBlock(
+    1 +
+      " (" +
+      1 +
+      "周)\n" +
+      "  xxxx / 00000 \n" +
+      2 +
+      " (" +
+      1 +
+      "周)\n" +
+      "  xxxx / 00000 \n" +
+      3+
+      " (" +
+      1 +
+      "周)\n" +
+      "  xxxx / 00000 \n" +
+      4 +
+      " (" +
+      1 +
+      "周)\n" +
+      "  xxxx / 00000 \n" +
+      5 +
+      " (" +
+      1 +
+      "周)\n" +
+      "  xxxx / 00000 \n"
+  );
+  }
+  const bossStatus = bossStatusCodeBlock
 
   const content: string =
-    userStatusContent + clanStatus + attackStatus + bossStatus;
+  // userStatusContent + clanStatus + attackStatus + bossStatus;
+  userStatusContent + attackStatus + bossStatus;
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,
