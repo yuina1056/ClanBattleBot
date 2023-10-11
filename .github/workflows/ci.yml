@@ -20,6 +20,8 @@ jobs:
         run: npm ci
       - name: ESLint
         run: npm run lint:eslint
+      - name: Prettier
+        run: npm run lint:prettier
 
   Test:
     runs-on: ubuntu-latest
