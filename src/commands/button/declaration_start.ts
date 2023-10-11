@@ -149,7 +149,6 @@ export async function execute(interaction: ButtonInteraction) {
     });
     return;
   }
-  console.log("call")
   // 各凸状況を収集する
   const firstAttacks = todayReports.filter((report) => {
     return report.attackCount == 1;
