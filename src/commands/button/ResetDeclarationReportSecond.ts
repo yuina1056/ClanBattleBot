@@ -1,4 +1,9 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
+import {
+  ButtonBuilder,
+  ButtonStyle,
+  ButtonInteraction,
+  Guild,
+} from "discord.js";
 import dayjs from "dayjs";
 
 export const customId = "reset_declaration_report_second";
@@ -14,7 +19,6 @@ import Declaration from "@/entity/Declaration";
 import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 
-
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;
   if (interaction.guild != null) {
@@ -27,7 +31,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");

@@ -109,7 +109,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     lap,
-    declarations
+    declarations,
   );
   await interaction.reply({ content: "凸宣言取消しました", ephemeral: true });
   await interaction.message.delete();

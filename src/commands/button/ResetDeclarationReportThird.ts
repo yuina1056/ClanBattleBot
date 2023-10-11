@@ -31,7 +31,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");

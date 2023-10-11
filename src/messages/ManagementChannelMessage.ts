@@ -25,9 +25,8 @@ export async function sendMessage(
   clan: Clan,
   users: User[],
   event: Event | null,
-  isInit: boolean
+  isInit: boolean,
 ) {
-
   let userStatus = "メンバー(" + users.length + ")\n";
   users.forEach((user) => {
     userStatus += user.getAttackStatus(event) + "\n";
@@ -53,11 +52,11 @@ export async function sendMessage(
   let latestReportTime: string;
   if (todayReports.length !== 0) {
     latestReport = todayReports.reduce((a, b) =>
-      a.UpdatedAt! > b.UpdatedAt! ? a : b
+      a.UpdatedAt! > b.UpdatedAt! ? a : b,
     );
     latestReportTime = latestReport.UpdatedAt
-    ? time(latestReport.UpdatedAt)
-    : "-";
+      ? time(latestReport.UpdatedAt)
+      : "-";
   }
 
   // const clanStatus: string =
@@ -70,7 +69,7 @@ export async function sendMessage(
   // TODO 持ち越し凸の数を加える
   const notAttackCount = users.length * 3 - attackedCount;
   const attackStatus = codeBlock(
-    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸"
+    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸",
   );
 
   // 周回数
@@ -82,7 +81,7 @@ export async function sendMessage(
       eventId: event.id,
     });
   } else {
-    lap = new Lap(clan.id??0,0);
+    lap = new Lap(clan.id ?? 0, 0);
   }
 
   if (lap == null) {
@@ -96,70 +95,70 @@ export async function sendMessage(
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
-    bosses[0].bossid +
-      " (" +
-      lap.boss1Lap +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      bosses[1].bossid +
-      " (" +
-      lap.boss2Lap +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      bosses[2].bossid +
-      " (" +
-      lap.boss3Lap +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      bosses[3].bossid +
-      " (" +
-      lap.boss4Lap +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      bosses[4].bossid +
-      " (" +
-      lap.boss5Lap +
-      "周)\n" +
-      "  xxxx / 00000 \n"
-  );
+      bosses[0].bossid +
+        " (" +
+        lap.boss1Lap +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        bosses[1].bossid +
+        " (" +
+        lap.boss2Lap +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        bosses[2].bossid +
+        " (" +
+        lap.boss3Lap +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        bosses[3].bossid +
+        " (" +
+        lap.boss4Lap +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        bosses[4].bossid +
+        " (" +
+        lap.boss5Lap +
+        "周)\n" +
+        "  xxxx / 00000 \n",
+    );
   } else {
     bossStatusCodeBlock = codeBlock(
-    1 +
-      " (" +
       1 +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      2 +
-      " (" +
-      1 +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      3+
-      " (" +
-      1 +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      4 +
-      " (" +
-      1 +
-      "周)\n" +
-      "  xxxx / 00000 \n" +
-      5 +
-      " (" +
-      1 +
-      "周)\n" +
-      "  xxxx / 00000 \n"
-  );
+        " (" +
+        1 +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        2 +
+        " (" +
+        1 +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        3 +
+        " (" +
+        1 +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        4 +
+        " (" +
+        1 +
+        "周)\n" +
+        "  xxxx / 00000 \n" +
+        5 +
+        " (" +
+        1 +
+        "周)\n" +
+        "  xxxx / 00000 \n",
+    );
   }
-  const bossStatus = bossStatusCodeBlock
+  const bossStatus = bossStatusCodeBlock;
 
   const content: string =
-  // userStatusContent + clanStatus + attackStatus + bossStatus;
-  userStatusContent + attackStatus + bossStatus;
+    // userStatusContent + clanStatus + attackStatus + bossStatus;
+    userStatusContent + attackStatus + bossStatus;
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,
-      button_manage_menu.data
+      button_manage_menu.data,
     ),
   ];
   if (isInit) {

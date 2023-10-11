@@ -33,7 +33,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("interaction.channel is null");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");
@@ -104,7 +104,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   const declarations = await DataSource.getRepository(
-    DeclarationRepository
+    DeclarationRepository,
   ).find({
     where: {
       bossId: boss.id,
@@ -119,10 +119,10 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     lap,
-    declarations
+    declarations,
   );
   const deleteMessage = await channel.messages.fetch(
-    interaction.message.reference?.messageId ?? ""
+    interaction.message.reference?.messageId ?? "",
   );
   await deleteMessage.delete();
   await interaction.reply({ content: content });

@@ -24,7 +24,7 @@ export async function execute(interaction: ButtonInteraction) {
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         button_reset_declaration_report_first.data,
         button_reset_declaration_report_second.data,
-        button_reset_declaration_report_third.data
+        button_reset_declaration_report_third.data,
       ),
     ],
   });

@@ -53,7 +53,7 @@ export default class Report {
     attackCount: number,
     damage: number,
     isDefeat: boolean,
-    isCarryOver: boolean
+    isCarryOver: boolean,
   ) {
     this.clanId = clanId;
     this.userId = userId;
