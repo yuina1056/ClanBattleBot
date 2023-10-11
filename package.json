@@ -10,7 +10,8 @@
     "deploy-command": "ts-node -r tsconfig-paths/register src/deploy-command.ts",
     "typeorm:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/datasource.ts",
     "typeorm:up": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/datasource.ts",
-    "typeorm:down": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/datasource.ts"
+    "typeorm:down": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/datasource.ts",
+    "lint:eslint": "eslint ."
   },
   "author": "",
   "license": "ISC",
