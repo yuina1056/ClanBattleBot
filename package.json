@@ -11,7 +11,8 @@
     "typeorm:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/datasource.ts",
     "typeorm:up": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/datasource.ts",
     "typeorm:down": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/datasource.ts",
-    "lint:eslint": "eslint ."
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "npm run lint:eslint --fix"
   },
   "author": "",
   "license": "ISC",
