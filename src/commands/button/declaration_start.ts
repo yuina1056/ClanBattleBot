@@ -127,10 +127,9 @@ export async function execute(interaction: ButtonInteraction) {
       break;
   }
   const todayReports = clanUser.getTodayReports(event, dayCount);
-
   // なし:- 持ち越しなし:x 持ち越しあり:y 持ち越し済み:z
 
-  if (todayReports == null) {
+  if (todayReports == null || todayReports.length == 0) {
     // ---
     await interaction.reply({
       content:
@@ -150,7 +149,6 @@ export async function execute(interaction: ButtonInteraction) {
     });
     return;
   }
-
   // 各凸状況を収集する
   const firstAttacks = todayReports.filter((report) => {
     return report.attackCount == 1;
