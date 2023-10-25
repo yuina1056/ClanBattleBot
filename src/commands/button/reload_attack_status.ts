@@ -1,11 +1,11 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 import dayjs from "dayjs";
 
-import ManagementMessage from "../../messages/ManagementChannelMessage";
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Clan from "../../entity/Clan";
-import Event from "../../entity/Event";
+import ManagementMessage from "@/messages/ManagementChannelMessage";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
 
 export const customId = "reload_attack_status";
 export const data = new ButtonBuilder()
@@ -37,6 +37,9 @@ export async function execute(interaction: ButtonInteraction) {
     .where("event.fromDate <= :today", { today })
     .andWhere("event.toDate >= :today", { today })
     .getOne();
+  if (event == null) {
+    throw new Error("開催情報が取得できませんでした");
+  }
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel.parentId,
   });
@@ -54,6 +57,7 @@ export async function execute(interaction: ButtonInteraction) {
   await ManagementMessage.sendMessage(
     interaction.channel,
     interaction.message,
+    clan,
     users,
     event,
     false

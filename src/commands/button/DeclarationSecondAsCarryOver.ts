@@ -15,11 +15,11 @@ import Event from "@/entity/Event";
 import DeclarationRepository from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 
-export const customId = "declaration_third";
+export const customId = "declarationSecondAsCarryOver";
 export const data = new ButtonBuilder()
   .setCustomId(customId)
-  .setStyle(ButtonStyle.Secondary)
-  .setLabel("3凸目");
+  .setStyle(ButtonStyle.Danger)
+  .setLabel("2凸目持越");
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;
@@ -95,7 +95,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   let content = "";
-  const user = await Declaration.regist(boss, interaction.user.id, bossLap, 3);
+  const user = await Declaration.regist(boss, interaction.user.id, bossLap, 2);
   if (user instanceof Error) {
     content = user.message;
   } else {

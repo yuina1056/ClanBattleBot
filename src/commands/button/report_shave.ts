@@ -7,14 +7,15 @@ import {
 } from "discord.js";
 import dayjs from "dayjs";
 
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Report from "../../entity/Report";
-import Boss from "../../entity/Boss";
-import Clan from "../../entity/Clan";
-import Event from "../../entity/Event";
-import Declaration from "../../entity/Declaration";
-import BossChannelMessage from "../../messages/BossChannelMessage";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Report from "@/entity/Report";
+import Boss from "@/entity/Boss";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import Lap from "@/entity/Lap";
+import Declaration from "@/entity/Declaration";
+import BossChannelMessage from "@/messages/BossChannelMessage";
 
 export const customId = "report_shave";
 export const data = new ButtonBuilder()
@@ -55,6 +56,36 @@ export async function execute(interaction: ButtonInteraction) {
   if (boss == null) {
     throw new Error("ボス情報が取得できませんでした");
   }
+
+  // 周回数取得
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    eventId: event.id,
+    clanId: clan.id,
+  });
+  if (lap == null) {
+    throw new Error("周回数が取得できませんでした");
+  }
+  let bossLap = 0;
+  switch (boss.bossid) {
+    case 1:
+      bossLap = lap.boss1Lap ?? 0;
+      break;
+    case 2:
+      bossLap = lap.boss2Lap ?? 0;
+      break;
+    case 3:
+      bossLap = lap.boss3Lap ?? 0;
+      break;
+    case 4:
+      bossLap = lap.boss4Lap ?? 0;
+      break;
+    case 5:
+      bossLap = lap.boss5Lap ?? 0;
+      break;
+    default:
+      break;
+  }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
   const user = await userRepository.findOneBy({
@@ -80,7 +111,7 @@ export async function execute(interaction: ButtonInteraction) {
     user.id!,
     event!.id!,
     boss.bossid,
-    0,
+    bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
     0,
@@ -103,6 +134,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel!,
     clan,
     boss,
+    lap,
     declarations
   );
   await interaction.reply({

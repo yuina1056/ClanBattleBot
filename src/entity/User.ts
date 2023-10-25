@@ -6,13 +6,14 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  DeleteDateColumn,
 } from "typeorm";
 import dayjs from "dayjs";
 
-import Report from "./Report";
-import Clan from "./Clan";
-import Event from "./Event";
-import Declaration from "./Declaration";
+import Report from "@/entity/Report";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import Declaration from "@/entity/Declaration";
 
 @Entity()
 // ユーザー
@@ -31,6 +32,8 @@ export default class User {
   CreatedAt?: Date;
   @UpdateDateColumn()
   UpdatedAt?: Date;
+  @DeleteDateColumn()
+  DeletedAt?: Date;
   @OneToMany(() => Report, (report) => report.user)
   reports?: Report[];
   @OneToMany(() => Declaration, (declaration) => declaration.user)
@@ -109,9 +112,17 @@ export default class User {
           res += "/";
         }
       }
-      res +=
-        "] (" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ")";
+      res += "] (" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ")";
     }
     return res;
+  }
+
+  public getTodayReports(event: Event, dayCount: number): Report[] | null {
+    if (this.reports == null) {
+      return null
+    }
+    return this.reports.filter((report) => {
+      return report.eventId == event.id && report.day == dayCount
+    })
   }
 }

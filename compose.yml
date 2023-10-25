@@ -1,9 +1,16 @@
-version: '3'
+version: "3"
 
 services:
-
-  db:
-    image: mysql:8.0.14
+  appbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: >
+      "nodemon"
+  mysql:
+    image: mysql:8.0.33
     restart: always
     ports:
       - "13306:3306"
@@ -11,5 +18,6 @@ services:
       - ./.data/db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: test
-      MYSQL_PASSWORD: test
+      MYSQL_USER: clanbattlebot
+      MYSQL_PASSWORD: clanbattlebot
+      MYSQL_DATABASE: clanbattle

@@ -15,11 +15,11 @@ import Event from "@/entity/Event";
 import DeclarationRepository from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 
-export const customId = "declaration_third";
+export const customId = "declarationThirdAsCarryOver";
 export const data = new ButtonBuilder()
   .setCustomId(customId)
-  .setStyle(ButtonStyle.Secondary)
-  .setLabel("3凸目");
+  .setStyle(ButtonStyle.Danger)
+  .setLabel("3凸目持越");
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;

@@ -6,13 +6,13 @@ import {
   CommandInteraction,
 } from "discord.js";
 
-import DataSource from "../../datasource";
-import Clan from "../../entity/Clan";
-import User from "../../entity/User";
-import Boss from "../../entity/Boss";
-import management_message from "../../messages/ManagementChannelMessage";
-import BossChannelMessage from "../../messages/BossChannelMessage";
-import Declaration from "../../entity/Declaration";
+import DataSource from "@/datasource";
+import Clan from "@/entity/Clan";
+import User from "@/entity/User";
+import Boss from "@/entity/Boss";
+import management_message from "@/messages/ManagementChannelMessage";
+import BossChannelMessage from "@/messages/BossChannelMessage";
+import Declaration from "@/entity/Declaration";
 
 export const data = new SlashCommandBuilder()
   .setName("setup")
@@ -69,9 +69,7 @@ export async function execute(interaction: CommandInteraction) {
   // Roleからユーザーを取得してDBに保存
   await interaction.guild.members.fetch();
   const role = await guild.roles.fetch(roleId);
-  console.log(role);
   const guildMembers = await role?.members;
-  console.log(guildMembers);
   if (guildMembers != null) {
     guildMembers.forEach(async (guildMember) => {
       console.log(guildMember);
@@ -84,7 +82,6 @@ export async function execute(interaction: CommandInteraction) {
       } else {
         userName = guildMember.user.username;
       }
-      console.log(userName);
       const user = new User(saveClan.id!, userName, guildMember.user.id);
       const userRepository = DataSource.getRepository(User);
       await userRepository.save(user);
@@ -134,7 +131,14 @@ async function createManagementChannel(
   });
 
   if (channel.isTextBased()) {
-    await management_message.sendMessage(channel, null, users, null, true);
+    await management_message.sendMessage(
+      channel,
+      null,
+      clan,
+      users,
+      null,
+      true
+    );
   }
 }
 
@@ -167,6 +171,12 @@ async function createBossChannel(
 
   const declaration: Declaration[] = [];
   if (channel?.isTextBased()) {
-    await BossChannelMessage.sendMessage(channel, clan, boss, declaration);
+    await BossChannelMessage.sendMessage(
+      channel,
+      clan,
+      boss,
+      null,
+      declaration
+    );
   }
 }

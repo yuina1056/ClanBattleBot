@@ -6,7 +6,7 @@ import {
   Column,
   OneToMany,
 } from "typeorm";
-import User from "./User";
+import User from "@/entity/User";
 
 @Entity()
 // クラン
@@ -19,16 +19,6 @@ export default class Clan {
   discordRoleId: string;
   @Column()
   discordCategoryId: string;
-  @Column({ default: 1 })
-  boss1Lap?: number;
-  @Column({ default: 1 })
-  boss2Lap?: number;
-  @Column({ default: 1 })
-  boss3Lap?: number;
-  @Column({ default: 1 })
-  boss4Lap?: number;
-  @Column({ default: 1 })
-  boss5Lap?: number;
   @CreateDateColumn()
   CreatedAt?: Date;
   @UpdateDateColumn()

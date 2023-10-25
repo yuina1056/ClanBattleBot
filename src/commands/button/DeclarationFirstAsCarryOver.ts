@@ -10,16 +10,17 @@ import Declaration from "@/app/model/Declaration";
 import DataSource from "@/datasource";
 import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
+import DeclarationRepository from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
 import Event from "@/entity/Event";
-import DeclarationRepository from "@/entity/Declaration";
+
 import BossChannelMessage from "@/messages/BossChannelMessage";
 
-export const customId = "declaration_third";
+export const customId = "declarationFirstAsCarryOver";
 export const data = new ButtonBuilder()
   .setCustomId(customId)
-  .setStyle(ButtonStyle.Secondary)
-  .setLabel("3凸目");
+  .setStyle(ButtonStyle.Danger)
+  .setLabel("1凸目持越");
 
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;
@@ -55,6 +56,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (boss == null) {
     throw new Error("ボス情報が取得できませんでした");
   }
+
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
     .createQueryBuilder("event")
@@ -95,7 +97,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   let content = "";
-  const user = await Declaration.regist(boss, interaction.user.id, bossLap, 3);
+  const user = await Declaration.regist(boss, interaction.user.id, bossLap, 1);
   if (user instanceof Error) {
     content = user.message;
   } else {

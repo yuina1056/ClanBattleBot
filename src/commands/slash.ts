@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import dice from "./slash/dice";
-import setup from "./slash/setup";
+import dice from "@/commands/slash/dice";
+import setup from "@/commands/slash/setup";
+import updateUser from "@/commands/slash/UpdateUser";
 
 export async function action(interaction: ChatInputCommandInteraction) {
   let action = null;
@@ -13,6 +14,12 @@ export async function action(interaction: ChatInputCommandInteraction) {
         ephemeral: true,
       });
       action = setup;
+      break;
+    case updateUser.data.name:
+      await interaction.deferReply({
+        ephemeral: true,
+      });
+      action = updateUser;
       break;
     default:
       console.error(

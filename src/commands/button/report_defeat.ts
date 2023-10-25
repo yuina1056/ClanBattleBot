@@ -7,14 +7,15 @@ import {
 } from "discord.js";
 import dayjs from "dayjs";
 
-import DataSource from "../../datasource";
-import User from "../../entity/User";
-import Report from "../../entity/Report";
-import Boss from "../../entity/Boss";
-import Clan from "../../entity/Clan";
-import Event from "../../entity/Event";
-import Declaration from "../../entity/Declaration";
-import BossChannelMessage from "../../messages/BossChannelMessage";
+import DataSource from "@/datasource";
+import User from "@/entity/User";
+import Report from "@/entity/Report";
+import Boss from "@/entity/Boss";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import Declaration from "@/entity/Declaration";
+import BossChannelMessage from "@/messages/BossChannelMessage";
+import Lap from "@/entity/Lap";
 
 export const customId = "report_defeat";
 export const data = new ButtonBuilder()
@@ -51,6 +52,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (channel.parentId == null) {
     throw new Error("channel.parentId is null");
   }
+  // クラン取得
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel.parentId,
   });
@@ -74,6 +76,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (user == null) {
     throw new Error("ユーザー情報が取得できませんでした");
   }
+  // 凸宣言取得
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
     isFinished: false,
@@ -86,7 +89,59 @@ export async function execute(interaction: ButtonInteraction) {
   if (declaration.id == null) {
     throw new Error("declaration.id is null");
   }
+  // 対象凸を完了状態にする
   await declarationRepository.update(declaration.id, { isFinished: true });
+
+  // 周回数更新
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  let bossLap = 0;
+  if (lap == null) {
+    throw new Error("周回数情報が取得できませんでした");
+  }
+  switch (boss.bossid) {
+    case 1:
+      if (lap.boss1Lap == null) {
+        throw new Error("lap.boss1Lap is null");
+      }
+      lap.boss1Lap += 1;
+      bossLap = lap.boss1Lap;
+      break;
+    case 2:
+      if (lap.boss2Lap == null) {
+        throw new Error("lap.boss2Lap is null");
+      }
+      lap.boss2Lap += 1;
+      bossLap = lap.boss2Lap;
+      break;
+    case 3:
+      if (lap.boss3Lap == null) {
+        throw new Error("lap.boss3Lap is null");
+      }
+      lap.boss3Lap += 1;
+      bossLap = lap.boss3Lap;
+      break;
+    case 4:
+      if (lap.boss4Lap == null) {
+        throw new Error("lap.boss4Lap is null");
+      }
+      lap.boss4Lap += 1;
+      bossLap = lap.boss4Lap;
+      break;
+    case 5:
+      if (lap.boss5Lap == null) {
+        throw new Error("lap.boss5Lap is null");
+      }
+      lap.boss5Lap += 1;
+      bossLap = lap.boss5Lap;
+      break;
+    default:
+      break;
+  }
+  await lapRepository.save(lap);
 
   // 持ち越しが発生しているかチェック
   let isCarryOver = false;
@@ -107,7 +162,7 @@ export async function execute(interaction: ButtonInteraction) {
     user.id!,
     event.id!,
     boss.bossid,
-    0,
+    bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
     0,
@@ -115,6 +170,7 @@ export async function execute(interaction: ButtonInteraction) {
     isCarryOver
   );
   await DataSource.getRepository(Report).save(report);
+
   content = user.name + "が" + boss.bossid + "ボスを撃破しました";
 
   const declarations = await DataSource.getRepository(Declaration).find({
@@ -130,6 +186,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    lap,
     declarations
   );
   await interaction.reply({ content: content });
