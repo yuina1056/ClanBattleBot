@@ -70,7 +70,7 @@ export async function action(interaction: ButtonInteraction) {
       break;
     default:
       console.error(
-        `${interaction.customId}というボタンには対応していません。`
+        `${interaction.customId}というボタンには対応していません。`,
       );
   }
   if (action != null) {

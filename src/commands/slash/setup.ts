@@ -21,7 +21,7 @@ export const data = new SlashCommandBuilder()
     option
       .setName("ロール")
       .setDescription("作成するクランのロールを入力")
-      .setRequired(true)
+      .setRequired(true),
   );
 
 export async function execute(interaction: CommandInteraction) {
@@ -111,7 +111,7 @@ export default {
 async function createManagementChannel(
   guild: Guild,
   channelName: string,
-  clan: Clan
+  clan: Clan,
 ) {
   await guild.channels.create({
     name: channelName,
@@ -121,7 +121,7 @@ async function createManagementChannel(
   const channel = guild.channels.cache.find(
     (channel) =>
       channel.name === channelName &&
-      channel.parentId === clan.discordCategoryId
+      channel.parentId === clan.discordCategoryId,
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -137,7 +137,7 @@ async function createManagementChannel(
       clan,
       users,
       null,
-      true
+      true,
     );
   }
 }
@@ -148,7 +148,7 @@ async function createBossChannel(
   roleName: string,
   bossId: number,
   channelName: string,
-  clan: Clan
+  clan: Clan,
 ) {
   await guild.channels.create({
     name: channelName,
@@ -159,8 +159,8 @@ async function createBossChannel(
     guild.channels.cache.find(
       (channel) =>
         channel.name === channelName &&
-        channel.parentId === clan.discordCategoryId
-    )?.id ?? ""
+        channel.parentId === clan.discordCategoryId,
+    )?.id ?? "",
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -176,7 +176,7 @@ async function createBossChannel(
       clan,
       boss,
       null,
-      declaration
+      declaration,
     );
   }
 }

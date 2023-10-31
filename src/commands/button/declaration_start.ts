@@ -52,7 +52,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("interaction.guild is null");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -143,7 +143,7 @@ export async function execute(interaction: ButtonInteraction) {
       ephemeral: true,
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          buttonAttackFirst.data
+          buttonAttackFirst.data,
         ),
       ],
     });
@@ -180,7 +180,7 @@ export async function execute(interaction: ButtonInteraction) {
         components: [
           // 2凸目を選択してもらう
           new ActionRowBuilder<ButtonBuilder>().addComponents(
-            buttonAttackSecond.data
+            buttonAttackSecond.data,
           ),
         ],
       });
@@ -200,7 +200,7 @@ export async function execute(interaction: ButtonInteraction) {
           // 1凸目の持ち越しか2凸目を選択してもらう
           new ActionRowBuilder<ButtonBuilder>().addComponents(
             buttonAttackFirstAsCarryOver.data,
-            buttonAttackSecond.data
+            buttonAttackSecond.data,
           ),
         ],
       });
@@ -228,7 +228,7 @@ export async function execute(interaction: ButtonInteraction) {
           components: [
             // 3凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-              buttonAttackThird.data
+              buttonAttackThird.data,
             ),
           ],
         });
@@ -248,7 +248,7 @@ export async function execute(interaction: ButtonInteraction) {
             // 2凸目の持ち越しか3凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               buttonAttackSecondAsCarryOver.data,
-              buttonAttackThird.data
+              buttonAttackThird.data,
             ),
           ],
         });
@@ -270,7 +270,7 @@ export async function execute(interaction: ButtonInteraction) {
             // 1凸目の持ち越しか3凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               buttonAttackFirstAsCarryOver.data,
-              buttonAttackThird.data
+              buttonAttackThird.data,
             ),
           ],
         });
@@ -291,7 +291,7 @@ export async function execute(interaction: ButtonInteraction) {
             new ActionRowBuilder<ButtonBuilder>().addComponents(
               buttonAttackFirstAsCarryOver.data,
               buttonAttackSecondAsCarryOver.data,
-              buttonAttackThird.data
+              buttonAttackThird.data,
             ),
           ],
         });
@@ -320,7 +320,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               // 3凸目の持ち越しを消化してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackThirdAsCarryOver.data
+                buttonAttackThirdAsCarryOver.data,
               ),
             ],
           });
@@ -334,7 +334,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               // 2凸目の持ち越しを消化してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackSecondAsCarryOver.data
+                buttonAttackSecondAsCarryOver.data,
               ),
             ],
           });
@@ -347,7 +347,7 @@ export async function execute(interaction: ButtonInteraction) {
               // 2凸目の持ち越しか3凸目の持ち越しを消化してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 buttonAttackSecondAsCarryOver.data,
-                buttonAttackThirdAsCarryOver.data
+                buttonAttackThirdAsCarryOver.data,
               ),
             ],
           });
@@ -362,7 +362,7 @@ export async function execute(interaction: ButtonInteraction) {
             ephemeral: true,
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackFirstAsCarryOver.data
+                buttonAttackFirstAsCarryOver.data,
               ),
             ],
           });
@@ -374,7 +374,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 buttonAttackFirstAsCarryOver.data,
-                buttonAttackThirdAsCarryOver.data
+                buttonAttackThirdAsCarryOver.data,
               ),
             ],
           });
@@ -388,7 +388,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 buttonAttackFirstAsCarryOver.data,
-                buttonAttackSecondAsCarryOver.data
+                buttonAttackSecondAsCarryOver.data,
               ),
             ],
           });
@@ -401,7 +401,7 @@ export async function execute(interaction: ButtonInteraction) {
               new ActionRowBuilder<ButtonBuilder>().addComponents(
                 buttonAttackFirstAsCarryOver.data,
                 buttonAttackSecondAsCarryOver.data,
-                buttonAttackThirdAsCarryOver.data
+                buttonAttackThirdAsCarryOver.data,
               ),
             ],
           });

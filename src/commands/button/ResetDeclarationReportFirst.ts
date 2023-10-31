@@ -31,7 +31,7 @@ export async function execute(interaction: ButtonInteraction) {
   }
 
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");
@@ -81,7 +81,7 @@ export async function execute(interaction: ButtonInteraction) {
     .andWhere("report.day = :day", { day: event.getClanBattleDay() })
     .andWhere("report.attackCount = :attackCount", { attackCount: 1 })
     .execute();
-  
+
   await interaction.reply({
     content: "1凸目の宣言・報告をリセットしました。",
     ephemeral: true,

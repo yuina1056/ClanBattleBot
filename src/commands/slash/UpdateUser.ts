@@ -10,7 +10,7 @@ export const data = new SlashCommandBuilder()
     option
       .setName("ロール")
       .setDescription("ユーザー情報を更新するクランのロールを入力")
-      .setRequired(true)
+      .setRequired(true),
   );
 
 export async function execute(interaction: CommandInteraction) {
@@ -49,7 +49,7 @@ export async function execute(interaction: CommandInteraction) {
   if (guildMembers != null) {
     if (guildMembers.size > 30) {
       throw new Error(
-        "メンバー数が30人を超えています。ロール設定を見直しして再実行してください。"
+        "メンバー数が30人を超えています。ロール設定を見直しして再実行してください。",
       );
     }
     guildMembers.forEach(async (guildMember) => {
@@ -63,7 +63,7 @@ export async function execute(interaction: CommandInteraction) {
         userName = guildMember.user.username;
       }
       const user = users.find(
-        (user) => user.discordUserId === guildMember.user.id
+        (user) => user.discordUserId === guildMember.user.id,
       );
       if (user != null) {
         user.name = userName;
@@ -77,7 +77,7 @@ export async function execute(interaction: CommandInteraction) {
   }
 
   await interaction.followUp(
-    "クランロール[" + roleName + "]のユーザー情報を更新しました"
+    "クランロール[" + roleName + "]のユーザー情報を更新しました",
   );
 }
 

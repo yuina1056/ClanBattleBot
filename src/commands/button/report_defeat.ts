@@ -44,7 +44,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -167,7 +167,7 @@ export async function execute(interaction: ButtonInteraction) {
     declaration.attackCount,
     0,
     true,
-    isCarryOver
+    isCarryOver,
   );
   await DataSource.getRepository(Report).save(report);
 
@@ -187,7 +187,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     lap,
-    declarations
+    declarations,
   );
   await interaction.reply({ content: content });
 }

@@ -53,7 +53,7 @@ export default class User {
       return res + " (記録なし)";
     }
     const maxId = Math.max(
-      ...(this.reports.map((report) => report.id) as number[])
+      ...(this.reports.map((report) => report.id) as number[]),
     );
     const latestReport = this.reports.find((report) => report.id === maxId);
     if (latestReport == null) {
@@ -86,7 +86,7 @@ export default class User {
       res = this.name + " [";
       for (let index = 1; index <= 3; index++) {
         const todayAttackCountReports = todayReports.filter(
-          (report) => report.attackCount === index
+          (report) => report.attackCount === index,
         );
         if (todayAttackCountReports.length === 0) {
           // 凸なし
@@ -119,10 +119,10 @@ export default class User {
 
   public getTodayReports(event: Event, dayCount: number): Report[] | null {
     if (this.reports == null) {
-      return null
+      return null;
     }
     return this.reports.filter((report) => {
-      return report.eventId == event.id && report.day == dayCount
-    })
+      return report.eventId == event.id && report.day == dayCount;
+    });
   }
 }

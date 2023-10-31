@@ -18,7 +18,7 @@ export async function execute(interaction: ButtonInteraction) {
     content: "管理メニュー",
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        button_reset_declaration_report.data
+        button_reset_declaration_report.data,
       ),
     ],
   });

@@ -40,7 +40,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id
+    (channel) => channel.id === interaction.channel!.id,
   );
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
@@ -116,7 +116,7 @@ export async function execute(interaction: ButtonInteraction) {
     declaration.attackCount,
     0,
     false,
-    false
+    false,
   );
   const reportRepository = DataSource.getRepository(Report);
   await reportRepository.save(report);
@@ -135,7 +135,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     lap,
-    declarations
+    declarations,
   );
   await interaction.reply({
     content: user.name + "が" + boss.bossid + "ボスを削りました",

@@ -12,7 +12,7 @@ export async function regist(
   boss: Boss,
   discordUserId: string,
   lap: number,
-  attackCount: number
+  attackCount: number,
 ): Promise<User | Error> {
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
@@ -44,7 +44,7 @@ export async function regist(
     lap,
     event.getClanBattleDay(),
     attackCount,
-    false
+    false,
   );
   await DataSource.getRepository(Declaration).save(declaration);
 
@@ -54,7 +54,7 @@ export async function regist(
 async function validate(
   user: User,
   event: Event,
-  attackCount: number
+  attackCount: number,
 ): Promise<Error | null> {
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findBy({
@@ -68,7 +68,7 @@ async function validate(
   }
   // 宣言済みの凸がある場合
   const declared = declaration.filter(
-    (declaration) => declaration.isFinished === false
+    (declaration) => declaration.isFinished === false,
   );
   if (declared.length > 0) {
     return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
@@ -76,7 +76,7 @@ async function validate(
 
   // 既に2回凸宣言がある場合
   const attackCountDeclaration = declaration.filter(
-    (declaration) => declaration.attackCount === attackCount
+    (declaration) => declaration.attackCount === attackCount,
   );
   if (attackCountDeclaration.length > 2) {
     return new Error("既に" + attackCount + "凸目は完了しています");
