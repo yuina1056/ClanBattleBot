@@ -134,27 +134,27 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  800 / 800 \n" +
         2 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  1000 / 1000 \n" +
         3 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  1300 / 1300 \n" +
         4 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  1500 / 1500 \n" +
         5 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n"
+        "  2000 / 2000 \n"
     );
   }
   const bossStatus = bossStatusCodeBlock;
