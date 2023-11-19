@@ -30,7 +30,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
       .setMaxLength(100)
       .setMinLength(1)
       .setValue(lap.boss1Lap!.toString())
-      .setRequired(true)
+      .setRequired(true),
   );
   const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
@@ -40,7 +40,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
       .setMaxLength(100)
       .setMinLength(1)
       .setValue(lap.boss2Lap!.toString())
-      .setRequired(true)
+      .setRequired(true),
   );
   const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
@@ -50,7 +50,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
       .setMaxLength(100)
       .setMinLength(1)
       .setValue(lap.boss3Lap!.toString())
-      .setRequired(true)
+      .setRequired(true),
   );
   const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
@@ -60,7 +60,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
       .setMaxLength(100)
       .setMinLength(1)
       .setValue(lap.boss4Lap!.toString())
-      .setRequired(true)
+      .setRequired(true),
   );
   const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
@@ -70,7 +70,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
       .setMaxLength(100)
       .setMinLength(1)
       .setValue(lap.boss5Lap!.toString())
-      .setRequired(true)
+      .setRequired(true),
   );
 
   modal.addComponents(
@@ -78,7 +78,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
     ActionRowBoss2,
     ActionRowBoss3,
     ActionRowBoss4,
-    ActionRowBoss5
+    ActionRowBoss5,
   );
   return modal;
 }
@@ -94,7 +94,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     throw new Error("interaction.channel is null");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
+    (channel) => channel.id === interaction.channel?.id,
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -127,19 +127,19 @@ export async function submit(interaction: ModalSubmitInteraction) {
     throw new Error("周回数情報が取得できませんでした");
   }
   lap.boss1Lap = Number(
-    interaction.fields.getTextInputValue(text_boss1_lap_customId)
+    interaction.fields.getTextInputValue(text_boss1_lap_customId),
   );
   lap.boss2Lap = Number(
-    interaction.fields.getTextInputValue(text_boss2_lap_customId)
+    interaction.fields.getTextInputValue(text_boss2_lap_customId),
   );
   lap.boss3Lap = Number(
-    interaction.fields.getTextInputValue(text_boss3_lap_customId)
+    interaction.fields.getTextInputValue(text_boss3_lap_customId),
   );
   lap.boss4Lap = Number(
-    interaction.fields.getTextInputValue(text_boss4_lap_customId)
+    interaction.fields.getTextInputValue(text_boss4_lap_customId),
   );
   lap.boss5Lap = Number(
-    interaction.fields.getTextInputValue(text_boss5_lap_customId)
+    interaction.fields.getTextInputValue(text_boss5_lap_customId),
   );
 
   await lapRepository.save(lap);

@@ -20,7 +20,7 @@ export async function execute(interaction: ButtonInteraction) {
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         button_reset_declaration_report.data,
-        button_edit_lap.data
+        button_edit_lap.data,
       ),
     ],
   });
