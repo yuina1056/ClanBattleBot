@@ -93,7 +93,7 @@ export async function sendMessage(
   // ボス状況
   const bossRepository = dataSource.getRepository(Boss);
   const bosses = await bossRepository.find();
-  // TODO ボスHP情報を盛り込む
+  // TODO 各段階ボスの満タンHP情報を盛り込む
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
