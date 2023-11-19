@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Lap from "@/entity/Lap";
 import {
   ModalSubmitInteraction,
