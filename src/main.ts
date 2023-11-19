@@ -10,6 +10,7 @@ dataSource.initialize();
 
 import slash from "@/commands/slash";
 import button from "@/commands/button";
+import modal from "@/commands/modal";
 
 // クライアントインスタンスと呼ばれるオブジェクトを作成します
 const client = new Client({
@@ -29,6 +30,10 @@ client.on(Events.InteractionCreate, async (interaction: Interaction) => {
   // ボタンの処理
   if (interaction.isButton()) {
     button.action(interaction);
+  }
+  // モーダルの処理
+  if (interaction.isModalSubmit()) {
+    modal.action(interaction);
   }
 });
 
