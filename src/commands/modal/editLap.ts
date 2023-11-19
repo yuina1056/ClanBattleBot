@@ -126,26 +126,21 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (lap == null) {
     throw new Error("周回数情報が取得できませんでした");
   }
-  const boss1Lap = interaction.fields.getTextInputValue(
-    text_boss1_lap_customId
+  lap.boss1Lap = Number(
+    interaction.fields.getTextInputValue(text_boss1_lap_customId)
   );
-  const boss2Lap = interaction.fields.getTextInputValue(
-    text_boss2_lap_customId
+  lap.boss2Lap = Number(
+    interaction.fields.getTextInputValue(text_boss2_lap_customId)
   );
-  const boss3Lap = interaction.fields.getTextInputValue(
-    text_boss3_lap_customId
+  lap.boss3Lap = Number(
+    interaction.fields.getTextInputValue(text_boss3_lap_customId)
   );
-  const boss4Lap = interaction.fields.getTextInputValue(
-    text_boss4_lap_customId
+  lap.boss4Lap = Number(
+    interaction.fields.getTextInputValue(text_boss4_lap_customId)
   );
-  const boss5Lap = interaction.fields.getTextInputValue(
-    text_boss5_lap_customId
+  lap.boss5Lap = Number(
+    interaction.fields.getTextInputValue(text_boss5_lap_customId)
   );
-  lap.boss1Lap = Number(boss1Lap);
-  lap.boss2Lap = Number(boss2Lap);
-  lap.boss3Lap = Number(boss3Lap);
-  lap.boss4Lap = Number(boss4Lap);
-  lap.boss5Lap = Number(boss5Lap);
 
   await lapRepository.save(lap);
   await interaction.reply({
