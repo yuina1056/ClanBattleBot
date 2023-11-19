@@ -2,11 +2,15 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ButtonInteraction,
-  ModalBuilder,
-  TextInputBuilder,
-  ActionRowBuilder,
-  TextInputStyle,
+  Guild,
 } from "discord.js";
+
+import editLap from "@/commands/modal/editLap";
+import Lap from "@/entity/Lap";
+import DataSource from "@/datasource";
+import Clan from "@/entity/Clan";
+import Event from "@/entity/Event";
+import dayjs from "dayjs";
 
 export const customId = "edit_lap";
 export const data = new ButtonBuilder()
@@ -15,67 +19,49 @@ export const data = new ButtonBuilder()
   .setLabel("周回数修正");
 
 export async function execute(interaction: ButtonInteraction) {
-  const modal = new ModalBuilder()
-    .setTitle("周回数修正")
-    .setCustomId("edit_lap_submit");
-  const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
-    new TextInputBuilder()
-      .setLabel("1ボス周回数")
-      .setCustomId("boss1_lap")
-      .setStyle(TextInputStyle.Short)
-      .setMaxLength(100)
-      .setMinLength(1)
-      .setValue("1")
-      .setRequired(true)
+  let guild: Guild;
+  if (interaction.guild != null) {
+    guild = interaction.guild;
+  } else {
+    throw new Error("interaction.guild is null");
+  }
+  if (interaction.channel == null) {
+    throw new Error("interaction.channel is null");
+  }
+  const channel = guild.channels.cache.find(
+    (channel) => channel.id === interaction.channel?.id
   );
-  const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
-    new TextInputBuilder()
-      .setLabel("2ボス周回数")
-      .setCustomId("boss2_lap")
-      .setStyle(TextInputStyle.Short)
-      .setMaxLength(100)
-      .setMinLength(1)
-      .setValue("1")
-      .setRequired(true)
-  );
-  const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
-    new TextInputBuilder()
-      .setLabel("3ボス周回数")
-      .setCustomId("boss3_lap")
-      .setStyle(TextInputStyle.Short)
-      .setMaxLength(100)
-      .setMinLength(1)
-      .setValue("1")
-      .setRequired(true)
-  );
-  const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
-    new TextInputBuilder()
-      .setLabel("4ボス周回数")
-      .setCustomId("boss4_lap")
-      .setStyle(TextInputStyle.Short)
-      .setMaxLength(100)
-      .setMinLength(1)
-      .setValue("1")
-      .setRequired(true)
-  );
-  const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
-    new TextInputBuilder()
-      .setLabel("5ボス周回数")
-      .setCustomId("boss5_lap")
-      .setStyle(TextInputStyle.Short)
-      .setMaxLength(100)
-      .setMinLength(1)
-      .setValue("1")
-      .setRequired(true)
-  );
-
-  modal.addComponents(
-    ActionRowBoss1,
-    ActionRowBoss2,
-    ActionRowBoss3,
-    ActionRowBoss4,
-    ActionRowBoss5
-  );
+  if (channel == null) {
+    throw new Error("channel is null");
+  }
+  if (channel.parentId == null) {
+    throw new Error("channel.parentId is null");
+  }
+  const today = dayjs().format();
+  const event = await DataSource.getRepository(Event)
+    .createQueryBuilder("event")
+    .where("event.fromDate <= :today", { today })
+    .andWhere("event.toDate >= :today", { today })
+    .getOne();
+  if (event == null) {
+    throw new Error("クランバトル開催情報が取得できませんでした");
+  }
+  // クラン取得
+  const clan = await DataSource.getRepository(Clan).findOneBy({
+    discordCategoryId: channel.parentId,
+  });
+  if (clan == null) {
+    throw new Error("クラン情報が取得できませんでした");
+  }
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (lap == null) {
+    throw new Error("周回数情報が取得できませんでした");
+  }
+  const modal = await editLap.createModal(lap);
   await interaction.showModal(modal);
 }
 
