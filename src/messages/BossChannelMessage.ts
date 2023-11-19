@@ -90,7 +90,7 @@ export async function sendMessage(
       },
       {
         name: "HP",
-        value: bossHp.toString(),
+        value: bossHp.toString() + "/ 00000",
       },
       {
         name: "凸宣言者",
