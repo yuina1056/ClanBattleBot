@@ -55,7 +55,10 @@ export async function execute(interaction: ButtonInteraction) {
     isFinished: false,
   });
   if (declaration == null) {
-    await interaction.reply({ content: "取り消しする凸宣言がありません" });
+    await interaction.reply({
+      content: "取り消しする凸宣言がありません",
+      ephemeral: true,
+    });
     return;
   }
   if (declaration.id == null) {
@@ -109,7 +112,7 @@ export async function execute(interaction: ButtonInteraction) {
     clan,
     boss,
     lap,
-    declarations,
+    declarations
   );
   await interaction.reply({ content: "凸宣言取消しました", ephemeral: true });
   await interaction.message.delete();

@@ -51,6 +51,8 @@ export async function sendMessage(
     }
   }
 
+  
+
   // コンポーネント定義
   const embed = new EmbedBuilder()
     .setTitle(boss.bossid + "ボス")

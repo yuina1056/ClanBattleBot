@@ -100,8 +100,14 @@ export async function execute(interaction: ButtonInteraction) {
   if (user instanceof Error) {
     content = user.message;
   } else {
-    content = user?.name + "が" + boss.bossid + "ボスに凸宣言しました";
-  }
+    content =
+      "【" +
+      bossLap +
+      "週目】" +
+      user?.name +
+      "が" +
+      boss.bossid +
+      "ボスに凸宣言しました";  }
 
   const declarations = await DataSource.getRepository(
     DeclarationRepository,
