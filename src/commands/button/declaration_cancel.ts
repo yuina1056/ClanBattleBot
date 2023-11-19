@@ -14,6 +14,7 @@ import Event from "@/entity/Event";
 import Lap from "@/entity/Lap";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
+import EventBoss from "@/entity/EventBoss";
 
 export const customId = "declaration_cancel";
 export const data = new ButtonBuilder()
@@ -98,6 +99,15 @@ export async function execute(interaction: ButtonInteraction) {
     clanId: clan.id,
   });
 
+  const eventBossRepository = DataSource.getRepository(EventBoss);
+  const eventBoss = await eventBossRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (eventBoss == null) {
+    throw new Error("クランバトルボスのHP情報が取得できませんでした");
+  }
+
   const declarations = await declarationRepository.find({
     where: {
       bossId: boss.id,
@@ -111,6 +121,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    eventBoss,
     lap,
     declarations
   );

@@ -13,11 +13,13 @@ import Clan from "@/entity/Clan";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
+import EventBoss from "@/entity/EventBoss";
 
 export async function sendMessage(
   channel: TextBasedChannel,
   clan: Clan,
   boss: Boss,
+  eventBoss: EventBoss | null,
   lap: Lap | null,
   declaration: Declaration[]
 ) {
@@ -50,8 +52,28 @@ export async function sendMessage(
         break;
     }
   }
-
-  
+  let bossHp = 0;
+  if (eventBoss != null) {
+    switch (boss.bossid) {
+      case 1:
+        bossHp = eventBoss.boss1HP ?? 0;
+        break;
+      case 2:
+        bossHp = eventBoss.boss2HP ?? 0;
+        break;
+      case 3:
+        bossHp = eventBoss.boss3HP ?? 0;
+        break;
+      case 4:
+        bossHp = eventBoss.boss4HP ?? 0;
+        break;
+      case 5:
+        bossHp = eventBoss.boss5HP ?? 0;
+        break;
+      default:
+        break;
+    }
+  }
 
   // コンポーネント定義
   const embed = new EmbedBuilder()
@@ -68,7 +90,7 @@ export async function sendMessage(
       },
       {
         name: "HP",
-        value: "TODO",
+        value: bossHp.toString(),
       },
       {
         name: "凸宣言者",

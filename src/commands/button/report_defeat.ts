@@ -16,6 +16,7 @@ import Event from "@/entity/Event";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Lap from "@/entity/Lap";
+import EventBoss from "@/entity/EventBoss";
 
 export const customId = "report_defeat";
 export const data = new ButtonBuilder()
@@ -143,6 +144,15 @@ export async function execute(interaction: ButtonInteraction) {
   }
   await lapRepository.save(lap);
 
+  const eventBossRepository = DataSource.getRepository(EventBoss);
+  const eventBoss = await eventBossRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (eventBoss == null) {
+    throw new Error("クランバトルボスのHP情報が取得できませんでした");
+  }
+
   // 持ち越しが発生しているかチェック
   let isCarryOver = false;
   const reports = await DataSource.getRepository(Report).find({
@@ -186,6 +196,7 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.channel,
     clan,
     boss,
+    eventBoss,
     lap,
     declarations
   );

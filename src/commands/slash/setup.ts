@@ -177,6 +177,7 @@ async function createBossChannel(
       clan,
       boss,
       null,
+      null,
       declaration
     );
   }

@@ -179,7 +179,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     default:
       break;
   }
-  await eventBossRepository.save(eventBoss);
+  const saveEventBoss = await eventBossRepository.save(eventBoss);
 
   const declarations = await DataSource.getRepository(Declaration).find({
     where: {
@@ -194,6 +194,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     interaction.channel!,
     clan,
     boss,
+    saveEventBoss,
     lap,
     declarations
   );
