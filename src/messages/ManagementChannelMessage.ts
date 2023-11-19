@@ -18,6 +18,7 @@ import Clan from "@/entity/Clan";
 import Report from "@/entity/Report";
 import Boss from "@/entity/Boss";
 import Lap from "@/entity/Lap";
+import EventBoss from "@/entity/EventBoss";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -25,7 +26,8 @@ export async function sendMessage(
   clan: Clan,
   users: User[],
   event: Event | null,
-  isInit: boolean,
+  eventBoss: EventBoss | null,
+  isInit: boolean
 ) {
   let userStatus = "メンバー(" + users.length + ")\n";
   users.forEach((user) => {
@@ -52,7 +54,7 @@ export async function sendMessage(
   let latestReportTime: string;
   if (todayReports.length !== 0) {
     latestReport = todayReports.reduce((a, b) =>
-      a.UpdatedAt! > b.UpdatedAt! ? a : b,
+      a.UpdatedAt! > b.UpdatedAt! ? a : b
     );
     latestReportTime = latestReport.UpdatedAt
       ? time(latestReport.UpdatedAt)
@@ -69,7 +71,7 @@ export async function sendMessage(
   // TODO 持ち越し凸の数を加える
   const notAttackCount = users.length * 3 - attackedCount;
   const attackStatus = codeBlock(
-    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸",
+    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸"
   );
 
   // 周回数
@@ -99,27 +101,32 @@ export async function sendMessage(
         " (" +
         lap.boss1Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss1HP +
+        " / 00000 \n" +
         bosses[1].bossid +
         " (" +
         lap.boss2Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss2HP +
+        " / 00000 \n" +
         bosses[2].bossid +
         " (" +
         lap.boss3Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss3HP +
+        " / 00000 \n" +
         bosses[3].bossid +
         " (" +
         lap.boss4Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss4HP +
+        " / 00000 \n" +
         bosses[4].bossid +
         " (" +
         lap.boss5Lap +
         "周)\n" +
-        "  xxxx / 00000 \n",
+        eventBoss?.boss5HP +
+        " / 00000 \n"
     );
   } else {
     bossStatusCodeBlock = codeBlock(
@@ -147,7 +154,7 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n",
+        "  xxxx / 00000 \n"
     );
   }
   const bossStatus = bossStatusCodeBlock;
@@ -158,7 +165,7 @@ export async function sendMessage(
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,
-      button_manage_menu.data,
+      button_manage_menu.data
     ),
   ];
   if (isInit) {
