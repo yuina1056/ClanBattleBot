@@ -1,6 +1,7 @@
 import { ModalSubmitInteraction } from "discord.js";
 import editLap from "./modal/editLap";
 import reportShave from "./modal/reportShave";
+import editHp from "./modal/editHp";
 
 export async function action(interaction: ModalSubmitInteraction) {
   let action = null;
@@ -10,6 +11,9 @@ export async function action(interaction: ModalSubmitInteraction) {
       break;
     case reportShave.customId:
       action = reportShave;
+      break;
+    case editHp.customId:
+      action = editHp;
       break;
     default:
       console.error(`${interaction.customId}というモーダルには対応していません。`);
