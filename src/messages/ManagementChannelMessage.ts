@@ -89,7 +89,7 @@ export async function sendMessage(
   // ボス状況
   const bossRepository = dataSource.getRepository(Boss);
   const bosses = await bossRepository.find();
-  // TODO 各段階ボスの満タンHP情報を盛り込む
+  // TODO 各段階ボスの満タンHP情報を盛り込む。HPは４段階目のみになっているため、段階ごとに切り替えられるようにする必要がある。
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
