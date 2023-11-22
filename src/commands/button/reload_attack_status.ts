@@ -6,6 +6,7 @@ import DataSource from "@/datasource";
 import User from "@/entity/User";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
+import EventBoss from "@/entity/EventBoss";
 
 export const customId = "reload_attack_status";
 export const data = new ButtonBuilder()
@@ -22,9 +23,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id,
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("channel is null");
   }
@@ -54,12 +53,22 @@ export async function execute(interaction: ButtonInteraction) {
       },
     },
   });
+  const eventBossRepository = DataSource.getRepository(EventBoss);
+  const eventBoss = await eventBossRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (eventBoss == null) {
+    throw new Error("ボスHP情報が取得できませんでした");
+  }
+
   await ManagementMessage.sendMessage(
     interaction.channel,
     interaction.message,
     clan,
     users,
     event,
+    eventBoss,
     false,
   );
 }

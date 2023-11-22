@@ -1,9 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  ActionRowBuilder,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from "discord.js";
 import button_reset_declaration_report from "@/commands/button/ResetDeclarationReport";
 import button_edit_lap from "@/commands/button/editLap";
 

@@ -1,10 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  ActionRowBuilder,
-  Guild,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 import dayjs from "dayjs";
 
 import DataSource from "@/datasource";
@@ -51,9 +45,7 @@ export async function execute(interaction: ButtonInteraction) {
   } else {
     throw new Error("interaction.guild is null");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id,
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("channel is null");
   }
@@ -141,11 +133,7 @@ export async function execute(interaction: ButtonInteraction) {
         boss.bossid +
         "ボス 宣言だよ。",
       ephemeral: true,
-      components: [
-        new ActionRowBuilder<ButtonBuilder>().addComponents(
-          buttonAttackFirst.data,
-        ),
-      ],
+      components: [new ActionRowBuilder<ButtonBuilder>().addComponents(buttonAttackFirst.data)],
     });
     return;
   }
@@ -160,11 +148,7 @@ export async function execute(interaction: ButtonInteraction) {
     return report.attackCount == 3;
   });
 
-  if (
-    firstAttacks.length != 0 &&
-    secondAttacks.length == 0 &&
-    thirdAttacks.length == 0
-  ) {
+  if (firstAttacks.length != 0 && secondAttacks.length == 0 && thirdAttacks.length == 0) {
     if (isFinishedOnAttack(firstAttacks)) {
       // z--
       await interaction.reply({
@@ -179,9 +163,7 @@ export async function execute(interaction: ButtonInteraction) {
         ephemeral: true,
         components: [
           // 2凸目を選択してもらう
-          new ActionRowBuilder<ButtonBuilder>().addComponents(
-            buttonAttackSecond.data,
-          ),
+          new ActionRowBuilder<ButtonBuilder>().addComponents(buttonAttackSecond.data),
         ],
       });
     } else {
@@ -207,11 +189,7 @@ export async function execute(interaction: ButtonInteraction) {
     }
   }
 
-  if (
-    firstAttacks.length != 0 &&
-    secondAttacks.length != 0 &&
-    thirdAttacks.length == 0
-  ) {
+  if (firstAttacks.length != 0 && secondAttacks.length != 0 && thirdAttacks.length == 0) {
     if (isFinishedOnAttack(firstAttacks)) {
       if (isFinishedOnAttack(secondAttacks)) {
         // zz-
@@ -227,9 +205,7 @@ export async function execute(interaction: ButtonInteraction) {
           ephemeral: true,
           components: [
             // 3凸目を選択してもらう
-            new ActionRowBuilder<ButtonBuilder>().addComponents(
-              buttonAttackThird.data,
-            ),
+            new ActionRowBuilder<ButtonBuilder>().addComponents(buttonAttackThird.data),
           ],
         });
       } else {
@@ -299,11 +275,7 @@ export async function execute(interaction: ButtonInteraction) {
     }
   }
 
-  if (
-    firstAttacks.length != 0 &&
-    secondAttacks.length != 0 &&
-    thirdAttacks.length != 0
-  ) {
+  if (firstAttacks.length != 0 && secondAttacks.length != 0 && thirdAttacks.length != 0) {
     if (isFinishedOnAttack(firstAttacks)) {
       if (isFinishedOnAttack(secondAttacks)) {
         if (isFinishedOnAttack(thirdAttacks)) {

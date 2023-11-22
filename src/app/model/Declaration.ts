@@ -51,11 +51,7 @@ export async function regist(
   return user;
 }
 
-async function validate(
-  user: User,
-  event: Event,
-  attackCount: number,
-): Promise<Error | null> {
+async function validate(user: User, event: Event, attackCount: number): Promise<Error | null> {
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findBy({
     userId: user.id,
@@ -67,9 +63,7 @@ async function validate(
     return null;
   }
   // 宣言済みの凸がある場合
-  const declared = declaration.filter(
-    (declaration) => declaration.isFinished === false,
-  );
+  const declared = declaration.filter((declaration) => declaration.isFinished === false);
   if (declared.length > 0) {
     return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
   }

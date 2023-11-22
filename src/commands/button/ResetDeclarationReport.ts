@@ -1,9 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  ActionRowBuilder,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from "discord.js";
 
 export const customId = "reset_declaration_report";
 export const data = new ButtonBuilder()
@@ -18,8 +13,7 @@ import button_reset_declaration_report_third from "@/commands/button/ResetDeclar
 export async function execute(interaction: ButtonInteraction) {
   await interaction.reply({
     ephemeral: true,
-    content:
-      "どの凸をリセットしますか？(ボタンを押したらリセット処理が行われます)",
+    content: "どの凸をリセットしますか？(ボタンを押したらリセット処理が行われます)",
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         button_reset_declaration_report_first.data,

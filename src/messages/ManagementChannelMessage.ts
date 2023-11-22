@@ -18,6 +18,7 @@ import Clan from "@/entity/Clan";
 import Report from "@/entity/Report";
 import Boss from "@/entity/Boss";
 import Lap from "@/entity/Lap";
+import EventBoss from "@/entity/EventBoss";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -25,6 +26,7 @@ export async function sendMessage(
   clan: Clan,
   users: User[],
   event: Event | null,
+  eventBoss: EventBoss | null,
   isInit: boolean,
 ) {
   let userStatus = "メンバー(" + users.length + ")\n";
@@ -51,12 +53,8 @@ export async function sendMessage(
   let latestReport: Report;
   let latestReportTime: string;
   if (todayReports.length !== 0) {
-    latestReport = todayReports.reduce((a, b) =>
-      a.UpdatedAt! > b.UpdatedAt! ? a : b,
-    );
-    latestReportTime = latestReport.UpdatedAt
-      ? time(latestReport.UpdatedAt)
-      : "-";
+    latestReport = todayReports.reduce((a, b) => (a.UpdatedAt! > b.UpdatedAt! ? a : b));
+    latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
   }
 
   // const clanStatus: string =
@@ -91,7 +89,7 @@ export async function sendMessage(
   // ボス状況
   const bossRepository = dataSource.getRepository(Boss);
   const bosses = await bossRepository.find();
-  // TODO ボスHP情報を盛り込む
+  // TODO 各段階ボスの満タンHP情報を盛り込む。HPは４段階目のみになっているため、段階ごとに切り替えられるようにする必要がある。
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
@@ -99,27 +97,32 @@ export async function sendMessage(
         " (" +
         lap.boss1Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss1HP +
+        " / 27000 \n" +
         bosses[1].bossid +
         " (" +
         lap.boss2Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss2HP +
+        " / 28000 \n" +
         bosses[2].bossid +
         " (" +
         lap.boss3Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss3HP +
+        " / 30000 \n" +
         bosses[3].bossid +
         " (" +
         lap.boss4Lap +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        eventBoss?.boss4HP +
+        " / 31000 \n" +
         bosses[4].bossid +
         " (" +
         lap.boss5Lap +
         "周)\n" +
-        "  xxxx / 00000 \n",
+        eventBoss?.boss5HP +
+        " / 32000 \n",
     );
   } else {
     bossStatusCodeBlock = codeBlock(
@@ -127,27 +130,27 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  27000 / 27000 \n" +
         2 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  28000 / 28000 \n" +
         3 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  30000 / 30000 \n" +
         4 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n" +
+        "  31000 / 31000 \n" +
         5 +
         " (" +
         1 +
         "周)\n" +
-        "  xxxx / 00000 \n",
+        "  32000 / 32000 \n",
     );
   }
   const bossStatus = bossStatusCodeBlock;

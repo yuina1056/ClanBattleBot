@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  ChannelType,
-  SlashCommandBuilder,
-  Guild,
-  CommandInteraction,
-} from "discord.js";
+import { ChannelType, SlashCommandBuilder, Guild, CommandInteraction } from "discord.js";
 
 import DataSource from "@/datasource";
 import Clan from "@/entity/Clan";
@@ -18,10 +13,7 @@ export const data = new SlashCommandBuilder()
   .setName("setup")
   .setDescription("botを使い始める準備をします")
   .addRoleOption((option) =>
-    option
-      .setName("ロール")
-      .setDescription("作成するクランのロールを入力")
-      .setRequired(true),
+    option.setName("ロール").setDescription("作成するクランのロールを入力").setRequired(true),
   );
 
 export async function execute(interaction: CommandInteraction) {
@@ -42,10 +34,7 @@ export async function execute(interaction: CommandInteraction) {
   }
 
   const categoryName = "クランバトル管理(" + roleName + ")";
-  if (
-    guild.channels.cache.find((channel) => channel.name === categoryName) !=
-    null
-  ) {
+  if (guild.channels.cache.find((channel) => channel.name === categoryName) != null) {
     throw new Error("既にチャンネルのセットアップが完了しています");
   }
 
@@ -55,8 +44,7 @@ export async function execute(interaction: CommandInteraction) {
     type: ChannelType.GuildCategory,
   });
   const categoryId =
-    guild.channels.cache.find((channel) => channel.name === categoryName)?.id ??
-    "";
+    guild.channels.cache.find((channel) => channel.name === categoryName)?.id ?? "";
 
   // DBにクラン情報保存
   const clan = new Clan(roleName, roleId, categoryId);
@@ -108,20 +96,14 @@ export default {
 };
 
 // 凸管理用チャンネル作成
-async function createManagementChannel(
-  guild: Guild,
-  channelName: string,
-  clan: Clan,
-) {
+async function createManagementChannel(guild: Guild, channelName: string, clan: Clan) {
   await guild.channels.create({
     name: channelName,
     parent: clan.discordCategoryId,
   });
 
   const channel = guild.channels.cache.find(
-    (channel) =>
-      channel.name === channelName &&
-      channel.parentId === clan.discordCategoryId,
+    (channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId,
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -131,14 +113,7 @@ async function createManagementChannel(
   });
 
   if (channel.isTextBased()) {
-    await management_message.sendMessage(
-      channel,
-      null,
-      clan,
-      users,
-      null,
-      true,
-    );
+    await management_message.sendMessage(channel, null, clan, users, null, null, true);
   }
 }
 
@@ -157,9 +132,7 @@ async function createBossChannel(
 
   const channel = guild.channels.cache.get(
     guild.channels.cache.find(
-      (channel) =>
-        channel.name === channelName &&
-        channel.parentId === clan.discordCategoryId,
+      (channel) => channel.name === channelName && channel.parentId === clan.discordCategoryId,
     )?.id ?? "",
   );
   if (channel == null) {
@@ -171,12 +144,6 @@ async function createBossChannel(
 
   const declaration: Declaration[] = [];
   if (channel?.isTextBased()) {
-    await BossChannelMessage.sendMessage(
-      channel,
-      clan,
-      boss,
-      null,
-      declaration,
-    );
+    await BossChannelMessage.sendMessage(channel, clan, boss, null, null, declaration);
   }
 }
