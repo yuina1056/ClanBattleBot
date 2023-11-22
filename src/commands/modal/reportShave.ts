@@ -35,7 +35,7 @@ export async function createModal(hp: number): Promise<ModalBuilder> {
         .setMaxLength(100)
         .setMinLength(1)
         .setValue(hp.toString())
-        .setRequired(true)
+        .setRequired(true),
     );
   modal.addComponents(ActionRowRemainingHP);
   return modal;
@@ -58,7 +58,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id
+    (channel) => channel.id === interaction.channel!.id,
   );
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
@@ -137,7 +137,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     declaration.attackCount,
     0,
     false,
-    false
+    false,
   );
   const reportRepository = DataSource.getRepository(Report);
   await reportRepository.save(report);
@@ -153,27 +153,27 @@ export async function submit(interaction: ModalSubmitInteraction) {
   switch (boss.bossid) {
     case 1:
       eventBoss.boss1HP = Number(
-        interaction.fields.getTextInputValue(text_remaining_hp_customId)
+        interaction.fields.getTextInputValue(text_remaining_hp_customId),
       );
       break;
     case 2:
       eventBoss.boss2HP = Number(
-        interaction.fields.getTextInputValue(text_remaining_hp_customId)
+        interaction.fields.getTextInputValue(text_remaining_hp_customId),
       );
       break;
     case 3:
       eventBoss.boss3HP = Number(
-        interaction.fields.getTextInputValue(text_remaining_hp_customId)
+        interaction.fields.getTextInputValue(text_remaining_hp_customId),
       );
       break;
     case 4:
       eventBoss.boss4HP = Number(
-        interaction.fields.getTextInputValue(text_remaining_hp_customId)
+        interaction.fields.getTextInputValue(text_remaining_hp_customId),
       );
       break;
     case 5:
       eventBoss.boss5HP = Number(
-        interaction.fields.getTextInputValue(text_remaining_hp_customId)
+        interaction.fields.getTextInputValue(text_remaining_hp_customId),
       );
       break;
     default:
@@ -196,7 +196,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     boss,
     saveEventBoss,
     lap,
-    declarations
+    declarations,
   );
   await interaction.reply({
     content: user.name + "が" + boss.bossid + "ボスを削りました",

@@ -108,7 +108,8 @@ export async function execute(interaction: ButtonInteraction) {
       user?.name +
       "が" +
       boss.bossid +
-      "ボスに凸宣言しました";  }
+      "ボスに凸宣言しました";
+  }
 
   const declarations = await DataSource.getRepository(
     DeclarationRepository,

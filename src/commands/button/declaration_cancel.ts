@@ -123,7 +123,7 @@ export async function execute(interaction: ButtonInteraction) {
     boss,
     eventBoss,
     lap,
-    declarations
+    declarations,
   );
   await interaction.reply({ content: "凸宣言取消しました", ephemeral: true });
   await interaction.message.delete();
