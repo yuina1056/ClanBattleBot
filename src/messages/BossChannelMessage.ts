@@ -21,7 +21,7 @@ export async function sendMessage(
   boss: Boss,
   eventBoss: EventBoss | null,
   lap: Lap | null,
-  declaration: Declaration[],
+  declaration: Declaration[]
 ) {
   let declarationMember = "凸宣言者なし";
   if (declaration.length > 0) {
@@ -53,22 +53,29 @@ export async function sendMessage(
     }
   }
   let bossHp = 0;
+  let bossMaxHp = 0;
+  // TODO: 4段階目用で準備したので、２段階目・３段階目に対応する必要がある。
   if (eventBoss != null) {
     switch (boss.bossid) {
       case 1:
         bossHp = eventBoss.boss1HP ?? 0;
+        bossMaxHp = 27000;
         break;
       case 2:
         bossHp = eventBoss.boss2HP ?? 0;
+        bossMaxHp = 28000;
         break;
       case 3:
         bossHp = eventBoss.boss3HP ?? 0;
+        bossMaxHp = 30000;
         break;
       case 4:
         bossHp = eventBoss.boss4HP ?? 0;
+        bossMaxHp = 31000;
         break;
       case 5:
         bossHp = eventBoss.boss5HP ?? 0;
+        bossMaxHp = 32000;
         break;
       default:
         break;
@@ -90,12 +97,12 @@ export async function sendMessage(
       },
       {
         name: "HP",
-        value: bossHp.toString() + "/ 00000",
+        value: bossHp.toString() + "/ " + bossMaxHp.toString(),
       },
       {
         name: "凸宣言者",
         value: declarationMember,
-      },
+      }
     );
 
   await channel.send({
@@ -105,7 +112,7 @@ export async function sendMessage(
         button_declaration.data,
         button_report_shave.data,
         button_report_defeat.data,
-        button_declaration_cancel.data,
+        button_declaration_cancel.data
       ),
     ],
   });
