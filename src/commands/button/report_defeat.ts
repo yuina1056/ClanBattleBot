@@ -45,7 +45,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id,
+    (channel) => channel.id === interaction.channel?.id
   );
   if (channel == null) {
     throw new Error("channel is null");
@@ -93,56 +93,16 @@ export async function execute(interaction: ButtonInteraction) {
   // 対象凸を完了状態にする
   await declarationRepository.update(declaration.id, { isFinished: true });
 
-  // 周回数更新
+  // 周回数・HP更新
   const lapRepository = DataSource.getRepository(Lap);
   const lap = await lapRepository.findOneBy({
     clanId: clan.id,
     eventId: event.id,
   });
-  let bossLap = 0;
   if (lap == null) {
     throw new Error("周回数情報が取得できませんでした");
   }
-  switch (boss.bossid) {
-    case 1:
-      if (lap.boss1Lap == null) {
-        throw new Error("lap.boss1Lap is null");
-      }
-      lap.boss1Lap += 1;
-      bossLap = lap.boss1Lap;
-      break;
-    case 2:
-      if (lap.boss2Lap == null) {
-        throw new Error("lap.boss2Lap is null");
-      }
-      lap.boss2Lap += 1;
-      bossLap = lap.boss2Lap;
-      break;
-    case 3:
-      if (lap.boss3Lap == null) {
-        throw new Error("lap.boss3Lap is null");
-      }
-      lap.boss3Lap += 1;
-      bossLap = lap.boss3Lap;
-      break;
-    case 4:
-      if (lap.boss4Lap == null) {
-        throw new Error("lap.boss4Lap is null");
-      }
-      lap.boss4Lap += 1;
-      bossLap = lap.boss4Lap;
-      break;
-    case 5:
-      if (lap.boss5Lap == null) {
-        throw new Error("lap.boss5Lap is null");
-      }
-      lap.boss5Lap += 1;
-      bossLap = lap.boss5Lap;
-      break;
-    default:
-      break;
-  }
-  await lapRepository.save(lap);
+  let bossLap = 0;
 
   const eventBossRepository = DataSource.getRepository(EventBoss);
   const eventBoss = await eventBossRepository.findOneBy({
@@ -152,6 +112,53 @@ export async function execute(interaction: ButtonInteraction) {
   if (eventBoss == null) {
     throw new Error("クランバトルボスのHP情報が取得できませんでした");
   }
+
+  switch (boss.bossid) {
+    case 1:
+      if (lap.boss1Lap == null) {
+        throw new Error("lap.boss1Lap is null");
+      }
+      lap.boss1Lap += 1;
+      bossLap = lap.boss1Lap;
+      eventBoss.boss1HP = 27000;
+      break;
+    case 2:
+      if (lap.boss2Lap == null) {
+        throw new Error("lap.boss2Lap is null");
+      }
+      lap.boss2Lap += 1;
+      bossLap = lap.boss2Lap;
+      eventBoss.boss2HP = 28000;
+      break;
+    case 3:
+      if (lap.boss3Lap == null) {
+        throw new Error("lap.boss3Lap is null");
+      }
+      lap.boss3Lap += 1;
+      bossLap = lap.boss3Lap;
+      eventBoss.boss3HP = 30000;
+      break;
+    case 4:
+      if (lap.boss4Lap == null) {
+        throw new Error("lap.boss4Lap is null");
+      }
+      lap.boss4Lap += 1;
+      bossLap = lap.boss4Lap;
+      eventBoss.boss4HP = 31000;
+      break;
+    case 5:
+      if (lap.boss5Lap == null) {
+        throw new Error("lap.boss5Lap is null");
+      }
+      lap.boss5Lap += 1;
+      bossLap = lap.boss5Lap;
+      eventBoss.boss5HP = 32000;
+      break;
+    default:
+      break;
+  }
+  await lapRepository.save(lap);
+  await eventBossRepository.save(eventBoss);
 
   // 持ち越しが発生しているかチェック
   let isCarryOver = false;
@@ -177,7 +184,7 @@ export async function execute(interaction: ButtonInteraction) {
     declaration.attackCount,
     0,
     true,
-    isCarryOver,
+    isCarryOver
   );
   await DataSource.getRepository(Report).save(report);
 
@@ -198,7 +205,7 @@ export async function execute(interaction: ButtonInteraction) {
     boss,
     eventBoss,
     lap,
-    declarations,
+    declarations
   );
   await interaction.reply({ content: content });
 }
