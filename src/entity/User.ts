@@ -52,9 +52,7 @@ export default class User {
     if (this.reports.length === 0) {
       return res + " (記録なし)";
     }
-    const maxId = Math.max(
-      ...(this.reports.map((report) => report.id) as number[])
-    );
+    const maxId = Math.max(...(this.reports.map((report) => report.id) as number[]));
     const latestReport = this.reports.find((report) => report.id === maxId);
     if (latestReport == null) {
       return res + " (記録なし)";
@@ -64,29 +62,19 @@ export default class User {
     });
 
     if (thisMonthReports.length === 0) {
-      return (
-        res +
-        "(" +
-        dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") +
-        ") 【当月凸なし】"
-      );
+      return res + "(" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ") 【当月凸なし】";
     } else {
       const todayReports = thisMonthReports.filter((report) => {
         return report.day == event.getClanBattleDay();
       });
       if (todayReports.length === 0) {
-        return (
-          res +
-          "(" +
-          dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") +
-          ") 【当日凸なし】"
-        );
+        return res + "(" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ") 【当日凸なし】";
       }
       // 当日凸あり
       res = this.name + " [";
       for (let index = 1; index <= 3; index++) {
         const todayAttackCountReports = todayReports.filter(
-          (report) => report.attackCount === index
+          (report) => report.attackCount === index,
         );
         if (todayAttackCountReports.length === 0) {
           // 凸なし
@@ -119,10 +107,10 @@ export default class User {
 
   public getTodayReports(event: Event, dayCount: number): Report[] | null {
     if (this.reports == null) {
-      return null
+      return null;
     }
     return this.reports.filter((report) => {
-      return report.eventId == event.id && report.day == dayCount
-    })
+      return report.eventId == event.id && report.day == dayCount;
+    });
   }
 }

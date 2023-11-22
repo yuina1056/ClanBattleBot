@@ -1,24 +1,24 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
-import dayjs from "dayjs";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import ManagementMessage from "@/messages/ManagementChannelMessage";
+import editLap from "@/commands/modal/editLap";
+import Lap from "@/entity/Lap";
 import DataSource from "@/datasource";
-import User from "@/entity/User";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
-import EventBoss from "@/entity/EventBoss";
+import dayjs from "dayjs";
 
-export const customId = "reload_attack_status";
+export const customId = "edit_lap";
 export const data = new ButtonBuilder()
-  .setCustomId("reload_attack_status")
+  .setCustomId(customId)
   .setStyle(ButtonStyle.Secondary)
-  .setLabel("凸状況更新");
+  .setLabel("周回数修正");
 
 export async function execute(interaction: ButtonInteraction) {
-  await interaction.deferUpdate();
-  const guild = interaction.guild;
-  if (guild == null) {
-    throw new Error("guild is null");
+  let guild: Guild;
+  if (interaction.guild != null) {
+    guild = interaction.guild;
+  } else {
+    throw new Error("interaction.guild is null");
   }
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
@@ -37,40 +37,25 @@ export async function execute(interaction: ButtonInteraction) {
     .andWhere("event.toDate >= :today", { today })
     .getOne();
   if (event == null) {
-    throw new Error("開催情報が取得できませんでした");
+    throw new Error("クランバトル開催情報が取得できませんでした");
   }
+  // クラン取得
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel.parentId,
   });
   if (clan == null) {
     throw new Error("クラン情報が取得できませんでした");
   }
-  const users = await DataSource.getRepository(User).find({
-    where: { clanId: clan.id },
-    relations: {
-      reports: {
-        event: true,
-      },
-    },
-  });
-  const eventBossRepository = DataSource.getRepository(EventBoss);
-  const eventBoss = await eventBossRepository.findOneBy({
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
     clanId: clan.id,
     eventId: event.id,
   });
-  if (eventBoss == null) {
-    throw new Error("ボスHP情報が取得できませんでした");
+  if (lap == null) {
+    throw new Error("周回数情報が取得できませんでした");
   }
-
-  await ManagementMessage.sendMessage(
-    interaction.channel,
-    interaction.message,
-    clan,
-    users,
-    event,
-    eventBoss,
-    false,
-  );
+  const modal = await editLap.createModal(lap);
+  await interaction.showModal(modal);
 }
 
 export default {

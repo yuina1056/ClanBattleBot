@@ -16,6 +16,7 @@ import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
 import reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
 import reset_declaration_report_second from "@/commands/button/ResetDeclarationReportSecond";
 import reset_declaration_report_third from "@/commands/button/ResetDeclarationReportThird";
+import edit_lap from "@/commands/button/editLap";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -68,10 +69,11 @@ export async function action(interaction: ButtonInteraction) {
     case reset_declaration_report_third.customId:
       action = reset_declaration_report_third;
       break;
+    case edit_lap.customId:
+      action = edit_lap;
+      break;
     default:
-      console.error(
-        `${interaction.customId}というボタンには対応していません。`
-      );
+      console.error(`${interaction.customId}というボタンには対応していません。`);
   }
   if (action != null) {
     try {

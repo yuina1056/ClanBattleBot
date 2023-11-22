@@ -1,9 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  Guild,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 import dayjs from "dayjs";
 
 export const customId = "reset_declaration_report_first";
@@ -30,9 +25,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("interaction.channel is null");
   }
 
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");
   }
@@ -81,7 +74,7 @@ export async function execute(interaction: ButtonInteraction) {
     .andWhere("report.day = :day", { day: event.getClanBattleDay() })
     .andWhere("report.attackCount = :attackCount", { attackCount: 1 })
     .execute();
-  
+
   await interaction.reply({
     content: "1凸目の宣言・報告をリセットしました。",
     ephemeral: true,

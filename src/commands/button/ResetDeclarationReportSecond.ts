@@ -14,7 +14,6 @@ import Declaration from "@/entity/Declaration";
 import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 
-
 export async function execute(interaction: ButtonInteraction) {
   let guild: Guild;
   if (interaction.guild != null) {
@@ -26,9 +25,7 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("interaction.channel is null");
   }
 
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");
   }

@@ -1,10 +1,6 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  ActionRowBuilder,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from "discord.js";
 import button_reset_declaration_report from "@/commands/button/ResetDeclarationReport";
+import button_edit_lap from "@/commands/button/editLap";
 
 export const customId = "manage_menu";
 export const data = new ButtonBuilder()
@@ -18,7 +14,8 @@ export async function execute(interaction: ButtonInteraction) {
     content: "管理メニュー",
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        button_reset_declaration_report.data
+        button_reset_declaration_report.data,
+        button_edit_lap.data,
       ),
     ],
   });

@@ -1,9 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  Guild,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/datasource";
@@ -15,6 +10,7 @@ import BossChannelMessage from "@/messages/BossChannelMessage";
 import Lap from "@/entity/Lap";
 import Event from "@/entity/Event";
 import dayjs from "dayjs";
+import EventBoss from "@/entity/EventBoss";
 
 export const customId = "declaration_first";
 export const data = new ButtonBuilder()
@@ -32,9 +28,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");
   }
@@ -100,12 +94,10 @@ export async function execute(interaction: ButtonInteraction) {
   if (user instanceof Error) {
     content = user.message;
   } else {
-    content = user?.name + "が" + boss.bossid + "ボスに凸宣言しました";
+    content = "【" + bossLap + "週目】" + user?.name + "が" + boss.bossid + "ボスに凸宣言しました";
   }
 
-  const declarations = await DataSource.getRepository(
-    DeclarationRepository
-  ).find({
+  const declarations = await DataSource.getRepository(DeclarationRepository).find({
     where: {
       bossId: boss.id,
       isFinished: false,
@@ -114,15 +106,26 @@ export async function execute(interaction: ButtonInteraction) {
       user: true,
     },
   });
+
+  const eventBossRepository = DataSource.getRepository(EventBoss);
+  const eventBoss = await eventBossRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (eventBoss == null) {
+    throw new Error("クランバトルボスのHP情報が取得できませんでした");
+  }
+
   await BossChannelMessage.sendMessage(
     interaction.channel,
     clan,
     boss,
+    eventBoss,
     lap,
-    declarations
+    declarations,
   );
   const deleteMessage = await channel.messages.fetch(
-    interaction.message.reference?.messageId ?? ""
+    interaction.message.reference?.messageId ?? "",
   );
   await deleteMessage.delete();
   await interaction.reply({ content: content });

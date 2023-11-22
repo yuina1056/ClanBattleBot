@@ -22,9 +22,7 @@ export async function action(interaction: ChatInputCommandInteraction) {
       action = updateUser;
       break;
     default:
-      console.error(
-        `${interaction.commandName}というコマンドには対応していません。`
-      );
+      console.error(`${interaction.commandName}というコマンドには対応していません。`);
   }
   if (action != null) {
     try {

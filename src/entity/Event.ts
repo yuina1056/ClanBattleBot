@@ -1,10 +1,4 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-  Unique,
-} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, Unique } from "typeorm";
 import dayjs from "dayjs";
 
 import Report from "@/entity/Report";
