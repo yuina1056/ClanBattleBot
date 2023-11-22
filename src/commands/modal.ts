@@ -12,9 +12,7 @@ export async function action(interaction: ModalSubmitInteraction) {
       action = reportShave;
       break;
     default:
-      console.error(
-        `${interaction.customId}というモーダルには対応していません。`,
-      );
+      console.error(`${interaction.customId}というモーダルには対応していません。`);
   }
   if (action != null) {
     try {

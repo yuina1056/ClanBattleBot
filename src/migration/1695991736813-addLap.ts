@@ -15,21 +15,11 @@ export class AddLap1695991736813 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE \`clan\` ADD \`boss5Lap\` int NOT NULL DEFAULT '1'`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`clan\` ADD \`boss4Lap\` int NOT NULL DEFAULT '1'`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`clan\` ADD \`boss3Lap\` int NOT NULL DEFAULT '1'`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`clan\` ADD \`boss2Lap\` int NOT NULL DEFAULT '1'`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`clan\` ADD \`boss1Lap\` int NOT NULL DEFAULT '1'`,
-    );
+    await queryRunner.query(`ALTER TABLE \`clan\` ADD \`boss5Lap\` int NOT NULL DEFAULT '1'`);
+    await queryRunner.query(`ALTER TABLE \`clan\` ADD \`boss4Lap\` int NOT NULL DEFAULT '1'`);
+    await queryRunner.query(`ALTER TABLE \`clan\` ADD \`boss3Lap\` int NOT NULL DEFAULT '1'`);
+    await queryRunner.query(`ALTER TABLE \`clan\` ADD \`boss2Lap\` int NOT NULL DEFAULT '1'`);
+    await queryRunner.query(`ALTER TABLE \`clan\` ADD \`boss1Lap\` int NOT NULL DEFAULT '1'`);
     await queryRunner.query(`DROP TABLE \`lap\``);
   }
 }

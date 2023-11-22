@@ -52,9 +52,7 @@ export default class User {
     if (this.reports.length === 0) {
       return res + " (記録なし)";
     }
-    const maxId = Math.max(
-      ...(this.reports.map((report) => report.id) as number[]),
-    );
+    const maxId = Math.max(...(this.reports.map((report) => report.id) as number[]));
     const latestReport = this.reports.find((report) => report.id === maxId);
     if (latestReport == null) {
       return res + " (記録なし)";
@@ -64,23 +62,13 @@ export default class User {
     });
 
     if (thisMonthReports.length === 0) {
-      return (
-        res +
-        "(" +
-        dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") +
-        ") 【当月凸なし】"
-      );
+      return res + "(" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ") 【当月凸なし】";
     } else {
       const todayReports = thisMonthReports.filter((report) => {
         return report.day == event.getClanBattleDay();
       });
       if (todayReports.length === 0) {
-        return (
-          res +
-          "(" +
-          dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") +
-          ") 【当日凸なし】"
-        );
+        return res + "(" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ") 【当日凸なし】";
       }
       // 当日凸あり
       res = this.name + " [";

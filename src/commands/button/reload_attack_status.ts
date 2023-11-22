@@ -23,9 +23,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id,
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("channel is null");
   }

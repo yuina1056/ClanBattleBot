@@ -93,9 +93,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id,
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("channel is null");
   }
@@ -126,21 +124,11 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (lap == null) {
     throw new Error("周回数情報が取得できませんでした");
   }
-  lap.boss1Lap = Number(
-    interaction.fields.getTextInputValue(text_boss1_lap_customId),
-  );
-  lap.boss2Lap = Number(
-    interaction.fields.getTextInputValue(text_boss2_lap_customId),
-  );
-  lap.boss3Lap = Number(
-    interaction.fields.getTextInputValue(text_boss3_lap_customId),
-  );
-  lap.boss4Lap = Number(
-    interaction.fields.getTextInputValue(text_boss4_lap_customId),
-  );
-  lap.boss5Lap = Number(
-    interaction.fields.getTextInputValue(text_boss5_lap_customId),
-  );
+  lap.boss1Lap = Number(interaction.fields.getTextInputValue(text_boss1_lap_customId));
+  lap.boss2Lap = Number(interaction.fields.getTextInputValue(text_boss2_lap_customId));
+  lap.boss3Lap = Number(interaction.fields.getTextInputValue(text_boss3_lap_customId));
+  lap.boss4Lap = Number(interaction.fields.getTextInputValue(text_boss4_lap_customId));
+  lap.boss5Lap = Number(interaction.fields.getTextInputValue(text_boss5_lap_customId));
 
   await lapRepository.save(lap);
   await interaction.reply({

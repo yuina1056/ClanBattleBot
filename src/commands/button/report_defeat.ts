@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  Guild,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 import dayjs from "dayjs";
 
 import DataSource from "@/datasource";
@@ -44,9 +39,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (event == null) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("channel is null");
   }
@@ -184,7 +177,7 @@ export async function execute(interaction: ButtonInteraction) {
     declaration.attackCount,
     0,
     true,
-    isCarryOver
+    isCarryOver,
   );
   await DataSource.getRepository(Report).save(report);
 
@@ -205,7 +198,7 @@ export async function execute(interaction: ButtonInteraction) {
     boss,
     eventBoss,
     lap,
-    declarations
+    declarations,
   );
   await interaction.reply({ content: content });
 }

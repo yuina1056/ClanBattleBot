@@ -1,10 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  Guild,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 import dayjs from "dayjs";
 
 import DataSource from "@/datasource";
@@ -39,9 +34,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (event == null) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel!.id,
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id);
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
   });

@@ -27,7 +27,7 @@ export async function sendMessage(
   users: User[],
   event: Event | null,
   eventBoss: EventBoss | null,
-  isInit: boolean
+  isInit: boolean,
 ) {
   let userStatus = "メンバー(" + users.length + ")\n";
   users.forEach((user) => {
@@ -53,12 +53,8 @@ export async function sendMessage(
   let latestReport: Report;
   let latestReportTime: string;
   if (todayReports.length !== 0) {
-    latestReport = todayReports.reduce((a, b) =>
-      a.UpdatedAt! > b.UpdatedAt! ? a : b
-    );
-    latestReportTime = latestReport.UpdatedAt
-      ? time(latestReport.UpdatedAt)
-      : "-";
+    latestReport = todayReports.reduce((a, b) => (a.UpdatedAt! > b.UpdatedAt! ? a : b));
+    latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
   }
 
   // const clanStatus: string =
@@ -71,7 +67,7 @@ export async function sendMessage(
   // TODO 持ち越し凸の数を加える
   const notAttackCount = users.length * 3 - attackedCount;
   const attackStatus = codeBlock(
-    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸"
+    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸",
   );
 
   // 周回数
@@ -126,7 +122,7 @@ export async function sendMessage(
         lap.boss5Lap +
         "周)\n" +
         eventBoss?.boss5HP +
-        " / 32000 \n"
+        " / 32000 \n",
     );
   } else {
     bossStatusCodeBlock = codeBlock(
@@ -154,7 +150,7 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "  2000 / 2000 \n"
+        "  2000 / 2000 \n",
     );
   }
   const bossStatus = bossStatusCodeBlock;
@@ -165,7 +161,7 @@ export async function sendMessage(
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,
-      button_manage_menu.data
+      button_manage_menu.data,
     ),
   ];
   if (isInit) {

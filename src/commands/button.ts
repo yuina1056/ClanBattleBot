@@ -73,9 +73,7 @@ export async function action(interaction: ButtonInteraction) {
       action = edit_lap;
       break;
     default:
-      console.error(
-        `${interaction.customId}というボタンには対応していません。`,
-      );
+      console.error(`${interaction.customId}というボタンには対応していません。`);
   }
   if (action != null) {
     try {

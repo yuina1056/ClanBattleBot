@@ -1,9 +1,4 @@
-import {
-  ButtonBuilder,
-  ButtonStyle,
-  ButtonInteraction,
-  Guild,
-} from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 import dayjs from "dayjs";
 
 import Declaration from "@/app/model/Declaration";
@@ -32,9 +27,7 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  const channel = guild.channels.cache.find(
-    (channel) => channel.id === interaction.channel?.id,
-  );
+  const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
   if (channel == null) {
     throw new Error("チャンネル情報が取得できませんでした");
   }
@@ -100,19 +93,10 @@ export async function execute(interaction: ButtonInteraction) {
   if (user instanceof Error) {
     content = user.message;
   } else {
-    content =
-      "【" +
-      bossLap +
-      "週目】" +
-      user?.name +
-      "が" +
-      boss.bossid +
-      "ボスに凸宣言しました";
+    content = "【" + bossLap + "週目】" + user?.name + "が" + boss.bossid + "ボスに凸宣言しました";
   }
 
-  const declarations = await DataSource.getRepository(
-    DeclarationRepository,
-  ).find({
+  const declarations = await DataSource.getRepository(DeclarationRepository).find({
     where: {
       bossId: boss.id,
       isFinished: false,

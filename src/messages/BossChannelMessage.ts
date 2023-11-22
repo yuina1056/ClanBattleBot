@@ -1,9 +1,4 @@
-import {
-  ActionRowBuilder,
-  EmbedBuilder,
-  TextBasedChannel,
-  ButtonBuilder,
-} from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from "discord.js";
 
 import button_declaration from "@/commands/button/declaration_start";
 import button_report_shave from "@/commands/button/report_shave";
@@ -21,7 +16,7 @@ export async function sendMessage(
   boss: Boss,
   eventBoss: EventBoss | null,
   lap: Lap | null,
-  declaration: Declaration[]
+  declaration: Declaration[],
 ) {
   let declarationMember = "凸宣言者なし";
   if (declaration.length > 0) {
@@ -102,7 +97,7 @@ export async function sendMessage(
       {
         name: "凸宣言者",
         value: declarationMember,
-      }
+      },
     );
 
   await channel.send({
@@ -112,7 +107,7 @@ export async function sendMessage(
         button_declaration.data,
         button_report_shave.data,
         button_report_defeat.data,
-        button_declaration_cancel.data
+        button_declaration_cancel.data,
       ),
     ],
   });
