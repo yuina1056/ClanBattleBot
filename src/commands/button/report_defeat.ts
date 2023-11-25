@@ -157,6 +157,7 @@ export async function execute(interaction: ButtonInteraction) {
   let isCarryOver = false;
   const reports = await DataSource.getRepository(Report).find({
     where: {
+      userId: user.id,
       eventId: event.id,
       day: declaration.day,
       attackCount: declaration.attackCount,
