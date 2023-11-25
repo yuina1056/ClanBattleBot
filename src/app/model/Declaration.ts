@@ -40,7 +40,7 @@ export async function regist(
     user.clanId,
     user.id!,
     event!.id!,
-    boss.id ?? 0,
+    boss.bossid ?? 0,
     lap,
     event.getClanBattleDay(),
     attackCount,
