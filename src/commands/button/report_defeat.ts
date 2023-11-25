@@ -181,7 +181,7 @@ export async function execute(interaction: ButtonInteraction) {
   );
   await DataSource.getRepository(Report).save(report);
 
-  content = user.name + "が" + boss.bossid + "ボスを撃破しました";
+  content = "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました";
 
   const declarations = await DataSource.getRepository(Declaration).find({
     where: {

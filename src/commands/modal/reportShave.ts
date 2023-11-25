@@ -187,7 +187,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     declarations,
   );
   await interaction.reply({
-    content: user.name + "が" + boss.bossid + "ボスを削りました",
+    content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを削りました",
   });
 }
 
