@@ -24,7 +24,10 @@ export async function regist(
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
-  const user = await userRepository.findOneBy({ discordUserId: discordUserId });
+  const user = await userRepository.findOneBy({
+    discordUserId: discordUserId,
+    clanId: boss.clanId,
+  });
   if (user == null) {
     return new Error("ユーザー情報が取得できませんでした");
   }
