@@ -73,6 +73,8 @@ export async function execute(interaction: ButtonInteraction) {
   // 凸宣言取得
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
+    userId: user.id,
+    eventId: event.id,
     isFinished: false,
   });
   if (declaration == null) {

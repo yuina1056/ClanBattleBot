@@ -11,6 +11,7 @@ import Event from "@/entity/Event";
 import reportShave from "@/commands/modal/reportShave";
 import EventBoss from "@/entity/EventBoss";
 import Declaration from "@/entity/Declaration";
+import User from "@/entity/User";
 
 export const customId = "report_shave";
 export const data = new ButtonBuilder()
@@ -49,9 +50,20 @@ export async function execute(interaction: ButtonInteraction) {
   if (boss == null) {
     throw new Error("ボス情報が取得できませんでした");
   }
+  // ユーザー取得
+  const userRepository = DataSource.getRepository(User);
+  const user = await userRepository.findOneBy({
+    discordUserId: interaction.user.id,
+    clanId: clan.id,
+  });
+  if (user == null) {
+    throw new Error("ユーザー情報が取得できませんでした");
+  }
   // 凸宣言取得
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
+    userId: user.id,
+    eventId: event.id,
     isFinished: false,
   });
   if (declaration == null) {
