@@ -78,7 +78,7 @@ export async function execute(interaction: ButtonInteraction) {
     isFinished: false,
   });
   if (declaration == null) {
-    content = "凸宣言がされていません";
+    content = "凸宣言がされていません。先に凸宣言を行ってください。";
     await interaction.reply({ content: content, ephemeral: true });
     return;
   }
