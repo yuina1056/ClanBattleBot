@@ -74,6 +74,7 @@ export async function execute(interaction: ButtonInteraction) {
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
     userId: user.id,
+    clanId: clan.id,
     eventId: event.id,
     isFinished: false,
   });
