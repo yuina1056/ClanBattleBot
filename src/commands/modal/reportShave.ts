@@ -113,6 +113,9 @@ export async function submit(interaction: ModalSubmitInteraction) {
   }
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
+    userId: user.id,
+    clanId: clan.id,
+    eventId: event.id,
     isFinished: false,
   });
   if (declaration == null) {
