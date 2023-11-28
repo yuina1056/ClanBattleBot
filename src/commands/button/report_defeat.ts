@@ -196,6 +196,10 @@ export async function execute(interaction: ButtonInteraction) {
       user: true,
     },
   });
+  const deleteMessage = await channel.messages.fetch(
+    interaction.message.reference?.messageId ?? "",
+  );
+  await deleteMessage.delete();
   await BossChannelMessage.sendMessage(
     interaction.channel,
     clan,
