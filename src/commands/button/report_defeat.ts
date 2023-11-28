@@ -79,7 +79,7 @@ export async function execute(interaction: ButtonInteraction) {
     isFinished: false,
   });
   if (declaration == null) {
-    content = "凸宣言がされていません";
+    content = "凸宣言がされていません。先に凸宣言を行ってください。";
     await interaction.reply({ content: content, ephemeral: true });
     return;
   }
@@ -114,40 +114,40 @@ export async function execute(interaction: ButtonInteraction) {
       if (lap.boss1Lap == null) {
         throw new Error("lap.boss1Lap is null");
       }
-      lap.boss1Lap += 1;
       bossLap = lap.boss1Lap;
+      lap.boss1Lap += 1;
       eventBoss.boss1HP = 27000;
       break;
     case 2:
       if (lap.boss2Lap == null) {
         throw new Error("lap.boss2Lap is null");
       }
-      lap.boss2Lap += 1;
       bossLap = lap.boss2Lap;
+      lap.boss2Lap += 1;
       eventBoss.boss2HP = 28000;
       break;
     case 3:
       if (lap.boss3Lap == null) {
         throw new Error("lap.boss3Lap is null");
       }
-      lap.boss3Lap += 1;
       bossLap = lap.boss3Lap;
+      lap.boss3Lap += 1;
       eventBoss.boss3HP = 30000;
       break;
     case 4:
       if (lap.boss4Lap == null) {
         throw new Error("lap.boss4Lap is null");
       }
-      lap.boss4Lap += 1;
       bossLap = lap.boss4Lap;
+      lap.boss4Lap += 1;
       eventBoss.boss4HP = 31000;
       break;
     case 5:
       if (lap.boss5Lap == null) {
         throw new Error("lap.boss5Lap is null");
       }
-      lap.boss5Lap += 1;
       bossLap = lap.boss5Lap;
+      lap.boss5Lap += 1;
       eventBoss.boss5HP = 32000;
       break;
     default:
@@ -160,6 +160,7 @@ export async function execute(interaction: ButtonInteraction) {
   let isCarryOver = false;
   const reports = await DataSource.getRepository(Report).find({
     where: {
+      userId: user.id,
       eventId: event.id,
       day: declaration.day,
       attackCount: declaration.attackCount,
@@ -184,7 +185,7 @@ export async function execute(interaction: ButtonInteraction) {
   );
   await DataSource.getRepository(Report).save(report);
 
-  content = user.name + "が" + boss.bossid + "ボスを撃破しました";
+  content = "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました";
 
   const declarations = await DataSource.getRepository(Declaration).find({
     where: {
@@ -195,6 +196,8 @@ export async function execute(interaction: ButtonInteraction) {
       user: true,
     },
   });
+  const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
+  await deleteMessage.delete();
   await BossChannelMessage.sendMessage(
     interaction.channel,
     clan,
