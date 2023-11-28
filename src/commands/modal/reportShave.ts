@@ -195,10 +195,8 @@ export async function submit(interaction: ModalSubmitInteraction) {
     lap,
     declarations,
   );
-  // const deleteMessage = await channel.messages.fetch(
-  //   interaction.message.reference?.messageId ?? "",
-  // );
-  // await deleteMessage.delete();
+  const deleteMessage = await channel.messages.fetch(interaction.message?.id ?? "");
+  await deleteMessage.delete();
   await interaction.reply({
     content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを削りました",
   });

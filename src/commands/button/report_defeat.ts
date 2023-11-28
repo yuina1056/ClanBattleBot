@@ -196,9 +196,7 @@ export async function execute(interaction: ButtonInteraction) {
       user: true,
     },
   });
-  const deleteMessage = await channel.messages.fetch(
-    interaction.message.reference?.messageId ?? "",
-  );
+  const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
   await deleteMessage.delete();
   await BossChannelMessage.sendMessage(
     interaction.channel,
