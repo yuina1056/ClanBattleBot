@@ -206,7 +206,11 @@ export async function execute(interaction: ButtonInteraction) {
     lap,
     declarations,
   );
-  await interaction.reply({ content: content });
+  if (!channel.isTextBased()) {
+    throw new Error("interaction.channel is not TextBasedChannel");
+  }
+  await interaction.deferUpdate();
+  await channel.send({ content: content });
 }
 
 export default {

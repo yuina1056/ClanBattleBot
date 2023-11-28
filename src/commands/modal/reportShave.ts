@@ -197,7 +197,11 @@ export async function submit(interaction: ModalSubmitInteraction) {
   );
   const deleteMessage = await channel.messages.fetch(interaction.message?.id ?? "");
   await deleteMessage.delete();
-  await interaction.reply({
+  if (!channel.isTextBased()) {
+    throw new Error("interaction.channel is not TextBasedChannel");
+  }
+  await interaction.deferUpdate();
+  await channel.send({
     content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを削りました",
   });
 }

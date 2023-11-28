@@ -128,7 +128,11 @@ export async function execute(interaction: ButtonInteraction) {
     interaction.message.reference?.messageId ?? "",
   );
   await deleteMessage.delete();
-  await interaction.reply({ content: content });
+  if (!channel.isTextBased()) {
+    throw new Error("interaction.channel is not TextBasedChannel");
+  }
+  await interaction.deferUpdate();
+  await channel.send({ content: content });
 }
 
 export default {
