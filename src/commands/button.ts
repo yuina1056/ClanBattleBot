@@ -5,12 +5,12 @@ import declaration_cancel from "@/commands/button/declaration_cancel";
 import report_shave from "@/commands/button/report_shave";
 import report_defeat from "@/commands/button/report_defeat";
 import reload_attack_status from "@/commands/button/reload_attack_status";
-import attack_first from "@/commands/button/DeclarationFirst";
-import attack_second from "@/commands/button/DeclarationSecond";
-import attack_third from "@/commands/button/DeclarationThird";
-import attackFirstAsCarryOver from "@/commands/button/DeclarationFirstAsCarryOver";
-import attackSecondAsCarryOver from "@/commands/button/DeclarationSecondAsCarryOver";
-import attackThirdAsCarryOver from "@/commands/button/DeclarationThirdAsCarryOver";
+import { DeclarationFirst } from "@/commands/button/DeclarationFirst";
+import { DeclarationSecond } from "@/commands/button/DeclarationSecond";
+import { DeclarationThird } from "@/commands/button/DeclarationThird";
+import { DeclarationFirstAsCarryOver } from "@/commands/button/DeclarationFirstAsCarryOver";
+import { DeclarationSecondAsCarryOver } from "@/commands/button/DeclarationSecondAsCarryOver";
+import { DeclarationThirdAsCarryOver } from "@/commands/button/DeclarationThirdAsCarryOver";
 import manage_menu from "@/commands/button/ManageMenu";
 import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
 import reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
@@ -37,23 +37,23 @@ export async function action(interaction: ButtonInteraction) {
     case reload_attack_status.customId:
       action = reload_attack_status;
       break;
-    case attack_first.customId:
-      action = attack_first;
+    case DeclarationFirst.customId:
+      action = new DeclarationFirst();
       break;
-    case attack_second.customId:
-      action = attack_second;
+    case DeclarationSecond.customId:
+      action = new DeclarationSecond();
       break;
-    case attack_third.customId:
-      action = attack_third;
+    case DeclarationThird.customId:
+      action = new DeclarationThird();
       break;
-    case attackFirstAsCarryOver.customId:
-      action = attackFirstAsCarryOver;
+    case DeclarationFirstAsCarryOver.customId:
+      action = new DeclarationFirstAsCarryOver();
       break;
-    case attackSecondAsCarryOver.customId:
-      action = attackSecondAsCarryOver;
+    case DeclarationSecondAsCarryOver.customId:
+      action = new DeclarationSecondAsCarryOver;
       break;
-    case attackThirdAsCarryOver.customId:
-      action = attackThirdAsCarryOver;
+    case DeclarationThirdAsCarryOver.customId:
+      action = new DeclarationThirdAsCarryOver();
       break;
     case manage_menu.customId:
       action = manage_menu;
