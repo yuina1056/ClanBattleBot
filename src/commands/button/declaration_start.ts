@@ -299,9 +299,7 @@ export async function execute(interaction: ButtonInteraction) {
             ephemeral: true,
             components: [
               // 3凸目の持ち越しを消化してもらう
-              new ActionRowBuilder<ButtonBuilder>().addComponents(
-                declarationThirdAsCarryOver.data,
-              ),
+              new ActionRowBuilder<ButtonBuilder>().addComponents(declarationThirdAsCarryOver.data),
             ],
           });
         }
@@ -341,9 +339,7 @@ export async function execute(interaction: ButtonInteraction) {
             content: "凸宣言する凸を選択してください",
             ephemeral: true,
             components: [
-              new ActionRowBuilder<ButtonBuilder>().addComponents(
-                declarationFirstAsCarryOver.data,
-              ),
+              new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirstAsCarryOver.data),
             ],
           });
         } else {

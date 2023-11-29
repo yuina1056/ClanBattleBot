@@ -1,8 +1,8 @@
-import { DeclarationAbstract } from '@/commands/button/DeclarationAbstract'
-import { ButtonBuilder, ButtonStyle } from 'discord.js';
+import { DeclarationAbstract } from "@/commands/button/DeclarationAbstract";
+import { ButtonBuilder, ButtonStyle } from "discord.js";
 
 export class DeclarationFirst extends DeclarationAbstract {
-  static readonly customId: string = 'declarationFirst';
+  static readonly customId: string = "declarationFirst";
   attackCount: number;
   data: ButtonBuilder;
 

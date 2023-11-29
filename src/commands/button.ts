@@ -50,7 +50,7 @@ export async function action(interaction: ButtonInteraction) {
       action = new DeclarationFirstAsCarryOver();
       break;
     case DeclarationSecondAsCarryOver.customId:
-      action = new DeclarationSecondAsCarryOver;
+      action = new DeclarationSecondAsCarryOver();
       break;
     case DeclarationThirdAsCarryOver.customId:
       action = new DeclarationThirdAsCarryOver();
