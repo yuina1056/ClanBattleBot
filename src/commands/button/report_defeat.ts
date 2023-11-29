@@ -20,7 +20,6 @@ export const data = new ButtonBuilder()
   .setLabel("撃破");
 
 export async function execute(interaction: ButtonInteraction) {
-  let content = "";
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
@@ -79,8 +78,10 @@ export async function execute(interaction: ButtonInteraction) {
     isFinished: false,
   });
   if (declaration == null) {
-    content = "凸宣言がされていません。先に凸宣言を行ってください。";
-    await interaction.reply({ content: content, ephemeral: true });
+    await interaction.reply({
+      content: "凸宣言がされていません。先に凸宣言を行ってください。",
+      ephemeral: true,
+    });
     return;
   }
   if (declaration.id == null) {
@@ -185,8 +186,6 @@ export async function execute(interaction: ButtonInteraction) {
   );
   await DataSource.getRepository(Report).save(report);
 
-  content = "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました";
-
   const declarations = await DataSource.getRepository(Declaration).find({
     where: {
       bossId: boss.id,
@@ -206,7 +205,13 @@ export async function execute(interaction: ButtonInteraction) {
     lap,
     declarations,
   );
-  await interaction.reply({ content: content });
+  if (!channel.isTextBased()) {
+    throw new Error("interaction.channel is not TextBasedChannel");
+  }
+  await interaction.deferUpdate();
+  await channel.send({
+    content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました",
+  });
 }
 
 export default {

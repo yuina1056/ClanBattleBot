@@ -27,41 +27,6 @@ export async function execute(interaction: ButtonInteraction) {
   if (interaction.channel == null) {
     throw new Error("interaction.channel is null");
   }
-  // ボス情報取得
-  const bossRepository = DataSource.getRepository(Boss);
-  const boss = await bossRepository.findOneBy({
-    discordChannelId: interaction.channel.id,
-  });
-  if (boss == null) {
-    throw new Error("ボス情報が取得できませんでした");
-  }
-  // ユーザー取得
-  const userRepository = DataSource.getRepository(User);
-  const user = await userRepository.findOneBy({
-    discordUserId: interaction.user.id,
-  });
-  if (user == null) {
-    throw new Error("ユーザー情報が取得できませんでした");
-  }
-
-  // DBから削除
-  const declarationRepository = DataSource.getRepository(Declaration);
-  const declaration = await declarationRepository.findOneBy({
-    userId: user.id,
-    isFinished: false,
-  });
-  if (declaration == null) {
-    await interaction.reply({
-      content: "取り消しする凸宣言がありません",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (declaration.id == null) {
-    throw new Error("declaration.id is null");
-  }
-  await declarationRepository.delete(declaration.id);
-
   const channel = guild.channels.cache.find((channel) => {
     return channel.id === interaction.channel?.id;
   });
@@ -77,6 +42,43 @@ export async function execute(interaction: ButtonInteraction) {
   if (clan == null) {
     throw new Error("クラン情報が取得できませんでした");
   }
+  // ボス情報取得
+  const bossRepository = DataSource.getRepository(Boss);
+  const boss = await bossRepository.findOneBy({
+    discordChannelId: interaction.channel.id,
+  });
+  if (boss == null) {
+    throw new Error("ボス情報が取得できませんでした");
+  }
+  // ユーザー取得
+  const userRepository = DataSource.getRepository(User);
+  const user = await userRepository.findOneBy({
+    clanId: clan.id,
+    discordUserId: interaction.user.id,
+  });
+  if (user == null) {
+    throw new Error("ユーザー情報が取得できませんでした");
+  }
+
+  // DBから削除
+  const declarationRepository = DataSource.getRepository(Declaration);
+  const declaration = await declarationRepository.findOneBy({
+    clanId: clan.id,
+    userId: user.id,
+    isFinished: false,
+  });
+  if (declaration == null) {
+    await interaction.reply({
+      content: "取り消しする凸宣言がありません",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (declaration.id == null) {
+    throw new Error("declaration.id is null");
+  }
+  await declarationRepository.delete(declaration.id);
+
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
     .createQueryBuilder("event")
