@@ -36,3 +36,17 @@ jobs:
         run: npm ci
       - name: Run test and show coverage
         run: npm test --watchAll=false --coverage
+
+  Build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version-file: ".node-version"
+          cache: "npm"
+      - name: Install packages
+        run: npm ci
+      - name: Build
+        run: npm run compile
