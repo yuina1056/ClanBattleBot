@@ -45,7 +45,7 @@ export default class User {
     this.discordUserId = discordUserId;
   }
   public getAttackStatus(event: Event | null): string {
-    const shortenName = this.name.substring(0,10);
+    const shortenName = this.name.substring(0, 10);
     let res: string = shortenName + " [－/－/－]";
     if (event == null || this.reports == null || this.reports.length === 0) {
       return res + " (記録なし)";
