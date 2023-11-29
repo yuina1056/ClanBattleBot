@@ -304,7 +304,7 @@ export async function execute(interaction: ButtonInteraction) {
           });
         }
       } else {
-        if (isFinishedOnAttack(secondAttacks)) {
+        if (isFinishedOnAttack(thirdAttacks)) {
           // zyz
           await interaction.reply({
             content: "凸宣言する凸を選択してください",
