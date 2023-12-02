@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
+import { ButtonBuilder, ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/datasource";
@@ -88,13 +88,13 @@ export abstract class DeclarationAbstract {
       }
     }
 
-    let content = "";
     const user = await Declaration.regist(boss, interaction.user.id, bossLap, this.attackCount);
     if (user instanceof Error) {
-      content = user.message;
-    } else {
-      content =
-        "【" + bossLap + "週目】" + user?.name + "が" + boss.bossid + "ボスに凸宣言しました";
+      interaction.reply({
+        content: user.message,
+        ephemeral: true,
+      });
+      return;
     }
 
     const declarations = await DataSource.getRepository(DeclarationRepository).find({
@@ -128,6 +128,12 @@ export abstract class DeclarationAbstract {
       interaction.message.reference?.messageId ?? "",
     );
     await deleteMessage.delete();
-    await interaction.reply({ content: content });
+    if (!channel.isTextBased()) {
+      throw new Error("interaction.channel is not TextBasedChannel");
+    }
+    await interaction.deferUpdate();
+    await channel.send({
+      content: "【" + bossLap + "週目】" + user?.name + "が" + boss.bossid + "ボスに凸宣言しました",
+    });
   }
 }
