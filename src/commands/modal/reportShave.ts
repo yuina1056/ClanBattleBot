@@ -55,6 +55,12 @@ export async function submit(interaction: ModalSubmitInteraction) {
     throw new Error("クランバトル開催情報が取得できませんでした");
   }
   const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id);
+  if (channel == null) {
+    throw new Error("channel is null");
+  }
+  if (channel.parentId == null) {
+    throw new Error("channel.parentId is null");
+  }
   const clan = await DataSource.getRepository(Clan).findOneBy({
     discordCategoryId: channel!.parentId!,
   });
@@ -113,6 +119,9 @@ export async function submit(interaction: ModalSubmitInteraction) {
   }
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
+    userId: user.id,
+    clanId: clan.id,
+    eventId: event.id,
     isFinished: false,
   });
   if (declaration == null) {
@@ -186,8 +195,14 @@ export async function submit(interaction: ModalSubmitInteraction) {
     lap,
     declarations,
   );
-  await interaction.reply({
-    content: user.name + "が" + boss.bossid + "ボスを削りました",
+  const deleteMessage = await channel.messages.fetch(interaction.message?.id ?? "");
+  await deleteMessage.delete();
+  if (!channel.isTextBased()) {
+    throw new Error("interaction.channel is not TextBasedChannel");
+  }
+  await interaction.deferUpdate();
+  await channel.send({
+    content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを削りました",
   });
 }
 
