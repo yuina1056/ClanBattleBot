@@ -26,6 +26,12 @@ export default class Lap {
     this.eventId = eventId;
   }
 
+  /**
+   * ボスに攻撃可能かを判定する
+   *
+   * @param bossId ボスID(1~5)
+   * @return true:攻撃可能 false:攻撃不可
+   */
   isAttackPossible(bossId: number): boolean {
     if (
       this.boss1Lap == null ||
