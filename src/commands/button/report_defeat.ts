@@ -12,6 +12,7 @@ import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
 
 export const customId = "report_defeat";
 export const data = new ButtonBuilder()
@@ -117,7 +118,7 @@ export async function execute(interaction: ButtonInteraction) {
       }
       bossLap = lap.boss1Lap;
       lap.boss1Lap += 1;
-      eventBoss.boss1HP = 27000;
+      eventBoss.boss1HP = Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)];
       break;
     case 2:
       if (lap.boss2Lap == null) {
@@ -125,7 +126,7 @@ export async function execute(interaction: ButtonInteraction) {
       }
       bossLap = lap.boss2Lap;
       lap.boss2Lap += 1;
-      eventBoss.boss2HP = 28000;
+      eventBoss.boss2HP = Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)];
       break;
     case 3:
       if (lap.boss3Lap == null) {
@@ -133,7 +134,7 @@ export async function execute(interaction: ButtonInteraction) {
       }
       bossLap = lap.boss3Lap;
       lap.boss3Lap += 1;
-      eventBoss.boss3HP = 30000;
+      eventBoss.boss3HP = Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)];
       break;
     case 4:
       if (lap.boss4Lap == null) {
@@ -141,7 +142,7 @@ export async function execute(interaction: ButtonInteraction) {
       }
       bossLap = lap.boss4Lap;
       lap.boss4Lap += 1;
-      eventBoss.boss4HP = 31000;
+      eventBoss.boss4HP = Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)];
       break;
     case 5:
       if (lap.boss5Lap == null) {
@@ -149,7 +150,7 @@ export async function execute(interaction: ButtonInteraction) {
       }
       bossLap = lap.boss5Lap;
       lap.boss5Lap += 1;
-      eventBoss.boss5HP = 32000;
+      eventBoss.boss5HP = Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)];
       break;
     default:
       break;
