@@ -46,7 +46,7 @@ export default class User {
   }
   public getAttackStatus(event: Event | null): string {
     const shortenName = this.name.substring(0, 10);
-    let res: string = shortenName + " [－/－/－]";
+    let res: string = shortenName.padEnd(10) + " [－/－/－]";
     if (event == null || this.reports == null || this.reports.length === 0) {
       return res + " (記録なし)";
     }
