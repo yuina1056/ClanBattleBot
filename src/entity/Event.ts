@@ -28,12 +28,14 @@ export default class Event {
     this.toDate = toDate;
   }
 
+  /**
+   * クランバトル開催日を取得する
+   * @returns クランバトル日数
+   * @throws クランバトル期間外
+   */
   public getClanBattleDay(): number {
     const now = dayjs();
-    if (now.isBefore(dayjs(this.fromDate))) {
-      throw new Error("クランバトル期間外です。");
-    }
-    if (now.isAfter(dayjs(this.toDate))) {
+    if (now.isBefore(dayjs(this.fromDate)) || now.isAfter(dayjs(this.toDate))) {
       throw new Error("クランバトル期間外です。");
     }
     const dayDifference = now.diff(dayjs(this.fromDate), "day");
