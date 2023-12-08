@@ -1,9 +1,11 @@
-export const config = {
+export const LapConfig = {
   bossLap: {
     2: 1,
     3: 7,
     4: 23,
   },
+};
+export const BossHPConfig = {
   boss1HP: {
     2: 800,
     3: 2000,
@@ -32,5 +34,6 @@ export const config = {
 };
 
 export default {
-  config,
+  LapConfig,
+  BossHPConfig,
 };
