@@ -1,3 +1,13 @@
+export interface LapConfigType {
+  2: number;
+  3: number;
+  4: number;
+  [key: number]: number;
+}
+export interface LapConfig {
+  bossLap: LapConfigType;
+}
+
 export const LapConfig = {
   bossLap: {
     2: 1,
@@ -5,7 +15,22 @@ export const LapConfig = {
     4: 23,
   },
 };
-export const BossHPConfig = {
+export interface BossHPConfigType {
+  2: number;
+  3: number;
+  4: number;
+  [key: number]: number;
+}
+
+export interface BossHPConfig {
+  boss1HP: BossHPConfigType;
+  boss2HP: BossHPConfigType;
+  boss3HP: BossHPConfigType;
+  boss4HP: BossHPConfigType;
+  boss5HP: BossHPConfigType;
+}
+
+export const BossHPConfig: BossHPConfig = {
   boss1HP: {
     2: 800,
     3: 2000,
