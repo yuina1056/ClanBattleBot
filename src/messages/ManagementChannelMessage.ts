@@ -19,6 +19,7 @@ import Report from "@/entity/Report";
 import Boss from "@/entity/Boss";
 import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -98,31 +99,41 @@ export async function sendMessage(
         lap.boss1Lap +
         "周)\n" +
         eventBoss?.boss1HP +
-        " / 27000 \n" +
+        " / " +
+        Config.BossHPConfig.boss1HP[lap.getCurrentStage(bosses[0].bossid)] +
+        " \n" +
         bosses[1].bossid +
         " (" +
         lap.boss2Lap +
         "周)\n" +
         eventBoss?.boss2HP +
-        " / 28000 \n" +
+        " / " +
+        Config.BossHPConfig.boss2HP[lap.getCurrentStage(bosses[1].bossid)] +
+        "\n" +
         bosses[2].bossid +
         " (" +
         lap.boss3Lap +
         "周)\n" +
         eventBoss?.boss3HP +
-        " / 30000 \n" +
+        " / " +
+        Config.BossHPConfig.boss3HP[lap.getCurrentStage(bosses[2].bossid)] +
+        "\n" +
         bosses[3].bossid +
         " (" +
         lap.boss4Lap +
         "周)\n" +
         eventBoss?.boss4HP +
-        " / 31000 \n" +
+        " / " +
+        Config.BossHPConfig.boss4HP[lap.getCurrentStage(bosses[3].bossid)] +
+        "\n" +
         bosses[4].bossid +
         " (" +
         lap.boss5Lap +
         "周)\n" +
         eventBoss?.boss5HP +
-        " / 32000 \n",
+        " / " +
+        Config.BossHPConfig.boss5HP[lap.getCurrentStage(bosses[4].bossid)] +
+        "\n",
     );
   } else {
     bossStatusCodeBlock = codeBlock(
@@ -130,27 +141,27 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "  27000 / 27000 \n" +
+        "  800 / 800 \n" +
         2 +
         " (" +
         1 +
         "周)\n" +
-        "  28000 / 28000 \n" +
+        "  1000 / 1000 \n" +
         3 +
         " (" +
         1 +
         "周)\n" +
-        "  30000 / 30000 \n" +
+        "  1300 / 1300 \n" +
         4 +
         " (" +
         1 +
         "周)\n" +
-        "  31000 / 31000 \n" +
+        "  1500 / 1500 \n" +
         5 +
         " (" +
         1 +
         "周)\n" +
-        "  32000 / 32000 \n",
+        "  2000 / 2000 \n",
     );
   }
   const bossStatus = bossStatusCodeBlock;
