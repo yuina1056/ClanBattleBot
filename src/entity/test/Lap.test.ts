@@ -93,3 +93,32 @@ describe("isAttackPossible", () => {
     expect(lap.isAttackPossible(5)).toBe(false);
   });
 });
+describe("getCurrentStage", () => {
+  test("2段階目", () => {
+    const lap = new Lap(1, 1);
+    lap.boss1Lap = 1;
+    lap.boss2Lap = 1;
+    lap.boss3Lap = 1;
+    lap.boss4Lap = 1;
+    lap.boss5Lap = 1;
+    expect(lap.getCurrentStage(1)).toBe(2);
+  });
+  test("3段階目", () => {
+    const lap = new Lap(1, 1);
+    lap.boss1Lap = 7;
+    lap.boss2Lap = 7;
+    lap.boss3Lap = 7;
+    lap.boss4Lap = 7;
+    lap.boss5Lap = 7;
+    expect(lap.getCurrentStage(1)).toBe(3);
+  });
+  test("4段階目", () => {
+    const lap = new Lap(1, 1);
+    lap.boss1Lap = 23;
+    lap.boss2Lap = 23;
+    lap.boss3Lap = 23;
+    lap.boss4Lap = 23;
+    lap.boss5Lap = 23;
+    expect(lap.getCurrentStage(1)).toBe(4);
+  });
+});

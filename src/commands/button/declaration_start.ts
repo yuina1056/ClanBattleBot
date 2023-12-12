@@ -94,7 +94,11 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("周回数情報を取得できません");
   }
   if (!lap.isAttackPossible(boss.bossid)) {
-    throw new Error("このボスは凸できません");
+    await interaction.reply({
+      content: "このボスには凸できません",
+      ephemeral: true,
+    });
+    return;
   }
 
   let bossLap = 0;

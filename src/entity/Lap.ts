@@ -203,4 +203,72 @@ export default class Lap {
     }
     return true;
   }
+
+  /**
+   * 何段階目かを取得する
+   *
+   * @param bossId ボスID(1~5)
+   * @return 何段階目か(2~4)
+   * @throws bossLap is null
+   */
+  getCurrentStage(bossId: number): number {
+    switch (bossId) {
+      case 1:
+        if (this.boss1Lap == null) {
+          throw new Error("lap.boss1Lap is null");
+        }
+        if (this.boss1Lap < Config.LapConfig.bossLap[3]) {
+          return 2;
+        }
+        if (this.boss1Lap < Config.LapConfig.bossLap[4]) {
+          return 3;
+        }
+        break;
+      case 2:
+        if (this.boss2Lap == null) {
+          throw new Error("lap.boss2Lap is null");
+        }
+        if (this.boss2Lap < Config.LapConfig.bossLap[3]) {
+          return 2;
+        }
+        if (this.boss2Lap < Config.LapConfig.bossLap[4]) {
+          return 3;
+        }
+        break;
+      case 3:
+        if (this.boss3Lap == null) {
+          throw new Error("lap.boss3Lap is null");
+        }
+        if (this.boss3Lap < Config.LapConfig.bossLap[3]) {
+          return 2;
+        }
+        if (this.boss3Lap < Config.LapConfig.bossLap[4]) {
+          return 3;
+        }
+        break;
+      case 4:
+        if (this.boss4Lap == null) {
+          throw new Error("lap.boss4Lap is null");
+        }
+        if (this.boss4Lap < Config.LapConfig.bossLap[3]) {
+          return 2;
+        }
+        if (this.boss4Lap < Config.LapConfig.bossLap[4]) {
+          return 3;
+        }
+        break;
+      case 5:
+        if (this.boss5Lap == null) {
+          throw new Error("lap.boss5Lap is null");
+        }
+        if (this.boss5Lap < Config.LapConfig.bossLap[3]) {
+          return 2;
+        }
+        if (this.boss5Lap < Config.LapConfig.bossLap[4]) {
+          return 3;
+        }
+        break;
+    }
+    return 4;
+  }
 }
