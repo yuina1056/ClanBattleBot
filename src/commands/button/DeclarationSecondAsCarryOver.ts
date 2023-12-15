@@ -9,7 +9,7 @@ export class DeclarationSecondAsCarryOver extends DeclarationAbstract {
 
   constructor() {
     super();
-    this.attackCount = 1;
+    this.attackCount = 2;
     this.isAttackCarryOver = true;
     this.data = new ButtonBuilder()
       .setCustomId(DeclarationSecondAsCarryOver.customId)

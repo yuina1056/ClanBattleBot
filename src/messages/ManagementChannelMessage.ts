@@ -69,7 +69,6 @@ export async function sendMessage(
   const attackedCount = todayReports.filter((report) => {
     return report.isCarryOver == false;
   }).length;
-  // TODO 持ち越し凸の数を加える
   const carryOverCount =
     todayReports.filter((report) => {
       return report.isCarryOver == true;
