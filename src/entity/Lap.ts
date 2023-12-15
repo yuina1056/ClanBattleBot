@@ -55,22 +55,40 @@ export default class Lap {
         }
         // 3段階をまたぐボスチェック
         if (
-          this.boss1Lap == Config.LapConfig.bossLap[3] - 1 &&
-          this.boss2Lap < Config.LapConfig.bossLap[3] &&
-          this.boss3Lap < Config.LapConfig.bossLap[3] &&
-          this.boss4Lap < Config.LapConfig.bossLap[3] &&
-          this.boss5Lap < Config.LapConfig.bossLap[3]
+          this.boss1Lap == Config.LapConfig.bossLap[3] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[3]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[3] &&
+            this.boss2Lap == Config.LapConfig.bossLap[3] &&
+            this.boss3Lap == Config.LapConfig.bossLap[3] &&
+            this.boss4Lap == Config.LapConfig.bossLap[3] &&
+            this.boss5Lap == Config.LapConfig.bossLap[3]
+          ) {
+            return true;
+          }
           return false;
         }
         // 4段階をまたぐボスチェック
         if (
-          this.boss1Lap == Config.LapConfig.bossLap[4] - 1 &&
-          this.boss2Lap < Config.LapConfig.bossLap[4] &&
-          this.boss3Lap < Config.LapConfig.bossLap[4] &&
-          this.boss4Lap < Config.LapConfig.bossLap[4] &&
-          this.boss5Lap < Config.LapConfig.bossLap[4]
+          this.boss1Lap == Config.LapConfig.bossLap[4] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[4]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[4] &&
+            this.boss2Lap == Config.LapConfig.bossLap[4] &&
+            this.boss3Lap == Config.LapConfig.bossLap[4] &&
+            this.boss4Lap == Config.LapConfig.bossLap[4] &&
+            this.boss5Lap == Config.LapConfig.bossLap[4]
+          ) {
+            return true;
+          }
           return false;
         }
         break;
@@ -86,22 +104,40 @@ export default class Lap {
         }
         // 3段階をまたぐボスチェック
         if (
-          this.boss2Lap == Config.LapConfig.bossLap[3] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[3] &&
-          this.boss3Lap < Config.LapConfig.bossLap[3] &&
-          this.boss4Lap < Config.LapConfig.bossLap[3] &&
-          this.boss5Lap < Config.LapConfig.bossLap[3]
+          this.boss2Lap == Config.LapConfig.bossLap[3] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[3]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[3] &&
+            this.boss2Lap == Config.LapConfig.bossLap[3] &&
+            this.boss3Lap == Config.LapConfig.bossLap[3] &&
+            this.boss4Lap == Config.LapConfig.bossLap[3] &&
+            this.boss5Lap == Config.LapConfig.bossLap[3]
+          ) {
+            return true;
+          }
           return false;
         }
         // 4段階をまたぐボスチェック
         if (
-          this.boss2Lap == Config.LapConfig.bossLap[4] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[4] &&
-          this.boss3Lap < Config.LapConfig.bossLap[4] &&
-          this.boss4Lap < Config.LapConfig.bossLap[4] &&
-          this.boss5Lap < Config.LapConfig.bossLap[4]
+          this.boss2Lap == Config.LapConfig.bossLap[4] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[4]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[4] &&
+            this.boss2Lap == Config.LapConfig.bossLap[4] &&
+            this.boss3Lap == Config.LapConfig.bossLap[4] &&
+            this.boss4Lap == Config.LapConfig.bossLap[4] &&
+            this.boss5Lap == Config.LapConfig.bossLap[4]
+          ) {
+            return true;
+          }
           return false;
         }
         break;
@@ -117,22 +153,40 @@ export default class Lap {
         }
         // 3段階をまたぐボスチェック
         if (
-          this.boss3Lap == Config.LapConfig.bossLap[3] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[3] &&
-          this.boss2Lap < Config.LapConfig.bossLap[3] &&
-          this.boss4Lap < Config.LapConfig.bossLap[3] &&
-          this.boss5Lap < Config.LapConfig.bossLap[3]
+          this.boss3Lap == Config.LapConfig.bossLap[3] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[3]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[3] &&
+            this.boss2Lap == Config.LapConfig.bossLap[3] &&
+            this.boss3Lap == Config.LapConfig.bossLap[3] &&
+            this.boss4Lap == Config.LapConfig.bossLap[3] &&
+            this.boss5Lap == Config.LapConfig.bossLap[3]
+          ) {
+            return true;
+          }
           return false;
         }
         // 4段階をまたぐボスチェック
         if (
-          this.boss3Lap == Config.LapConfig.bossLap[4] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[4] &&
-          this.boss2Lap < Config.LapConfig.bossLap[4] &&
-          this.boss4Lap < Config.LapConfig.bossLap[4] &&
-          this.boss5Lap < Config.LapConfig.bossLap[4]
+          this.boss3Lap == Config.LapConfig.bossLap[4] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[4]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[4] &&
+            this.boss2Lap == Config.LapConfig.bossLap[4] &&
+            this.boss3Lap == Config.LapConfig.bossLap[4] &&
+            this.boss4Lap == Config.LapConfig.bossLap[4] &&
+            this.boss5Lap == Config.LapConfig.bossLap[4]
+          ) {
+            return true;
+          }
           return false;
         }
         break;
@@ -148,22 +202,40 @@ export default class Lap {
         }
         // 3段階をまたぐボスチェック
         if (
-          this.boss4Lap == Config.LapConfig.bossLap[3] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[3] &&
-          this.boss2Lap < Config.LapConfig.bossLap[3] &&
-          this.boss3Lap < Config.LapConfig.bossLap[3] &&
-          this.boss5Lap < Config.LapConfig.bossLap[3]
+          this.boss4Lap == Config.LapConfig.bossLap[3] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[3]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[3] &&
+            this.boss2Lap == Config.LapConfig.bossLap[3] &&
+            this.boss3Lap == Config.LapConfig.bossLap[3] &&
+            this.boss4Lap == Config.LapConfig.bossLap[3] &&
+            this.boss5Lap == Config.LapConfig.bossLap[3]
+          ) {
+            return true;
+          }
           return false;
         }
         // 4段階をまたぐボスチェック
         if (
-          this.boss4Lap == Config.LapConfig.bossLap[4] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[4] &&
-          this.boss2Lap < Config.LapConfig.bossLap[4] &&
-          this.boss3Lap < Config.LapConfig.bossLap[4] &&
-          this.boss5Lap < Config.LapConfig.bossLap[4]
+          this.boss4Lap == Config.LapConfig.bossLap[4] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss5Lap <= Config.LapConfig.bossLap[4]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[4] &&
+            this.boss2Lap == Config.LapConfig.bossLap[4] &&
+            this.boss3Lap == Config.LapConfig.bossLap[4] &&
+            this.boss4Lap == Config.LapConfig.bossLap[4] &&
+            this.boss5Lap == Config.LapConfig.bossLap[4]
+          ) {
+            return true;
+          }
           return false;
         }
         break;
@@ -179,22 +251,40 @@ export default class Lap {
         }
         // 3段階をまたぐボスチェック
         if (
-          this.boss5Lap == Config.LapConfig.bossLap[3] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[3] &&
-          this.boss2Lap < Config.LapConfig.bossLap[3] &&
-          this.boss3Lap < Config.LapConfig.bossLap[3] &&
-          this.boss4Lap < Config.LapConfig.bossLap[3]
+          this.boss5Lap == Config.LapConfig.bossLap[3] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[3] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[3]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[3] &&
+            this.boss2Lap == Config.LapConfig.bossLap[3] &&
+            this.boss3Lap == Config.LapConfig.bossLap[3] &&
+            this.boss4Lap == Config.LapConfig.bossLap[3] &&
+            this.boss5Lap == Config.LapConfig.bossLap[3]
+          ) {
+            return true;
+          }
           return false;
         }
         // 4段階をまたぐボスチェック
         if (
-          this.boss5Lap == Config.LapConfig.bossLap[4] - 1 &&
-          this.boss1Lap < Config.LapConfig.bossLap[4] &&
-          this.boss2Lap < Config.LapConfig.bossLap[4] &&
-          this.boss3Lap < Config.LapConfig.bossLap[4] &&
-          this.boss4Lap < Config.LapConfig.bossLap[4]
+          this.boss5Lap == Config.LapConfig.bossLap[4] &&
+          this.boss1Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss2Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss3Lap <= Config.LapConfig.bossLap[4] &&
+          this.boss4Lap <= Config.LapConfig.bossLap[4]
         ) {
+          if (
+            this.boss1Lap == Config.LapConfig.bossLap[4] &&
+            this.boss2Lap == Config.LapConfig.bossLap[4] &&
+            this.boss3Lap == Config.LapConfig.bossLap[4] &&
+            this.boss4Lap == Config.LapConfig.bossLap[4] &&
+            this.boss5Lap == Config.LapConfig.bossLap[4]
+          ) {
+            return true;
+          }
           return false;
         }
         break;
