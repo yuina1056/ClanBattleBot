@@ -114,7 +114,9 @@ export async function sendMessage(
       bosses[0].bossid +
         " ( " +
         String(lap.boss1Lap).padStart(2) +
-        "周目 )\n" +
+        "周目 )" +
+        (lap.isAttackPossible(1) ? "" : "💎") +
+        "\n" +
         String(eventBoss?.boss1HP).padStart(5) +
         " / " +
         Config.BossHPConfig.boss1HP[lap.getCurrentStage(bosses[0].bossid)] +
@@ -122,7 +124,9 @@ export async function sendMessage(
         bosses[1].bossid +
         " ( " +
         String(lap.boss2Lap).padStart(2) +
-        "周目 )\n" +
+        "周目 )" +
+        (lap.isAttackPossible(2) ? "" : "💎") +
+        "\n" +
         String(eventBoss?.boss2HP).padStart(5) +
         " / " +
         Config.BossHPConfig.boss2HP[lap.getCurrentStage(bosses[1].bossid)] +
@@ -130,7 +134,9 @@ export async function sendMessage(
         bosses[2].bossid +
         " ( " +
         String(lap.boss3Lap).padStart(2) +
-        "周目 )\n" +
+        "周目 )" +
+        (lap.isAttackPossible(3) ? "" : "💎") +
+        "\n" +
         String(eventBoss?.boss3HP).padStart(5) +
         " / " +
         Config.BossHPConfig.boss3HP[lap.getCurrentStage(bosses[2].bossid)] +
@@ -138,7 +144,9 @@ export async function sendMessage(
         bosses[3].bossid +
         " ( " +
         String(lap.boss4Lap).padStart(2) +
-        "周目 )\n" +
+        "周目 )" +
+        (lap.isAttackPossible(4) ? "" : "💎") +
+        "\n" +
         String(eventBoss?.boss4HP).padStart(5) +
         " / " +
         Config.BossHPConfig.boss4HP[lap.getCurrentStage(bosses[3].bossid)] +
@@ -146,7 +154,9 @@ export async function sendMessage(
         bosses[4].bossid +
         " ( " +
         String(lap.boss5Lap).padStart(2) +
-        "周目 )\n" +
+        "周目 )" +
+        (lap.isAttackPossible(5) ? "" : "💎") +
+        "\n" +
         String(eventBoss?.boss5HP).padStart(5) +
         " / " +
         Config.BossHPConfig.boss5HP[lap.getCurrentStage(bosses[4].bossid)] +
