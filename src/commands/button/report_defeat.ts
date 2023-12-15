@@ -76,6 +76,7 @@ export async function execute(interaction: ButtonInteraction) {
     userId: user.id,
     clanId: clan.id,
     eventId: event.id,
+    day: event.getClanBattleDay(),
     isFinished: false,
   });
   if (declaration == null) {
@@ -181,6 +182,7 @@ export async function execute(interaction: ButtonInteraction) {
     bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
+    declaration.isAttackCarryOver,
     0,
     true,
     isCarryOver,

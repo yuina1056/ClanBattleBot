@@ -15,6 +15,7 @@ import EventBoss from "@/entity/EventBoss";
 export abstract class DeclarationAbstract {
   static readonly customId: string;
   abstract attackCount: number;
+  abstract isAttackCarryOver: boolean;
   abstract data: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
@@ -88,7 +89,13 @@ export abstract class DeclarationAbstract {
       }
     }
 
-    const user = await Declaration.regist(boss, interaction.user.id, bossLap, this.attackCount);
+    const user = await Declaration.regist(
+      boss,
+      interaction.user.id,
+      bossLap,
+      this.attackCount,
+      this.isAttackCarryOver,
+    );
     if (user instanceof Error) {
       interaction.reply({
         content: user.message,

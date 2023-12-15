@@ -12,6 +12,7 @@ export async function regist(
   discordUserId: string,
   lap: number,
   attackCount: number,
+  isAttackCarryOver: boolean,
 ): Promise<User | Error> {
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
@@ -47,6 +48,7 @@ export async function regist(
     event.getClanBattleDay(),
     attackCount,
     false,
+    isAttackCarryOver,
   );
   await DataSource.getRepository(Declaration).save(declaration);
 

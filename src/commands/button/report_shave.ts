@@ -65,6 +65,7 @@ export async function execute(interaction: ButtonInteraction) {
     userId: user.id,
     clanId: clan.id,
     eventId: event.id,
+    day: event.getClanBattleDay(),
     isFinished: false,
   });
   if (declaration == null) {
