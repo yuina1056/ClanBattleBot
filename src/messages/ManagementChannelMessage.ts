@@ -58,17 +58,35 @@ export async function sendMessage(
     latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
   }
 
-  // const clanStatus: string =
-  //   clanTitle + codeBlock(clanProfile + latestreportTime);
+  const clanStatus: string =
+    clanTitle +
+    codeBlock(
+      clanProfile,
+      //+ latestreportTime
+    );
 
   // 凸数
   const attackedCount = todayReports.filter((report) => {
     return report.isCarryOver == false;
   }).length;
   // TODO 持ち越し凸の数を加える
-  const notAttackCount = users.length * 3 - attackedCount;
+  const carryOverCount =
+    todayReports.filter((report) => {
+      return report.isCarryOver == true;
+    }).length -
+    todayReports.filter((report) => {
+      return report.isAttackCarryOver == true;
+    }).length;
+  const notAttackCount = users.length * 3 - attackedCount - carryOverCount;
   const attackStatus = codeBlock(
-    "残凸: " + notAttackCount + " 凸 x 持\n" + "済凸: " + attackedCount + " 凸",
+    "残凸: " +
+      notAttackCount +
+      " 凸 " +
+      carryOverCount +
+      " 持\n" +
+      "済凸: " +
+      attackedCount +
+      " 凸",
   );
 
   // 周回数
@@ -166,9 +184,7 @@ export async function sendMessage(
   }
   const bossStatus = bossStatusCodeBlock;
 
-  const content: string =
-    // userStatusContent + clanStatus + attackStatus + bossStatus;
-    userStatusContent + attackStatus + bossStatus;
+  const content: string = userStatusContent + clanStatus + attackStatus + bossStatus;
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,
