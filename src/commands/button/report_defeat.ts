@@ -181,6 +181,7 @@ export async function execute(interaction: ButtonInteraction) {
     bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
+    declaration.isAttackCarryOver,
     0,
     true,
     isCarryOver,

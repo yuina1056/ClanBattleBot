@@ -142,6 +142,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
     bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
+    declaration.isAttackCarryOver,
     0,
     false,
     false,
