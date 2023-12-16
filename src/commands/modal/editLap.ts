@@ -124,11 +124,53 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (lap == null) {
     throw new Error("周回数情報が取得できませんでした");
   }
-  lap.boss1Lap = Number(interaction.fields.getTextInputValue(text_boss1_lap_customId));
-  lap.boss2Lap = Number(interaction.fields.getTextInputValue(text_boss2_lap_customId));
-  lap.boss3Lap = Number(interaction.fields.getTextInputValue(text_boss3_lap_customId));
-  lap.boss4Lap = Number(interaction.fields.getTextInputValue(text_boss4_lap_customId));
-  lap.boss5Lap = Number(interaction.fields.getTextInputValue(text_boss5_lap_customId));
+
+  const boss1Lap = Number(interaction.fields.getTextInputValue(text_boss1_lap_customId));
+  const boss2Lap = Number(interaction.fields.getTextInputValue(text_boss2_lap_customId));
+  const boss3Lap = Number(interaction.fields.getTextInputValue(text_boss3_lap_customId));
+  const boss4Lap = Number(interaction.fields.getTextInputValue(text_boss4_lap_customId));
+  const boss5Lap = Number(interaction.fields.getTextInputValue(text_boss5_lap_customId));
+  if (isNaN(boss1Lap)) {
+    await interaction.reply({
+      content: "1ボスの周回数が不正です。数値を入力してください。",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss2Lap)) {
+    await interaction.reply({
+      content: "2ボスの周回数が不正です。数値を入力してください。",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss3Lap)) {
+    await interaction.reply({
+      content: "3ボスの周回数が不正です。数値を入力してください。",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss4Lap)) {
+    await interaction.reply({
+      content: "4ボスの周回数が不正です。数値を入力してください。",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss5Lap)) {
+    await interaction.reply({
+      content: "5ボスの周回数が不正です。数値を入力してください。",
+      ephemeral: true,
+    });
+    return;
+  }
+  
+  lap.boss1Lap = boss1Lap;
+  lap.boss2Lap = boss2Lap;
+  lap.boss3Lap = boss3Lap;
+  lap.boss4Lap = boss4Lap;
+  lap.boss5Lap = boss5Lap;
 
   await lapRepository.save(lap);
   await interaction.reply({
