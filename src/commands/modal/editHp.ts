@@ -12,6 +12,8 @@ import {
 } from "discord.js";
 import DataSource from "@/datasource";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
+import Lap from "@/entity/Lap";
 
 export const customId = "edit_hp_submit";
 const text_boss1_hp_customId = "boss1_hp";
@@ -124,11 +126,113 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (eventBoss == null) {
     throw new Error("クランバトルボスのHP情報が取得できませんでした");
   }
-  eventBoss.boss1HP = Number(interaction.fields.getTextInputValue(text_boss1_hp_customId));
-  eventBoss.boss2HP = Number(interaction.fields.getTextInputValue(text_boss2_hp_customId));
-  eventBoss.boss3HP = Number(interaction.fields.getTextInputValue(text_boss3_hp_customId));
-  eventBoss.boss4HP = Number(interaction.fields.getTextInputValue(text_boss4_hp_customId));
-  eventBoss.boss5HP = Number(interaction.fields.getTextInputValue(text_boss5_hp_customId));
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (lap == null) {
+    throw new Error("クランバトル周回数情報が取得できませんでした");
+  }
+
+  // バリデーション
+  const boss1HP = Number(interaction.fields.getTextInputValue(text_boss1_hp_customId));
+  const boss2HP = Number(interaction.fields.getTextInputValue(text_boss2_hp_customId));
+  const boss3HP = Number(interaction.fields.getTextInputValue(text_boss3_hp_customId));
+  const boss4HP = Number(interaction.fields.getTextInputValue(text_boss4_hp_customId));
+  const boss5HP = Number(interaction.fields.getTextInputValue(text_boss5_hp_customId));
+  if (isNaN(boss1HP)) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n1ボスのHPの入力値が不正です",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss2HP)) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n2ボスのHPの入力値が不正です",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss3HP)) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n3ボスのHPの入力値が不正です",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss4HP)) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n4ボスのHPの入力値が不正です",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (isNaN(boss5HP)) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n5ボスのHPの入力値が不正です",
+      ephemeral: true,
+    });
+    return;
+  }
+
+  if (
+    Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] <
+    Number(interaction.fields.getTextInputValue(text_boss1_hp_customId))
+  ) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n1ボスのHPの入力値が最大値を超えています",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (
+    Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] <
+    Number(interaction.fields.getTextInputValue(text_boss2_hp_customId))
+  ) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n2ボスのHPの入力値が最大値を超えています",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (
+    Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] <
+    Number(interaction.fields.getTextInputValue(text_boss3_hp_customId))
+  ) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n3ボスのHPの入力値が最大値を超えています",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (
+    Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] <
+    Number(interaction.fields.getTextInputValue(text_boss4_hp_customId))
+  ) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n4ボスのHPの入力値が最大値を超えています",
+      ephemeral: true,
+    });
+    return;
+  }
+  if (
+    Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] <
+    Number(interaction.fields.getTextInputValue(text_boss5_hp_customId))
+  ) {
+    await interaction.reply({
+      content: "各ボスの残HPが変更できませんでした。\n5ボスのHPの入力値が最大値を超えています",
+      ephemeral: true,
+    });
+    return;
+  }
+
+  eventBoss.boss1HP = boss1HP;
+  eventBoss.boss2HP = boss2HP;
+  eventBoss.boss3HP = boss3HP;
+  eventBoss.boss4HP = boss4HP;
+  eventBoss.boss5HP = boss5HP;
 
   await eventBossRepository.save(eventBoss);
   await interaction.reply({

@@ -18,6 +18,7 @@ import {
 } from "discord.js";
 import DataSource from "@/datasource";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
 
 export const customId = "report_shave";
 const text_remaining_hp_customId = "remaining_hp";
@@ -114,9 +115,79 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (user == null) {
     throw new Error("ユーザー情報が取得できませんでした");
   }
-  if (interaction.fields.getTextInputValue(text_remaining_hp_customId) == "0") {
+
+  const eventBossRepository = DataSource.getRepository(EventBoss);
+  const eventBoss = await eventBossRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (eventBoss == null) {
+    throw new Error("クランバトルボスのHP情報が取得できませんでした");
+  }
+
+  const inputHP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
+  if (isNaN(inputHP)) {
+    throw new Error("入力値が不正です。数値を入力してください");
+  }
+  if (inputHP <= 0) {
     throw new Error("残HPが0になる時は撃破ボタンを押して報告してください");
   }
+
+  switch (boss.bossid) {
+    case 1:
+      if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < inputHP) {
+        await interaction.reply({
+          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
+          ephemeral: true,
+        });
+        return;
+      }
+      eventBoss.boss1HP = inputHP;
+      break;
+    case 2:
+      if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < inputHP) {
+        await interaction.reply({
+          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
+          ephemeral: true,
+        });
+        return;
+      }
+      eventBoss.boss2HP = inputHP;
+      break;
+    case 3:
+      if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < inputHP) {
+        await interaction.reply({
+          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
+          ephemeral: true,
+        });
+        return;
+      }
+      eventBoss.boss3HP = inputHP;
+      break;
+    case 4:
+      if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < inputHP) {
+        await interaction.reply({
+          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
+          ephemeral: true,
+        });
+        return;
+      }
+      eventBoss.boss4HP = inputHP;
+      break;
+    case 5:
+      if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < inputHP) {
+        await interaction.reply({
+          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
+          ephemeral: true,
+        });
+        return;
+      }
+      eventBoss.boss5HP = inputHP;
+      break;
+    default:
+      break;
+  }
+
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
     userId: user.id,
@@ -150,33 +221,6 @@ export async function submit(interaction: ModalSubmitInteraction) {
   const reportRepository = DataSource.getRepository(Report);
   await reportRepository.save(report);
 
-  const eventBossRepository = DataSource.getRepository(EventBoss);
-  const eventBoss = await eventBossRepository.findOneBy({
-    clanId: clan.id,
-    eventId: event.id,
-  });
-  if (eventBoss == null) {
-    throw new Error("クランバトルボスのHP情報が取得できませんでした");
-  }
-  switch (boss.bossid) {
-    case 1:
-      eventBoss.boss1HP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
-      break;
-    case 2:
-      eventBoss.boss2HP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
-      break;
-    case 3:
-      eventBoss.boss3HP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
-      break;
-    case 4:
-      eventBoss.boss4HP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
-      break;
-    case 5:
-      eventBoss.boss5HP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
-      break;
-    default:
-      break;
-  }
   const saveEventBoss = await eventBossRepository.save(eventBoss);
 
   const declarations = await DataSource.getRepository(Declaration).find({
