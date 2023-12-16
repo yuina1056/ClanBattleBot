@@ -13,9 +13,9 @@ import { DeclarationSecondAsCarryOver } from "@/commands/button/DeclarationSecon
 import { DeclarationThirdAsCarryOver } from "@/commands/button/DeclarationThirdAsCarryOver";
 import manage_menu from "@/commands/button/ManageMenu";
 import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
-import reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
-import reset_declaration_report_second from "@/commands/button/ResetDeclarationReportSecond";
-import reset_declaration_report_third from "@/commands/button/ResetDeclarationReportThird";
+import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
+import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
+import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
 import edit_lap from "@/commands/button/editLap";
 import editHp from "@/commands/button/editHp";
 
@@ -61,14 +61,14 @@ export async function action(interaction: ButtonInteraction) {
     case reset_declaration_report.customId:
       action = reset_declaration_report;
       break;
-    case reset_declaration_report_first.customId:
-      action = reset_declaration_report_first;
+    case ResetDeclarationReportFirst.customId:
+      action = new ResetDeclarationReportFirst();
       break;
-    case reset_declaration_report_second.customId:
-      action = reset_declaration_report_second;
+    case ResetDeclarationReportSecond.customId:
+      action = new ResetDeclarationReportSecond();
       break;
-    case reset_declaration_report_third.customId:
-      action = reset_declaration_report_third;
+    case ResetDeclarationReportThird.customId:
+      action = new ResetDeclarationReportThird();
       break;
     case edit_lap.customId:
       action = edit_lap;

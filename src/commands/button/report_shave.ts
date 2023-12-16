@@ -87,19 +87,19 @@ export async function execute(interaction: ButtonInteraction) {
   let remainingHp = 0;
   switch (boss.bossid) {
     case 1:
-      remainingHp = eventBoss?.boss1HP ?? 0;
+      remainingHp = eventBoss.boss1HP ?? 0;
       break;
     case 2:
-      remainingHp = eventBoss?.boss2HP ?? 0;
+      remainingHp = eventBoss.boss2HP ?? 0;
       break;
     case 3:
-      remainingHp = eventBoss?.boss3HP ?? 0;
+      remainingHp = eventBoss.boss3HP ?? 0;
       break;
     case 4:
-      remainingHp = eventBoss?.boss4HP ?? 0;
+      remainingHp = eventBoss.boss4HP ?? 0;
       break;
     case 5:
-      remainingHp = eventBoss?.boss5HP ?? 0;
+      remainingHp = eventBoss.boss5HP ?? 0;
       break;
     default:
       break;

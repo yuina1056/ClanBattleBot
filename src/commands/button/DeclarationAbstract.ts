@@ -140,7 +140,16 @@ export abstract class DeclarationAbstract {
     }
     await interaction.deferUpdate();
     await channel.send({
-      content: "【" + bossLap + "週目】" + user?.name + "が" + boss.bossid + "ボスに凸宣言しました",
+      content:
+        "【" +
+        bossLap +
+        "週目】" +
+        user?.name +
+        "が" +
+        boss.bossid +
+        "ボスに" +
+        (this.isAttackCarryOver ? "持越" : "本戦") +
+        "凸宣言しました",
     });
   }
 }
