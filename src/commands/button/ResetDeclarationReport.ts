@@ -6,19 +6,23 @@ export const data = new ButtonBuilder()
   .setStyle(ButtonStyle.Secondary)
   .setLabel("凸状況リセット");
 
-import button_reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
-import button_reset_declaration_report_second from "@/commands/button/ResetDeclarationReportSecond";
-import button_reset_declaration_report_third from "@/commands/button/ResetDeclarationReportThird";
+import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
+import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
+import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
 
 export async function execute(interaction: ButtonInteraction) {
+  const resetDeclarationReportFirst = new ResetDeclarationReportFirst();
+  const resetDeclarationReportSecond = new ResetDeclarationReportSecond();
+  const resetDeclarationReportThird = new ResetDeclarationReportThird();
+
   await interaction.reply({
     ephemeral: true,
     content: "どの凸をリセットしますか？(ボタンを押したらリセット処理が行われます)",
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        button_reset_declaration_report_first.data,
-        button_reset_declaration_report_second.data,
-        button_reset_declaration_report_third.data,
+        resetDeclarationReportFirst.data,
+        resetDeclarationReportSecond.data,
+        resetDeclarationReportThird.data,
       ),
     ],
   });
