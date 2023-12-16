@@ -161,7 +161,7 @@ export async function submit(interaction: ModalSubmitInteraction) {
   const bossHP = validateForm(formBossHP, lap);
   if (bossHP instanceof Error) {
     await interaction.reply({
-      content: "ボスHP修正に失敗しました。"+bossHP.message,
+      content: "ボスHP修正に失敗しました。" + bossHP.message,
       ephemeral: true,
     });
     return;
