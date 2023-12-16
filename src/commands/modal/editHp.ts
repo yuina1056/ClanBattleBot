@@ -85,7 +85,30 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   return modal;
 }
 
+interface FormBossHP {
+  boss1HP: string;
+  boss2HP: string;
+  boss3HP: string;
+  boss4HP: string;
+  boss5HP: string;
+}
+
+interface BossHP {
+  boss1HP: number;
+  boss2HP: number;
+  boss3HP: number;
+  boss4HP: number;
+  boss5HP: number;
+}
+
 export async function submit(interaction: ModalSubmitInteraction) {
+  const formBossHP: FormBossHP = {
+    boss1HP: interaction.fields.getTextInputValue(text_boss1_hp_customId),
+    boss2HP: interaction.fields.getTextInputValue(text_boss2_hp_customId),
+    boss3HP: interaction.fields.getTextInputValue(text_boss3_hp_customId),
+    boss4HP: interaction.fields.getTextInputValue(text_boss4_hp_customId),
+    boss5HP: interaction.fields.getTextInputValue(text_boss5_hp_customId),
+  };
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
@@ -135,110 +158,71 @@ export async function submit(interaction: ModalSubmitInteraction) {
     throw new Error("クランバトル周回数情報が取得できませんでした");
   }
 
-  // バリデーション
-  const boss1HP = Number(interaction.fields.getTextInputValue(text_boss1_hp_customId));
-  const boss2HP = Number(interaction.fields.getTextInputValue(text_boss2_hp_customId));
-  const boss3HP = Number(interaction.fields.getTextInputValue(text_boss3_hp_customId));
-  const boss4HP = Number(interaction.fields.getTextInputValue(text_boss4_hp_customId));
-  const boss5HP = Number(interaction.fields.getTextInputValue(text_boss5_hp_customId));
-  if (isNaN(boss1HP)) {
+  const bossHP = validateForm(formBossHP, lap);
+  if (bossHP instanceof Error) {
     await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n1ボスのHPの入力値が不正です",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (isNaN(boss2HP)) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n2ボスのHPの入力値が不正です",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (isNaN(boss3HP)) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n3ボスのHPの入力値が不正です",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (isNaN(boss4HP)) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n4ボスのHPの入力値が不正です",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (isNaN(boss5HP)) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n5ボスのHPの入力値が不正です",
+      content: "ボスHP修正に失敗しました。"+bossHP.message,
       ephemeral: true,
     });
     return;
   }
 
-  if (
-    Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] <
-    Number(interaction.fields.getTextInputValue(text_boss1_hp_customId))
-  ) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n1ボスのHPの入力値が最大値を超えています",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (
-    Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] <
-    Number(interaction.fields.getTextInputValue(text_boss2_hp_customId))
-  ) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n2ボスのHPの入力値が最大値を超えています",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (
-    Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] <
-    Number(interaction.fields.getTextInputValue(text_boss3_hp_customId))
-  ) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n3ボスのHPの入力値が最大値を超えています",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (
-    Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] <
-    Number(interaction.fields.getTextInputValue(text_boss4_hp_customId))
-  ) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n4ボスのHPの入力値が最大値を超えています",
-      ephemeral: true,
-    });
-    return;
-  }
-  if (
-    Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] <
-    Number(interaction.fields.getTextInputValue(text_boss5_hp_customId))
-  ) {
-    await interaction.reply({
-      content: "各ボスの残HPが変更できませんでした。\n5ボスのHPの入力値が最大値を超えています",
-      ephemeral: true,
-    });
-    return;
-  }
-
-  eventBoss.boss1HP = boss1HP;
-  eventBoss.boss2HP = boss2HP;
-  eventBoss.boss3HP = boss3HP;
-  eventBoss.boss4HP = boss4HP;
-  eventBoss.boss5HP = boss5HP;
+  eventBoss.boss1HP = bossHP.boss1HP;
+  eventBoss.boss2HP = bossHP.boss2HP;
+  eventBoss.boss3HP = bossHP.boss3HP;
+  eventBoss.boss4HP = bossHP.boss4HP;
+  eventBoss.boss5HP = bossHP.boss5HP;
 
   await eventBossRepository.save(eventBoss);
   await interaction.reply({
-    content: "各ボスの残HPが変更されました",
+    content: "各ボスの残HPが変更されました。",
     ephemeral: true,
   });
+}
+
+function validateForm(formHP: FormBossHP, lap: Lap): BossHP | Error {
+  const boss1HP = Number(formHP.boss1HP);
+  const boss2HP = Number(formHP.boss2HP);
+  const boss3HP = Number(formHP.boss3HP);
+  const boss4HP = Number(formHP.boss4HP);
+  const boss5HP = Number(formHP.boss5HP);
+  if (isNaN(boss1HP)) {
+    return new Error("1ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss2HP)) {
+    return new Error("2ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss3HP)) {
+    return new Error("3ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss4HP)) {
+    return new Error("4ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss5HP)) {
+    return new Error("5ボスのHPの入力値が数値ではありません。");
+  }
+  if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < boss1HP) {
+    return new Error("1ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < boss2HP) {
+    return new Error("2ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < boss3HP) {
+    return new Error("3ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < boss4HP) {
+    return new Error("4ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < boss5HP) {
+    return new Error("5ボスのHPの入力値が最大値を超えています。");
+  }
+  return {
+    boss1HP,
+    boss2HP,
+    boss3HP,
+    boss4HP,
+    boss5HP,
+  };
 }
 
 export default {
