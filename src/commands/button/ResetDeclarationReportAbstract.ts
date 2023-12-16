@@ -74,7 +74,7 @@ export abstract class ResetDeclarationReportAbstract {
       .execute();
 
     await interaction.reply({
-      content: "1凸目の宣言・報告をリセットしました。",
+      content: this.attackCount + "凸目の宣言・報告をリセットしました。",
       ephemeral: true,
     });
   }
