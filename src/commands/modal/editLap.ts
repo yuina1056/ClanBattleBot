@@ -24,7 +24,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
   const modal = new ModalBuilder().setTitle("周回数修正").setCustomId(customId);
   const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("1ボス周回数")
+      .setLabel("1ボス周回数(数値のみ)")
       .setCustomId(text_boss1_lap_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -34,7 +34,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
   );
   const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("2ボス周回数")
+      .setLabel("2ボス周回数(数値のみ)")
       .setCustomId(text_boss2_lap_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -44,7 +44,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
   );
   const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("3ボス周回数")
+      .setLabel("3ボス周回数(数値のみ)")
       .setCustomId(text_boss3_lap_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -54,7 +54,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
   );
   const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("4ボス周回数")
+      .setLabel("4ボス周回数(数値のみ)")
       .setCustomId(text_boss4_lap_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -64,7 +64,7 @@ export async function createModal(lap: Lap): Promise<ModalBuilder> {
   );
   const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("5ボス周回数")
+      .setLabel("5ボス周回数(数値のみ)")
       .setCustomId(text_boss5_lap_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)

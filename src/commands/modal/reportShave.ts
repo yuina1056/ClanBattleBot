@@ -27,7 +27,7 @@ export async function createModal(hp: number): Promise<ModalBuilder> {
   const modal = new ModalBuilder().setTitle("凸報告：残HP報告").setCustomId(customId);
   const ActionRowRemainingHP = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("残HP")
+      .setLabel("残HP(万)(数値のみ)")
       .setCustomId(text_remaining_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)

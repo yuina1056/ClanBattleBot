@@ -23,10 +23,10 @@ const text_boss4_hp_customId = "boss4_hp";
 const text_boss5_hp_customId = "boss5_hp";
 
 export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
-  const modal = new ModalBuilder().setTitle("周回数修正").setCustomId(customId);
+  const modal = new ModalBuilder().setTitle("ボスHP修正").setCustomId(customId);
   const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("1ボス周回数")
+      .setLabel("1ボスHP(万)(数値のみ)")
       .setCustomId(text_boss1_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -36,7 +36,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("2ボス周回数")
+      .setLabel("2ボスHP(万)(数値のみ)")
       .setCustomId(text_boss2_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -46,7 +46,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("3ボス周回数")
+      .setLabel("3ボスHP(万)(数値のみ)")
       .setCustomId(text_boss3_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -56,7 +56,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("4ボス周回数")
+      .setLabel("4ボスHP(万)(数値のみ)")
       .setCustomId(text_boss4_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -66,7 +66,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("5ボス周回数")
+      .setLabel("5ボスHP(万)(数値のみ)")
       .setCustomId(text_boss5_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
