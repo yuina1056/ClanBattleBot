@@ -39,7 +39,18 @@ export async function createModal(hp: number): Promise<ModalBuilder> {
   return modal;
 }
 
+interface FormReportShaveHP {
+  remaining_hp: string;
+}
+
+interface ReportShaveHP {
+  remaining_hp: number;
+}
+
 export async function submit(interaction: ModalSubmitInteraction) {
+  const formReportShaveHP: FormReportShaveHP = {
+    remaining_hp: interaction.fields.getTextInputValue(text_remaining_hp_customId),
+  };
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
@@ -86,26 +97,6 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (lap == null) {
     throw new Error("周回数が取得できませんでした");
   }
-  let bossLap = 0;
-  switch (boss.bossid) {
-    case 1:
-      bossLap = lap.boss1Lap ?? 0;
-      break;
-    case 2:
-      bossLap = lap.boss2Lap ?? 0;
-      break;
-    case 3:
-      bossLap = lap.boss3Lap ?? 0;
-      break;
-    case 4:
-      bossLap = lap.boss4Lap ?? 0;
-      break;
-    case 5:
-      bossLap = lap.boss5Lap ?? 0;
-      break;
-    default:
-      break;
-  }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
   const user = await userRepository.findOneBy({
@@ -125,64 +116,35 @@ export async function submit(interaction: ModalSubmitInteraction) {
     throw new Error("クランバトルボスのHP情報が取得できませんでした");
   }
 
-  const inputHP = Number(interaction.fields.getTextInputValue(text_remaining_hp_customId));
-  if (isNaN(inputHP)) {
-    throw new Error("入力値が不正です。数値を入力してください");
+  const ReportShaveHP = validateForm(formReportShaveHP, lap, boss.bossid);
+  if (ReportShaveHP instanceof Error) {
+    await interaction.reply({
+      content: "撃破処理に失敗しました。" + ReportShaveHP.message,
+      ephemeral: true,
+    });
+    return;
   }
-  if (inputHP <= 0) {
-    throw new Error("残HPが0になる時は撃破ボタンを押して報告してください");
-  }
-
+  let bossLap = 0;
   switch (boss.bossid) {
     case 1:
-      if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < inputHP) {
-        await interaction.reply({
-          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
-          ephemeral: true,
-        });
-        return;
-      }
-      eventBoss.boss1HP = inputHP;
+      bossLap = lap.boss1Lap ?? 0;
+      eventBoss.boss1HP = ReportShaveHP.remaining_hp;
       break;
     case 2:
-      if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < inputHP) {
-        await interaction.reply({
-          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
-          ephemeral: true,
-        });
-        return;
-      }
-      eventBoss.boss2HP = inputHP;
+      bossLap = lap.boss1Lap ?? 0;
+      eventBoss.boss2HP = ReportShaveHP.remaining_hp;
       break;
     case 3:
-      if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < inputHP) {
-        await interaction.reply({
-          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
-          ephemeral: true,
-        });
-        return;
-      }
-      eventBoss.boss3HP = inputHP;
+      bossLap = lap.boss3Lap ?? 0;
+      eventBoss.boss3HP = ReportShaveHP.remaining_hp;
       break;
     case 4:
-      if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < inputHP) {
-        await interaction.reply({
-          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
-          ephemeral: true,
-        });
-        return;
-      }
-      eventBoss.boss4HP = inputHP;
+      bossLap = lap.boss4Lap ?? 0;
+      eventBoss.boss4HP = ReportShaveHP.remaining_hp;
       break;
     case 5:
-      if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < inputHP) {
-        await interaction.reply({
-          content: "撃破処理できませんでした。残HPがボスのHPを超えています",
-          ephemeral: true,
-        });
-        return;
-      }
-      eventBoss.boss5HP = inputHP;
+      bossLap = lap.boss5Lap ?? 0;
+      eventBoss.boss5HP = ReportShaveHP.remaining_hp;
       break;
     default:
       break;
@@ -249,6 +211,52 @@ export async function submit(interaction: ModalSubmitInteraction) {
   await channel.send({
     content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを削りました",
   });
+}
+
+function validateForm(
+  formReportShaveHP: FormReportShaveHP,
+  lap: Lap,
+  bossId: number,
+): ReportShaveHP | Error {
+  const remaining_hp = Number(formReportShaveHP.remaining_hp);
+  if (isNaN(remaining_hp)) {
+    return new Error("残HPの入力値が数値ではありません。数値を入力してください。");
+  }
+  if (remaining_hp < 0) {
+    return new Error("残HPが0になる時は撃破ボタンを押して報告してください。");
+  }
+  switch (bossId) {
+    case 1:
+      if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < remaining_hp) {
+        return new Error("1ボスの残HPがボスの最大HPを超えています");
+      }
+      break;
+    case 2:
+      if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < remaining_hp) {
+        return new Error("2ボスの残HPがボスの最大HPを超えています");
+      }
+      break;
+    case 3:
+      if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < remaining_hp) {
+        return new Error("3ボスの残HPがボスの最大HPを超えています");
+      }
+      break;
+    case 4:
+      if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < remaining_hp) {
+        return new Error("4ボスの残HPがボスの最大HPを超えています");
+      }
+      break;
+    case 5:
+      if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < remaining_hp) {
+        return new Error("5ボスの残HPがボスの最大HPを超えています");
+      }
+      break;
+    default:
+      return new Error("ボスIDが不正です");
+  }
+  return {
+    remaining_hp,
+  };
 }
 
 export default {
