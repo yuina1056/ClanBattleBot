@@ -5,6 +5,7 @@ import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import Declaration from "@/entity/Declaration";
 import Event from "@/entity/Event";
+import Report from "@/entity/Report";
 import dayjs from "dayjs";
 
 export abstract class ResetDeclarationReportAbstract {
