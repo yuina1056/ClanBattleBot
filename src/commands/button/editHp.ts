@@ -61,7 +61,7 @@ export class EditHp extends Button {
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
-    const modal = await editHp.createModal(eventBoss);
+    const modal = editHp.createModal(eventBoss);
     await interaction.showModal(modal);
   }
 }

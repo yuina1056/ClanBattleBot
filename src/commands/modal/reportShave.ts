@@ -23,7 +23,7 @@ import Config from "@/config/config";
 export const customId = "report_shave";
 const text_remaining_hp_customId = "remaining_hp";
 
-export async function createModal(hp: number): Promise<ModalBuilder> {
+export function createModal(hp: number): ModalBuilder {
   const modal = new ModalBuilder().setTitle("凸報告：残HP報告").setCustomId(customId);
   const ActionRowRemainingHP = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()

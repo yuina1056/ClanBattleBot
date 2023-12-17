@@ -22,7 +22,7 @@ const text_boss3_hp_customId = "boss3_hp";
 const text_boss4_hp_customId = "boss4_hp";
 const text_boss5_hp_customId = "boss5_hp";
 
-export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
+export function createModal(eventBoss: EventBoss): ModalBuilder {
   const modal = new ModalBuilder().setTitle("ボスHP修正").setCustomId(customId);
   const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()

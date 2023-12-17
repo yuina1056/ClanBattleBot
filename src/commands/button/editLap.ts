@@ -61,7 +61,7 @@ export class EditLap extends Button {
     if (lap == null) {
       throw new Error("周回数情報が取得できませんでした");
     }
-    const modal = await editLap.createModal(lap);
+    const modal = editLap.createModal(lap);
     await interaction.showModal(modal);
   }
 }

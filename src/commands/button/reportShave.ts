@@ -111,7 +111,7 @@ export class ReportShave extends Button {
       default:
         break;
     }
-    const modal = await reportShave.createModal(remainingHp);
+    const modal = reportShave.createModal(remainingHp);
     await interaction.showModal(modal);
   }
 }

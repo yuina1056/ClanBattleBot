@@ -20,7 +20,7 @@ const text_boss3_lap_customId = "boss3_lap";
 const text_boss4_lap_customId = "boss4_lap";
 const text_boss5_lap_customId = "boss5_lap";
 
-export async function createModal(lap: Lap): Promise<ModalBuilder> {
+export function createModal(lap: Lap): ModalBuilder {
   const modal = new ModalBuilder().setTitle("周回数修正").setCustomId(customId);
   const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
