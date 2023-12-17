@@ -1,4 +1,4 @@
-import { DeclarationAbstract } from "@/commands/button/declarationAbstract";
+import { DeclarationAbstract } from "@/commands/button/Declaration_Abstract";
 import { ButtonBuilder, ButtonStyle } from "discord.js";
 
 export class DeclarationThirdAsCarryOver extends DeclarationAbstract {
