@@ -1,6 +1,6 @@
 import { ButtonInteraction } from "discord.js";
 
-import declaration_start from "@/commands/button/declaration_start";
+import { DeclarationStart } from "@/commands/button/declaration_start";
 import { DeclarationCancel } from "@/commands/button/declaration_cancel";
 import report_shave from "@/commands/button/report_shave";
 import report_defeat from "@/commands/button/report_defeat";
@@ -22,8 +22,8 @@ import editHp from "@/commands/button/editHp";
 export async function action(interaction: ButtonInteraction) {
   let action = null;
   switch (interaction.customId) {
-    case declaration_start.customId:
-      action = declaration_start;
+    case DeclarationStart.customId:
+      action = new DeclarationStart();
       break;
     case DeclarationCancel.customId:
       action = new DeclarationCancel();
