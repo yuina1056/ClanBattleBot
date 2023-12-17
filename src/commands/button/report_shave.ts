@@ -16,7 +16,7 @@ import { Button } from "@/commands/button/button";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
-  data = new ButtonBuilder()
+  button = new ButtonBuilder()
     .setCustomId(ReportShave.customId)
     .setStyle(ButtonStyle.Secondary)
     .setLabel("削り");

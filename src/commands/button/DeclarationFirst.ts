@@ -5,13 +5,13 @@ export class DeclarationFirst extends DeclarationAbstract {
   static readonly customId: string = "declarationFirst";
   attackCount: number;
   isAttackCarryOver: boolean;
-  data: ButtonBuilder;
+  button: ButtonBuilder;
 
   constructor() {
     super();
     this.attackCount = 1;
     this.isAttackCarryOver = false;
-    this.data = new ButtonBuilder()
+    this.button = new ButtonBuilder()
       .setCustomId(DeclarationFirst.customId)
       .setStyle(ButtonStyle.Secondary)
       .setLabel("1凸目");

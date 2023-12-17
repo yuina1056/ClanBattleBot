@@ -18,11 +18,11 @@ import { Button } from "@/commands/button/button";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
-  data: ButtonBuilder;
+  button: ButtonBuilder;
 
   constructor() {
     super();
-    this.data = new ButtonBuilder()
+    this.button = new ButtonBuilder()
       .setCustomId(DeclarationStart.customId)
       .setStyle(ButtonStyle.Primary)
       .setLabel("凸宣言");
@@ -146,7 +146,7 @@ export class DeclarationStart extends Button {
           boss.bossid +
           "ボス 宣言だよ。",
         ephemeral: true,
-        components: [new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirst.data)],
+        components: [new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirst.button)],
       });
       return;
     }
@@ -176,7 +176,7 @@ export class DeclarationStart extends Button {
           ephemeral: true,
           components: [
             // 2凸目を選択してもらう
-            new ActionRowBuilder<ButtonBuilder>().addComponents(declarationSecond.data),
+            new ActionRowBuilder<ButtonBuilder>().addComponents(declarationSecond.button),
           ],
         });
       } else {
@@ -194,8 +194,8 @@ export class DeclarationStart extends Button {
           components: [
             // 1凸目の持ち越しか2凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-              declarationFirstAsCarryOver.data,
-              declarationSecond.data,
+              declarationFirstAsCarryOver.button,
+              declarationSecond.button,
             ),
           ],
         });
@@ -218,7 +218,7 @@ export class DeclarationStart extends Button {
             ephemeral: true,
             components: [
               // 3凸目を選択してもらう
-              new ActionRowBuilder<ButtonBuilder>().addComponents(declarationThird.data),
+              new ActionRowBuilder<ButtonBuilder>().addComponents(declarationThird.button),
             ],
           });
         } else {
@@ -236,8 +236,8 @@ export class DeclarationStart extends Button {
             components: [
               // 2凸目の持ち越しか3凸目を選択してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                declarationSecondAsCarryOver.data,
-                declarationThird.data,
+                declarationSecondAsCarryOver.button,
+                declarationThird.button,
               ),
             ],
           });
@@ -258,8 +258,8 @@ export class DeclarationStart extends Button {
             components: [
               // 1凸目の持ち越しか3凸目を選択してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                declarationFirstAsCarryOver.data,
-                declarationThird.data,
+                declarationFirstAsCarryOver.button,
+                declarationThird.button,
               ),
             ],
           });
@@ -278,9 +278,9 @@ export class DeclarationStart extends Button {
             components: [
               // 1凸目の持ち越しか2凸目の持ち越しか3凸目を選択してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                declarationFirstAsCarryOver.data,
-                declarationSecondAsCarryOver.data,
-                declarationThird.data,
+                declarationFirstAsCarryOver.button,
+                declarationSecondAsCarryOver.button,
+                declarationThird.button,
               ),
             ],
           });
@@ -305,7 +305,7 @@ export class DeclarationStart extends Button {
               components: [
                 // 3凸目の持ち越しを消化してもらう
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationThirdAsCarryOver.data,
+                  declarationThirdAsCarryOver.button,
                 ),
               ],
             });
@@ -319,7 +319,7 @@ export class DeclarationStart extends Button {
               components: [
                 // 2凸目の持ち越しを消化してもらう
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationSecondAsCarryOver.data,
+                  declarationSecondAsCarryOver.button,
                 ),
               ],
             });
@@ -331,8 +331,8 @@ export class DeclarationStart extends Button {
               components: [
                 // 2凸目の持ち越しか3凸目の持ち越しを消化してもらう
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationSecondAsCarryOver.data,
-                  declarationThirdAsCarryOver.data,
+                  declarationSecondAsCarryOver.button,
+                  declarationThirdAsCarryOver.button,
                 ),
               ],
             });
@@ -347,7 +347,7 @@ export class DeclarationStart extends Button {
               ephemeral: true,
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationFirstAsCarryOver.data,
+                  declarationFirstAsCarryOver.button,
                 ),
               ],
             });
@@ -358,8 +358,8 @@ export class DeclarationStart extends Button {
               ephemeral: true,
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationFirstAsCarryOver.data,
-                  declarationThirdAsCarryOver.data,
+                  declarationFirstAsCarryOver.button,
+                  declarationThirdAsCarryOver.button,
                 ),
               ],
             });
@@ -372,8 +372,8 @@ export class DeclarationStart extends Button {
               ephemeral: true,
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationFirstAsCarryOver.data,
-                  declarationSecondAsCarryOver.data,
+                  declarationFirstAsCarryOver.button,
+                  declarationSecondAsCarryOver.button,
                 ),
               ],
             });
@@ -384,9 +384,9 @@ export class DeclarationStart extends Button {
               ephemeral: true,
               components: [
                 new ActionRowBuilder<ButtonBuilder>().addComponents(
-                  declarationFirstAsCarryOver.data,
-                  declarationSecondAsCarryOver.data,
-                  declarationThirdAsCarryOver.data,
+                  declarationFirstAsCarryOver.button,
+                  declarationSecondAsCarryOver.button,
+                  declarationThirdAsCarryOver.button,
                 ),
               ],
             });

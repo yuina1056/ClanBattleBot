@@ -17,7 +17,7 @@ export abstract class DeclarationAbstract extends Button {
   static readonly customId: string;
   abstract attackCount: number;
   abstract isAttackCarryOver: boolean;
-  abstract data: ButtonBuilder;
+  abstract button: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;

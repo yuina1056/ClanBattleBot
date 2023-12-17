@@ -12,7 +12,7 @@ import { Button } from "@/commands/button/button";
 export abstract class ResetDeclarationReportAbstract extends Button {
   static readonly customId: string;
   abstract attackCount: number;
-  abstract data: ButtonBuilder;
+  abstract button: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;

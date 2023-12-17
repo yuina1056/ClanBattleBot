@@ -14,11 +14,11 @@ import { Button } from "@/commands/button/button";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
-  data: ButtonBuilder;
+  button: ButtonBuilder;
 
   constructor() {
     super();
-    this.data = new ButtonBuilder()
+    this.button = new ButtonBuilder()
       .setCustomId(DeclarationCancel.customId)
       .setStyle(ButtonStyle.Danger)
       .setLabel("取消");

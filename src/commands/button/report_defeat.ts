@@ -17,7 +17,7 @@ import { Button } from "@/commands/button/button";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
-  data = new ButtonBuilder()
+  button = new ButtonBuilder()
     .setCustomId(ReportDefeat.customId)
     .setStyle(ButtonStyle.Secondary)
     .setLabel("撃破");

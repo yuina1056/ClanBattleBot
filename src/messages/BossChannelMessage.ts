@@ -129,10 +129,10 @@ export async function sendMessage(
     embeds: [embed],
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        declarationStart.data,
-        reportShave.data,
-        reportDefeat.data,
-        declarationCancel.data,
+        declarationStart.button,
+        reportShave.button,
+        reportDefeat.button,
+        declarationCancel.button,
       ),
     ],
   });
