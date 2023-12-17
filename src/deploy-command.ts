@@ -6,7 +6,7 @@ dotenv.config();
 
 import { Dice } from "@/commands/slash/dice";
 import { Setup } from "@/commands/slash/setup";
-import { UpdateUser } from "@/commands/slash/updateUser";
+import { UpdateUser } from "@/commands/slash/Update_User";
 
 // 登録コマンドを呼び出してリスト形式で登録
 const dice = new Dice();
