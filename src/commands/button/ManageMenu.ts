@@ -1,5 +1,5 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from "discord.js";
-import button_reset_declaration_report from "@/commands/button/ResetDeclarationReport";
+import { ResetDeclarationReport } from "@/commands/button/ResetDeclarationReport";
 import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 
@@ -12,12 +12,13 @@ export const data = new ButtonBuilder()
 export async function execute(interaction: ButtonInteraction) {
   const editHp = new EditHp();
   const editLap = new EditLap();
+  const resetDeclarationReport = new ResetDeclarationReport();
   await interaction.reply({
     ephemeral: true,
     content: "管理メニュー",
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        button_reset_declaration_report.data,
+        resetDeclarationReport.button,
         editLap.button,
         editHp.button,
       ),
