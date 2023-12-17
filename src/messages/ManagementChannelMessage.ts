@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 
 import dataSource from "@/datasource";
-import { ReloadAttackStatus } from "@/commands/button/reload_attack_status";
+import { ReloadAttackStatus } from "@/commands/button/reloadAttackStatus";
 import { ManageMenu } from "@/commands/button/ManageMenu";
 
 import User from "@/entity/User";
