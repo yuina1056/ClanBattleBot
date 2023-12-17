@@ -143,7 +143,7 @@ export abstract class DeclarationAbstract extends Button {
         "【" +
         bossLap +
         "週目】" +
-        user?.name +
+        user.name +
         "が" +
         boss.bossid +
         "ボスに" +
