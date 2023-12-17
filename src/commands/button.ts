@@ -16,7 +16,7 @@ import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
 import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
 import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
 import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
-import edit_lap from "@/commands/button/editLap";
+import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 
 export async function action(interaction: ButtonInteraction) {
@@ -70,8 +70,8 @@ export async function action(interaction: ButtonInteraction) {
     case ResetDeclarationReportThird.customId:
       action = new ResetDeclarationReportThird();
       break;
-    case edit_lap.customId:
-      action = edit_lap;
+    case EditLap.customId:
+      action = new EditLap();
       break;
     case EditHp.customId:
       action = new EditHp();
