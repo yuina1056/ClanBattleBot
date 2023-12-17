@@ -4,7 +4,7 @@ import { DeclarationStart } from "@/commands/button/declaration_start";
 import { DeclarationCancel } from "@/commands/button/declaration_cancel";
 import { ReportShave } from "@/commands/button/report_shave";
 import { ReportDefeat } from "@/commands/button/report_defeat";
-import reload_attack_status from "@/commands/button/reload_attack_status";
+import { ReloadAttackStatus } from "@/commands/button/reload_attack_status";
 import { DeclarationFirst } from "@/commands/button/DeclarationFirst";
 import { DeclarationSecond } from "@/commands/button/DeclarationSecond";
 import { DeclarationThird } from "@/commands/button/DeclarationThird";
@@ -34,8 +34,8 @@ export async function action(interaction: ButtonInteraction) {
     case ReportDefeat.customId:
       action = new ReportDefeat();
       break;
-    case reload_attack_status.customId:
-      action = reload_attack_status;
+    case ReloadAttackStatus.customId:
+      action = new ReloadAttackStatus();
       break;
     case DeclarationFirst.customId:
       action = new DeclarationFirst();

@@ -9,7 +9,7 @@ import {
 } from "discord.js";
 
 import dataSource from "@/datasource";
-import button_reload_attack_status from "@/commands/button/reload_attack_status";
+import { ReloadAttackStatus } from "@/commands/button/reload_attack_status";
 import { ManageMenu } from "@/commands/button/ManageMenu";
 
 import User from "@/entity/User";
@@ -195,10 +195,12 @@ export async function sendMessage(
 
   const content: string = userStatusContent + clanStatus + attackStatus + bossStatus;
 
+  const reloadAttackStatus = new ReloadAttackStatus();
   const manageMenu = new ManageMenu();
+
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
-      button_reload_attack_status.data,
+      reloadAttackStatus.button,
       manageMenu.button,
     ),
   ];
