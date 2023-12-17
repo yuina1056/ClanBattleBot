@@ -1,21 +1,21 @@
 import { ButtonInteraction } from "discord.js";
 
-import { DeclarationStart } from "@/commands/button/declaration_start";
-import { DeclarationCancel } from "@/commands/button/declaration_cancel";
-import { ReportShave } from "@/commands/button/report_shave";
-import { ReportDefeat } from "@/commands/button/report_defeat";
+import { DeclarationStart } from "@/commands/button/declarationStart";
+import { DeclarationCancel } from "@/commands/button/declarationCancel";
+import { ReportShave } from "@/commands/button/reportShave";
+import { ReportDefeat } from "@/commands/button/reportDefeat";
 import { ReloadAttackStatus } from "@/commands/button/reload_attack_status";
-import { DeclarationFirst } from "@/commands/button/DeclarationFirst";
-import { DeclarationSecond } from "@/commands/button/DeclarationSecond";
-import { DeclarationThird } from "@/commands/button/DeclarationThird";
-import { DeclarationFirstAsCarryOver } from "@/commands/button/DeclarationFirstAsCarryOver";
-import { DeclarationSecondAsCarryOver } from "@/commands/button/DeclarationSecondAsCarryOver";
-import { DeclarationThirdAsCarryOver } from "@/commands/button/DeclarationThirdAsCarryOver";
+import { DeclarationFirst } from "@/commands/button/Declaration_First";
+import { DeclarationSecond } from "@/commands/button/Declaration_Second";
+import { DeclarationThird } from "@/commands/button/Declaration_Third";
+import { DeclarationFirstAsCarryOver } from "@/commands/button/Declaration_FirstAsCarryOver";
+import { DeclarationSecondAsCarryOver } from "@/commands/button/Declaration_SecondAsCarryOver";
+import { DeclarationThirdAsCarryOver } from "@/commands/button/Declaration_ThirdAsCarryOver";
 import { ManageMenu } from "@/commands/button/ManageMenu";
-import { ResetDeclarationReport } from "@/commands/button/ResetDeclarationReport";
-import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
-import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
-import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
+import { ResetDeclarationReport } from "@/commands/button/Reset_DeclarationReport";
+import { ResetDeclarationReportFirst } from "@/commands/button/Reset_DeclarationReportFirst";
+import { ResetDeclarationReportSecond } from "@/commands/button/Reset_DeclarationReportSecond";
+import { ResetDeclarationReportThird } from "@/commands/button/Reset_DeclarationReportThird";
 import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 

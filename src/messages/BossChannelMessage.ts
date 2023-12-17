@@ -1,9 +1,9 @@
 import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from "discord.js";
 
-import { DeclarationStart } from "@/commands/button/declaration_start";
-import { ReportShave } from "@/commands/button/report_shave";
-import { ReportDefeat } from "@/commands/button/report_defeat";
-import { DeclarationCancel } from "@/commands/button/declaration_cancel";
+import { DeclarationStart } from "@/commands/button/declarationStart";
+import { ReportShave } from "@/commands/button/reportShave";
+import { ReportDefeat } from "@/commands/button/reportDefeat";
+import { DeclarationCancel } from "@/commands/button/declarationCancel";
 import Clan from "@/entity/Clan";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";

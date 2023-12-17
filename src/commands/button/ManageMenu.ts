@@ -1,5 +1,5 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from "discord.js";
-import { ResetDeclarationReport } from "@/commands/button/ResetDeclarationReport";
+import { ResetDeclarationReport } from "@/commands/button/Reset_DeclarationReport";
 import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 import { Button } from "@/commands/button/button";
@@ -33,4 +33,3 @@ export class ManageMenu extends Button {
     });
   }
 }
-

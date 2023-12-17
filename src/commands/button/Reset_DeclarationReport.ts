@@ -1,7 +1,7 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder } from "discord.js";
-import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
-import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
-import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
+import { ResetDeclarationReportFirst } from "@/commands/button/Reset_DeclarationReportFirst";
+import { ResetDeclarationReportSecond } from "@/commands/button/Reset_DeclarationReportSecond";
+import { ResetDeclarationReportThird } from "@/commands/button/Reset_DeclarationReportThird";
 import { Button } from "@/commands/button/button";
 
 export class ResetDeclarationReport extends Button {

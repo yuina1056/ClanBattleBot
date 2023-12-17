@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle } from "discord.js";
 
-import { ResetDeclarationReportAbstract } from "@/commands/button/ResetDeclarationReportAbstract";
+import { ResetDeclarationReportAbstract } from "@/commands/button/Reset_DeclarationReportAbstract";
 
 export class ResetDeclarationReportFirst extends ResetDeclarationReportAbstract {
   static readonly customId: string = "reset_declaration_report_first";
