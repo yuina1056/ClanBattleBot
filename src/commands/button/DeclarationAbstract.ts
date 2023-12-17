@@ -11,8 +11,9 @@ import Lap from "@/entity/Lap";
 import Event from "@/entity/Event";
 import dayjs from "dayjs";
 import EventBoss from "@/entity/EventBoss";
+import { Button } from "@/commands/button/button";
 
-export abstract class DeclarationAbstract {
+export abstract class DeclarationAbstract extends Button {
   static readonly customId: string;
   abstract attackCount: number;
   abstract isAttackCarryOver: boolean;

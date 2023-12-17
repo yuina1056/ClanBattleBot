@@ -7,8 +7,9 @@ import Declaration from "@/entity/Declaration";
 import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 import dayjs from "dayjs";
+import { Button } from "@/commands/button/button";
 
-export abstract class ResetDeclarationReportAbstract {
+export abstract class ResetDeclarationReportAbstract extends Button {
   static readonly customId: string;
   abstract attackCount: number;
   abstract data: ButtonBuilder;
@@ -44,7 +45,7 @@ export abstract class ResetDeclarationReportAbstract {
       .andWhere("event.toDate >= :today", { today })
       .getOne();
     if (event == null) {
-      return new Error("クランバトル開催情報が取得できませんでした");
+      throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // ユーザー取得
     const userRepository = DataSource.getRepository(User);

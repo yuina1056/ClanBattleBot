@@ -3,7 +3,7 @@ import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from 
 import button_declaration from "@/commands/button/declaration_start";
 import button_report_shave from "@/commands/button/report_shave";
 import button_report_defeat from "@/commands/button/report_defeat";
-import button_declaration_cancel from "@/commands/button/declaration_cancel";
+import { DeclarationCancel } from "@/commands/button/declaration_cancel";
 import Clan from "@/entity/Clan";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";
@@ -120,6 +120,8 @@ export async function sendMessage(
       },
     );
 
+  const declarationCancel = new DeclarationCancel();
+
   await channel.send({
     embeds: [embed],
     components: [
@@ -127,7 +129,7 @@ export async function sendMessage(
         button_declaration.data,
         button_report_shave.data,
         button_report_defeat.data,
-        button_declaration_cancel.data,
+        declarationCancel.data,
       ),
     ],
   });
