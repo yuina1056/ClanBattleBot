@@ -17,10 +17,15 @@ import { Button } from "@/commands/button/button";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
-  button = new ButtonBuilder()
-    .setCustomId(ReportDefeat.customId)
-    .setStyle(ButtonStyle.Secondary)
-    .setLabel("撃破");
+  button: ButtonBuilder;
+
+  constructor() {
+    super();
+    this.button = new ButtonBuilder()
+      .setCustomId(ReportDefeat.customId)
+      .setStyle(ButtonStyle.Secondary)
+      .setLabel("撃破");
+  }
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;
