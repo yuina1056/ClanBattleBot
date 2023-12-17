@@ -2,7 +2,7 @@ import { ButtonInteraction } from "discord.js";
 
 import { DeclarationStart } from "@/commands/button/declaration_start";
 import { DeclarationCancel } from "@/commands/button/declaration_cancel";
-import report_shave from "@/commands/button/report_shave";
+import { ReportShave } from "@/commands/button/report_shave";
 import { ReportDefeat } from "@/commands/button/report_defeat";
 import reload_attack_status from "@/commands/button/reload_attack_status";
 import { DeclarationFirst } from "@/commands/button/DeclarationFirst";
@@ -28,8 +28,8 @@ export async function action(interaction: ButtonInteraction) {
     case DeclarationCancel.customId:
       action = new DeclarationCancel();
       break;
-    case report_shave.customId:
-      action = report_shave;
+    case ReportShave.customId:
+      action = new ReportShave();
       break;
     case ReportDefeat.customId:
       action = new ReportDefeat();

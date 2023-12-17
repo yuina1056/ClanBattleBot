@@ -1,7 +1,7 @@
 import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from "discord.js";
 
 import { DeclarationStart } from "@/commands/button/declaration_start";
-import button_report_shave from "@/commands/button/report_shave";
+import { ReportShave } from "@/commands/button/report_shave";
 import { ReportDefeat } from "@/commands/button/report_defeat";
 import { DeclarationCancel } from "@/commands/button/declaration_cancel";
 import Clan from "@/entity/Clan";
@@ -123,13 +123,14 @@ export async function sendMessage(
   const declarationStart = new DeclarationStart();
   const declarationCancel = new DeclarationCancel();
   const reportDefeat = new ReportDefeat();
+  const reportShave = new ReportShave();
 
   await channel.send({
     embeds: [embed],
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         declarationStart.data,
-        button_report_shave.data,
+        reportShave.data,
         reportDefeat.data,
         declarationCancel.data,
       ),
