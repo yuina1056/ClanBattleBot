@@ -20,9 +20,9 @@ export async function execute(interaction: ButtonInteraction) {
     content: "どの凸をリセットしますか？(ボタンを押したらリセット処理が行われます)",
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        resetDeclarationReportFirst.data,
-        resetDeclarationReportSecond.data,
-        resetDeclarationReportThird.data,
+        resetDeclarationReportFirst.button,
+        resetDeclarationReportSecond.button,
+        resetDeclarationReportThird.button,
       ),
     ],
   });
