@@ -1,7 +1,7 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { Dice } from "@/commands/slash/dice";
-import setup from "@/commands/slash/setup";
-import updateUser from "@/commands/slash/UpdateUser";
+import { Setup } from "@/commands/slash/setup";
+import { UpdateUser } from "@/commands/slash/UpdateUser";
 
 export async function action(interaction: ChatInputCommandInteraction) {
   let action = null;
@@ -9,17 +9,17 @@ export async function action(interaction: ChatInputCommandInteraction) {
     case Dice.commandName:
       action = new Dice();
       break;
-    case setup.data.name:
+    case Setup.commandName:
       await interaction.deferReply({
         ephemeral: true,
       });
-      action = setup;
+      action = new Setup();
       break;
-    case updateUser.data.name:
+    case UpdateUser.commandName:
       await interaction.deferReply({
         ephemeral: true,
       });
-      action = updateUser;
+      action = new UpdateUser();
       break;
     default:
       console.error(`${interaction.commandName}というコマンドには対応していません。`);

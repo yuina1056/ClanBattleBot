@@ -5,15 +5,17 @@ import { Routes } from "discord-api-types/v10";
 dotenv.config();
 
 import { Dice } from "@/commands/slash/dice";
-import setupFile from "@/commands/slash/setup";
-import updateUserFile from "@/commands/slash/UpdateUser";
+import { Setup } from "@/commands/slash/setup";
+import { UpdateUser } from "@/commands/slash/UpdateUser";
 
 // 登録コマンドを呼び出してリスト形式で登録
-const newDice = new Dice();
+const dice = new Dice();
+const setup = new Setup();
+const updateUser = new UpdateUser();
 const commands = [
-  newDice.slashCommand.toJSON(),
-  setupFile.data.toJSON(),
-  updateUserFile.data.toJSON(),
+  dice.slashCommand.toJSON(),
+  setup.slashCommand.toJSON(),
+  updateUser.slashCommand.toJSON(),
 ];
 
 // DiscordのAPIには現在最新のversion10を指定
