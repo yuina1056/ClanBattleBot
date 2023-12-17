@@ -5,12 +5,12 @@ import {
   ButtonBuilder,
   codeBlock,
   bold,
-  time,
+  // time,
 } from "discord.js";
 
 import dataSource from "@/datasource";
 import button_reload_attack_status from "@/commands/button/reload_attack_status";
-import button_manage_menu from "@/commands/button/ManageMenu";
+import { ManageMenu } from "@/commands/button/ManageMenu";
 
 import User from "@/entity/User";
 import Event from "@/entity/Event";
@@ -51,12 +51,12 @@ export async function sendMessage(
       },
     });
   }
-  let latestReport: Report;
-  let latestReportTime: string;
-  if (todayReports.length !== 0) {
-    latestReport = todayReports.reduce((a, b) => (a.UpdatedAt! > b.UpdatedAt! ? a : b));
-    latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
-  }
+  // let latestReport: Report;
+  // let latestReportTime: string;
+  // if (todayReports.length !== 0) {
+  // latestReport = todayReports.reduce((a, b) => (a.UpdatedAt! > b.UpdatedAt! ? a : b));
+  // latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
+  // }
 
   const clanStatus: string =
     clanTitle +
@@ -194,10 +194,12 @@ export async function sendMessage(
   const bossStatus = bossStatusCodeBlock;
 
   const content: string = userStatusContent + clanStatus + attackStatus + bossStatus;
+
+  const manageMenu = new ManageMenu();
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
       button_reload_attack_status.data,
-      button_manage_menu.data,
+      manageMenu.button,
     ),
   ];
   if (isInit) {

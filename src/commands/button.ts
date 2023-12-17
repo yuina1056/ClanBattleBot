@@ -11,7 +11,7 @@ import { DeclarationThird } from "@/commands/button/DeclarationThird";
 import { DeclarationFirstAsCarryOver } from "@/commands/button/DeclarationFirstAsCarryOver";
 import { DeclarationSecondAsCarryOver } from "@/commands/button/DeclarationSecondAsCarryOver";
 import { DeclarationThirdAsCarryOver } from "@/commands/button/DeclarationThirdAsCarryOver";
-import manage_menu from "@/commands/button/ManageMenu";
+import { ManageMenu } from "@/commands/button/ManageMenu";
 import { ResetDeclarationReport } from "@/commands/button/ResetDeclarationReport";
 import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
 import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
@@ -55,8 +55,8 @@ export async function action(interaction: ButtonInteraction) {
     case DeclarationThirdAsCarryOver.customId:
       action = new DeclarationThirdAsCarryOver();
       break;
-    case manage_menu.customId:
-      action = manage_menu;
+    case ManageMenu.customId:
+      action = new ManageMenu();
       break;
     case ResetDeclarationReport.customId:
       action = new ResetDeclarationReport();
