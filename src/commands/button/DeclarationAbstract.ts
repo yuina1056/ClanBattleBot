@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonInteraction, Guild } from "discord.js";
+import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/datasource";
@@ -14,10 +14,8 @@ import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 
 export abstract class DeclarationAbstract extends Button {
-  static readonly customId: string;
   abstract attackCount: number;
   abstract isAttackCarryOver: boolean;
-  abstract button: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;

@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonInteraction, Guild } from "discord.js";
+import { ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/datasource";
 import Clan from "@/entity/Clan";
@@ -10,9 +10,7 @@ import dayjs from "dayjs";
 import { Button } from "@/commands/button/button";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
-  static readonly customId: string;
   abstract attackCount: number;
-  abstract button: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;
