@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import editLap from "@/commands/modal/editLap";
+import { ModalEditLap } from "@/commands/modal/editLap";
 import Lap from "@/entity/Lap";
 import DataSource from "@/datasource";
 import Clan from "@/entity/Clan";
@@ -61,7 +61,7 @@ export class EditLap extends Button {
     if (lap == null) {
       throw new Error("周回数情報が取得できませんでした");
     }
-    const modal = editLap.createModal(lap);
+    const modal = new ModalEditLap().createModal(lap);
     await interaction.showModal(modal);
   }
 }

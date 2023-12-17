@@ -4,7 +4,7 @@ import DataSource from "@/datasource";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
 import dayjs from "dayjs";
-import editHp from "../modal/editHp";
+import { ModalEditHp } from "@/commands/modal/editHp";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 
@@ -61,7 +61,7 @@ export class EditHp extends Button {
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
-    const modal = editHp.createModal(eventBoss);
+    const modal = new ModalEditHp().createModal(eventBoss);
     await interaction.showModal(modal);
   }
 }

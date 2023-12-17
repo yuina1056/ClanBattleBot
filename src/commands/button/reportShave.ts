@@ -8,7 +8,7 @@ import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
 
-import reportShave from "@/commands/modal/reportShave";
+import { ModalReportShaveHP } from "@/commands/modal/reportShave";
 import EventBoss from "@/entity/EventBoss";
 import Declaration from "@/entity/Declaration";
 import User from "@/entity/User";
@@ -111,7 +111,7 @@ export class ReportShave extends Button {
       default:
         break;
     }
-    const modal = reportShave.createModal(remainingHp);
+    const modal = new ModalReportShaveHP().createModal(remainingHp);
     await interaction.showModal(modal);
   }
 }
