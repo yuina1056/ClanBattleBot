@@ -17,7 +17,7 @@ import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationR
 import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
 import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
 import edit_lap from "@/commands/button/editLap";
-import editHp from "@/commands/button/editHp";
+import { EditHp } from "@/commands/button/editHp";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -73,8 +73,8 @@ export async function action(interaction: ButtonInteraction) {
     case edit_lap.customId:
       action = edit_lap;
       break;
-    case editHp.customId:
-      action = editHp;
+    case EditHp.customId:
+      action = new EditHp();
       break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
