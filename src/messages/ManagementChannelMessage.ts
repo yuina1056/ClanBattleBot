@@ -10,7 +10,7 @@ import {
 
 import dataSource from "@/datasource";
 import { ReloadAttackStatus } from "@/commands/button/reloadAttackStatus";
-import { ManageMenu } from "@/commands/button/manageMenu";
+import { ManageMenu } from "@/commands/button/Manage_Menu";
 
 import User from "@/entity/User";
 import Event from "@/entity/Event";

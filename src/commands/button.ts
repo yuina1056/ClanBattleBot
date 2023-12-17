@@ -11,7 +11,7 @@ import { DeclarationThird } from "@/commands/button/declarationThird";
 import { DeclarationFirstAsCarryOver } from "@/commands/button/declarationFirstAsCarryOver";
 import { DeclarationSecondAsCarryOver } from "@/commands/button/declarationSecondAsCarryOver";
 import { DeclarationThirdAsCarryOver } from "@/commands/button/declarationThirdAsCarryOver";
-import { ManageMenu } from "@/commands/button/manageMenu";
+import { ManageMenu } from "@/commands/button/Manage_Menu";
 import { ResetDeclarationReport } from "@/commands/button/resetDeclarationReport";
 import { ResetDeclarationReportFirst } from "@/commands/button/resetDeclarationReportFirst";
 import { ResetDeclarationReportSecond } from "@/commands/button/resetDeclarationReportSecond";
