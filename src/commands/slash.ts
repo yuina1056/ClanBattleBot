@@ -1,13 +1,13 @@
 import { ChatInputCommandInteraction } from "discord.js";
-import dice from "@/commands/slash/dice";
+import { Dice } from "@/commands/slash/dice";
 import setup from "@/commands/slash/setup";
 import updateUser from "@/commands/slash/UpdateUser";
 
 export async function action(interaction: ChatInputCommandInteraction) {
   let action = null;
   switch (interaction.commandName) {
-    case dice.data.name:
-      action = dice;
+    case Dice.commandName:
+      action = new Dice();
       break;
     case setup.data.name:
       await interaction.deferReply({
