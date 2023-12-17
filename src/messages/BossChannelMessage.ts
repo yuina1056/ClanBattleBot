@@ -2,7 +2,7 @@ import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from 
 
 import { DeclarationStart } from "@/commands/button/declaration_start";
 import button_report_shave from "@/commands/button/report_shave";
-import button_report_defeat from "@/commands/button/report_defeat";
+import { ReportDefeat } from "@/commands/button/report_defeat";
 import { DeclarationCancel } from "@/commands/button/declaration_cancel";
 import Clan from "@/entity/Clan";
 import Boss from "@/entity/Boss";
@@ -120,8 +120,9 @@ export async function sendMessage(
       },
     );
 
-  const declarationCancel = new DeclarationCancel();
   const declarationStart = new DeclarationStart();
+  const declarationCancel = new DeclarationCancel();
+  const reportDefeat = new ReportDefeat();
 
   await channel.send({
     embeds: [embed],
@@ -129,7 +130,7 @@ export async function sendMessage(
       new ActionRowBuilder<ButtonBuilder>().addComponents(
         declarationStart.data,
         button_report_shave.data,
-        button_report_defeat.data,
+        reportDefeat.data,
         declarationCancel.data,
       ),
     ],
