@@ -96,7 +96,7 @@ export abstract class DeclarationAbstract extends Button {
       this.isAttackCarryOver,
     );
     if (user instanceof Error) {
-      interaction.reply({
+      await interaction.reply({
         content: user.message,
         ephemeral: true,
       });
