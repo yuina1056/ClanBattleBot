@@ -12,6 +12,8 @@ import {
 } from "discord.js";
 import DataSource from "@/datasource";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
+import Lap from "@/entity/Lap";
 
 export const customId = "edit_hp_submit";
 const text_boss1_hp_customId = "boss1_hp";
@@ -21,10 +23,10 @@ const text_boss4_hp_customId = "boss4_hp";
 const text_boss5_hp_customId = "boss5_hp";
 
 export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
-  const modal = new ModalBuilder().setTitle("周回数修正").setCustomId(customId);
+  const modal = new ModalBuilder().setTitle("ボスHP修正").setCustomId(customId);
   const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("1ボス周回数")
+      .setLabel("1ボスHP(万)(数値のみ)")
       .setCustomId(text_boss1_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -34,7 +36,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("2ボス周回数")
+      .setLabel("2ボスHP(万)(数値のみ)")
       .setCustomId(text_boss2_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -44,7 +46,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("3ボス周回数")
+      .setLabel("3ボスHP(万)(数値のみ)")
       .setCustomId(text_boss3_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -54,7 +56,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("4ボス周回数")
+      .setLabel("4ボスHP(万)(数値のみ)")
       .setCustomId(text_boss4_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -64,7 +66,7 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   );
   const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
     new TextInputBuilder()
-      .setLabel("5ボス周回数")
+      .setLabel("5ボスHP(万)(数値のみ)")
       .setCustomId(text_boss5_hp_customId)
       .setStyle(TextInputStyle.Short)
       .setMaxLength(100)
@@ -83,7 +85,30 @@ export async function createModal(eventBoss: EventBoss): Promise<ModalBuilder> {
   return modal;
 }
 
+interface FormBossHP {
+  boss1HP: string;
+  boss2HP: string;
+  boss3HP: string;
+  boss4HP: string;
+  boss5HP: string;
+}
+
+interface BossHP {
+  boss1HP: number;
+  boss2HP: number;
+  boss3HP: number;
+  boss4HP: number;
+  boss5HP: number;
+}
+
 export async function submit(interaction: ModalSubmitInteraction) {
+  const formBossHP: FormBossHP = {
+    boss1HP: interaction.fields.getTextInputValue(text_boss1_hp_customId),
+    boss2HP: interaction.fields.getTextInputValue(text_boss2_hp_customId),
+    boss3HP: interaction.fields.getTextInputValue(text_boss3_hp_customId),
+    boss4HP: interaction.fields.getTextInputValue(text_boss4_hp_customId),
+    boss5HP: interaction.fields.getTextInputValue(text_boss5_hp_customId),
+  };
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
@@ -124,17 +149,80 @@ export async function submit(interaction: ModalSubmitInteraction) {
   if (eventBoss == null) {
     throw new Error("クランバトルボスのHP情報が取得できませんでした");
   }
-  eventBoss.boss1HP = Number(interaction.fields.getTextInputValue(text_boss1_hp_customId));
-  eventBoss.boss2HP = Number(interaction.fields.getTextInputValue(text_boss2_hp_customId));
-  eventBoss.boss3HP = Number(interaction.fields.getTextInputValue(text_boss3_hp_customId));
-  eventBoss.boss4HP = Number(interaction.fields.getTextInputValue(text_boss4_hp_customId));
-  eventBoss.boss5HP = Number(interaction.fields.getTextInputValue(text_boss5_hp_customId));
+  const lapRepository = DataSource.getRepository(Lap);
+  const lap = await lapRepository.findOneBy({
+    clanId: clan.id,
+    eventId: event.id,
+  });
+  if (lap == null) {
+    throw new Error("クランバトル周回数情報が取得できませんでした");
+  }
+
+  const bossHP = validateForm(formBossHP, lap);
+  if (bossHP instanceof Error) {
+    await interaction.reply({
+      content: "ボスHP修正に失敗しました。" + bossHP.message,
+      ephemeral: true,
+    });
+    return;
+  }
+
+  eventBoss.boss1HP = bossHP.boss1HP;
+  eventBoss.boss2HP = bossHP.boss2HP;
+  eventBoss.boss3HP = bossHP.boss3HP;
+  eventBoss.boss4HP = bossHP.boss4HP;
+  eventBoss.boss5HP = bossHP.boss5HP;
 
   await eventBossRepository.save(eventBoss);
   await interaction.reply({
-    content: "各ボスの残HPが変更されました",
+    content: "各ボスの残HPが変更されました。",
     ephemeral: true,
   });
+}
+
+function validateForm(formHP: FormBossHP, lap: Lap): BossHP | Error {
+  const boss1HP = Number(formHP.boss1HP);
+  const boss2HP = Number(formHP.boss2HP);
+  const boss3HP = Number(formHP.boss3HP);
+  const boss4HP = Number(formHP.boss4HP);
+  const boss5HP = Number(formHP.boss5HP);
+  if (isNaN(boss1HP)) {
+    return new Error("1ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss2HP)) {
+    return new Error("2ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss3HP)) {
+    return new Error("3ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss4HP)) {
+    return new Error("4ボスのHPの入力値が数値ではありません。");
+  }
+  if (isNaN(boss5HP)) {
+    return new Error("5ボスのHPの入力値が数値ではありません。");
+  }
+  if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < boss1HP) {
+    return new Error("1ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < boss2HP) {
+    return new Error("2ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < boss3HP) {
+    return new Error("3ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < boss4HP) {
+    return new Error("4ボスのHPの入力値が最大値を超えています。");
+  }
+  if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < boss5HP) {
+    return new Error("5ボスのHPの入力値が最大値を超えています。");
+  }
+  return {
+    boss1HP,
+    boss2HP,
+    boss3HP,
+    boss4HP,
+    boss5HP,
+  };
 }
 
 export default {

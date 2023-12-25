@@ -45,7 +45,8 @@ export default class User {
     this.discordUserId = discordUserId;
   }
   public getAttackStatus(event: Event | null): string {
-    let res: string = this.name + " [－/－/－]";
+    const shortenName = this.name.substring(0, 10).padEnd(10);
+    let res: string = shortenName + " [－/－/－]";
     if (event == null || this.reports == null || this.reports.length === 0) {
       return res + " (記録なし)";
     }
@@ -71,7 +72,7 @@ export default class User {
         return res + "(" + dayjs(latestReport.CreatedAt).format("MM/DD HH:mm") + ") 【当日凸なし】";
       }
       // 当日凸あり
-      res = this.name + " [";
+      res = shortenName + " [";
       for (let index = 1; index <= 3; index++) {
         const todayAttackCountReports = todayReports.filter(
           (report) => report.attackCount === index,

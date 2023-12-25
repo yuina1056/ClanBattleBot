@@ -12,6 +12,7 @@ export async function regist(
   discordUserId: string,
   lap: number,
   attackCount: number,
+  isAttackCarryOver: boolean,
 ): Promise<User | Error> {
   const today = dayjs().format();
   const event = await DataSource.getRepository(Event)
@@ -24,7 +25,10 @@ export async function regist(
   }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
-  const user = await userRepository.findOneBy({ discordUserId: discordUserId });
+  const user = await userRepository.findOneBy({
+    discordUserId: discordUserId,
+    clanId: boss.clanId,
+  });
   if (user == null) {
     return new Error("ユーザー情報が取得できませんでした");
   }
@@ -39,11 +43,12 @@ export async function regist(
     user.clanId,
     user.id!,
     event!.id!,
-    boss.id ?? 0,
+    boss.bossid,
     lap,
     event.getClanBattleDay(),
     attackCount,
     false,
+    isAttackCarryOver,
   );
   await DataSource.getRepository(Declaration).save(declaration);
 

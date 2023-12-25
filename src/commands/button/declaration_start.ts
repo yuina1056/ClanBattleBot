@@ -6,12 +6,12 @@ import Boss from "@/entity/Boss";
 import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 import User from "@/entity/User";
-import buttonAttackFirst from "@/commands/button/DeclarationFirst";
-import buttonAttackSecond from "@/commands/button/DeclarationSecond";
-import buttonAttackThird from "@/commands/button/DeclarationThird";
-import buttonAttackFirstAsCarryOver from "@/commands/button/DeclarationFirstAsCarryOver";
-import buttonAttackSecondAsCarryOver from "@/commands/button/DeclarationSecondAsCarryOver";
-import buttonAttackThirdAsCarryOver from "@/commands/button/DeclarationThirdAsCarryOver";
+import { DeclarationFirst } from "@/commands/button/DeclarationFirst";
+import { DeclarationSecond } from "@/commands/button/DeclarationSecond";
+import { DeclarationThird } from "@/commands/button/DeclarationThird";
+import { DeclarationFirstAsCarryOver } from "@/commands/button/DeclarationFirstAsCarryOver";
+import { DeclarationSecondAsCarryOver } from "@/commands/button/DeclarationSecondAsCarryOver";
+import { DeclarationThirdAsCarryOver } from "@/commands/button/DeclarationThirdAsCarryOver";
 import Lap from "@/entity/Lap";
 import Clan from "@/entity/Clan";
 
@@ -94,7 +94,11 @@ export async function execute(interaction: ButtonInteraction) {
     throw new Error("周回数情報を取得できません");
   }
   if (!lap.isAttackPossible(boss.bossid)) {
-    throw new Error("このボスは凸できません");
+    await interaction.reply({
+      content: "このボスには凸できません",
+      ephemeral: true,
+    });
+    return;
   }
 
   let bossLap = 0;
@@ -118,6 +122,14 @@ export async function execute(interaction: ButtonInteraction) {
     default:
       break;
   }
+
+  const declarationFirst = new DeclarationFirst();
+  const declarationFirstAsCarryOver = new DeclarationFirstAsCarryOver();
+  const declarationSecond = new DeclarationSecond();
+  const declarationSecondAsCarryOver = new DeclarationSecondAsCarryOver();
+  const declarationThird = new DeclarationThird();
+  const declarationThirdAsCarryOver = new DeclarationThirdAsCarryOver();
+
   const todayReports = clanUser.getTodayReports(event, dayCount);
   // なし:- 持ち越しなし:x 持ち越しあり:y 持ち越し済み:z
 
@@ -133,7 +145,7 @@ export async function execute(interaction: ButtonInteraction) {
         boss.bossid +
         "ボス 宣言だよ。",
       ephemeral: true,
-      components: [new ActionRowBuilder<ButtonBuilder>().addComponents(buttonAttackFirst.data)],
+      components: [new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirst.data)],
     });
     return;
   }
@@ -163,7 +175,7 @@ export async function execute(interaction: ButtonInteraction) {
         ephemeral: true,
         components: [
           // 2凸目を選択してもらう
-          new ActionRowBuilder<ButtonBuilder>().addComponents(buttonAttackSecond.data),
+          new ActionRowBuilder<ButtonBuilder>().addComponents(declarationSecond.data),
         ],
       });
     } else {
@@ -181,8 +193,8 @@ export async function execute(interaction: ButtonInteraction) {
         components: [
           // 1凸目の持ち越しか2凸目を選択してもらう
           new ActionRowBuilder<ButtonBuilder>().addComponents(
-            buttonAttackFirstAsCarryOver.data,
-            buttonAttackSecond.data,
+            declarationFirstAsCarryOver.data,
+            declarationSecond.data,
           ),
         ],
       });
@@ -205,7 +217,7 @@ export async function execute(interaction: ButtonInteraction) {
           ephemeral: true,
           components: [
             // 3凸目を選択してもらう
-            new ActionRowBuilder<ButtonBuilder>().addComponents(buttonAttackThird.data),
+            new ActionRowBuilder<ButtonBuilder>().addComponents(declarationThird.data),
           ],
         });
       } else {
@@ -223,8 +235,8 @@ export async function execute(interaction: ButtonInteraction) {
           components: [
             // 2凸目の持ち越しか3凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-              buttonAttackSecondAsCarryOver.data,
-              buttonAttackThird.data,
+              declarationSecondAsCarryOver.data,
+              declarationThird.data,
             ),
           ],
         });
@@ -245,8 +257,8 @@ export async function execute(interaction: ButtonInteraction) {
           components: [
             // 1凸目の持ち越しか3凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-              buttonAttackFirstAsCarryOver.data,
-              buttonAttackThird.data,
+              declarationFirstAsCarryOver.data,
+              declarationThird.data,
             ),
           ],
         });
@@ -265,9 +277,9 @@ export async function execute(interaction: ButtonInteraction) {
           components: [
             // 1凸目の持ち越しか2凸目の持ち越しか3凸目を選択してもらう
             new ActionRowBuilder<ButtonBuilder>().addComponents(
-              buttonAttackFirstAsCarryOver.data,
-              buttonAttackSecondAsCarryOver.data,
-              buttonAttackThird.data,
+              declarationFirstAsCarryOver.data,
+              declarationSecondAsCarryOver.data,
+              declarationThird.data,
             ),
           ],
         });
@@ -291,14 +303,12 @@ export async function execute(interaction: ButtonInteraction) {
             ephemeral: true,
             components: [
               // 3凸目の持ち越しを消化してもらう
-              new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackThirdAsCarryOver.data,
-              ),
+              new ActionRowBuilder<ButtonBuilder>().addComponents(declarationThirdAsCarryOver.data),
             ],
           });
         }
       } else {
-        if (isFinishedOnAttack(secondAttacks)) {
+        if (isFinishedOnAttack(thirdAttacks)) {
           // zyz
           await interaction.reply({
             content: "凸宣言する凸を選択してください",
@@ -306,7 +316,7 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               // 2凸目の持ち越しを消化してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackSecondAsCarryOver.data,
+                declarationSecondAsCarryOver.data,
               ),
             ],
           });
@@ -318,8 +328,8 @@ export async function execute(interaction: ButtonInteraction) {
             components: [
               // 2凸目の持ち越しか3凸目の持ち越しを消化してもらう
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackSecondAsCarryOver.data,
-                buttonAttackThirdAsCarryOver.data,
+                declarationSecondAsCarryOver.data,
+                declarationThirdAsCarryOver.data,
               ),
             ],
           });
@@ -333,9 +343,7 @@ export async function execute(interaction: ButtonInteraction) {
             content: "凸宣言する凸を選択してください",
             ephemeral: true,
             components: [
-              new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackFirstAsCarryOver.data,
-              ),
+              new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirstAsCarryOver.data),
             ],
           });
         } else {
@@ -345,8 +353,8 @@ export async function execute(interaction: ButtonInteraction) {
             ephemeral: true,
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackFirstAsCarryOver.data,
-                buttonAttackThirdAsCarryOver.data,
+                declarationFirstAsCarryOver.data,
+                declarationThirdAsCarryOver.data,
               ),
             ],
           });
@@ -359,8 +367,8 @@ export async function execute(interaction: ButtonInteraction) {
             ephemeral: true,
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackFirstAsCarryOver.data,
-                buttonAttackSecondAsCarryOver.data,
+                declarationFirstAsCarryOver.data,
+                declarationSecondAsCarryOver.data,
               ),
             ],
           });
@@ -371,9 +379,9 @@ export async function execute(interaction: ButtonInteraction) {
             ephemeral: true,
             components: [
               new ActionRowBuilder<ButtonBuilder>().addComponents(
-                buttonAttackFirstAsCarryOver.data,
-                buttonAttackSecondAsCarryOver.data,
-                buttonAttackThirdAsCarryOver.data,
+                declarationFirstAsCarryOver.data,
+                declarationSecondAsCarryOver.data,
+                declarationThirdAsCarryOver.data,
               ),
             ],
           });

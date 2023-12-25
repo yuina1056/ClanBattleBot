@@ -5,17 +5,17 @@ import declaration_cancel from "@/commands/button/declaration_cancel";
 import report_shave from "@/commands/button/report_shave";
 import report_defeat from "@/commands/button/report_defeat";
 import reload_attack_status from "@/commands/button/reload_attack_status";
-import attack_first from "@/commands/button/DeclarationFirst";
-import attack_second from "@/commands/button/DeclarationSecond";
-import attack_third from "@/commands/button/DeclarationThird";
-import attackFirstAsCarryOver from "@/commands/button/DeclarationFirstAsCarryOver";
-import attackSecondAsCarryOver from "@/commands/button/DeclarationSecondAsCarryOver";
-import attackThirdAsCarryOver from "@/commands/button/DeclarationThirdAsCarryOver";
+import { DeclarationFirst } from "@/commands/button/DeclarationFirst";
+import { DeclarationSecond } from "@/commands/button/DeclarationSecond";
+import { DeclarationThird } from "@/commands/button/DeclarationThird";
+import { DeclarationFirstAsCarryOver } from "@/commands/button/DeclarationFirstAsCarryOver";
+import { DeclarationSecondAsCarryOver } from "@/commands/button/DeclarationSecondAsCarryOver";
+import { DeclarationThirdAsCarryOver } from "@/commands/button/DeclarationThirdAsCarryOver";
 import manage_menu from "@/commands/button/ManageMenu";
 import reset_declaration_report from "@/commands/button/ResetDeclarationReport";
-import reset_declaration_report_first from "@/commands/button/ResetDeclarationReportFirst";
-import reset_declaration_report_second from "@/commands/button/ResetDeclarationReportSecond";
-import reset_declaration_report_third from "@/commands/button/ResetDeclarationReportThird";
+import { ResetDeclarationReportFirst } from "@/commands/button/ResetDeclarationReportFirst";
+import { ResetDeclarationReportSecond } from "@/commands/button/ResetDeclarationReportSecond";
+import { ResetDeclarationReportThird } from "@/commands/button/ResetDeclarationReportThird";
 import edit_lap from "@/commands/button/editLap";
 import editHp from "@/commands/button/editHp";
 
@@ -37,23 +37,23 @@ export async function action(interaction: ButtonInteraction) {
     case reload_attack_status.customId:
       action = reload_attack_status;
       break;
-    case attack_first.customId:
-      action = attack_first;
+    case DeclarationFirst.customId:
+      action = new DeclarationFirst();
       break;
-    case attack_second.customId:
-      action = attack_second;
+    case DeclarationSecond.customId:
+      action = new DeclarationSecond();
       break;
-    case attack_third.customId:
-      action = attack_third;
+    case DeclarationThird.customId:
+      action = new DeclarationThird();
       break;
-    case attackFirstAsCarryOver.customId:
-      action = attackFirstAsCarryOver;
+    case DeclarationFirstAsCarryOver.customId:
+      action = new DeclarationFirstAsCarryOver();
       break;
-    case attackSecondAsCarryOver.customId:
-      action = attackSecondAsCarryOver;
+    case DeclarationSecondAsCarryOver.customId:
+      action = new DeclarationSecondAsCarryOver();
       break;
-    case attackThirdAsCarryOver.customId:
-      action = attackThirdAsCarryOver;
+    case DeclarationThirdAsCarryOver.customId:
+      action = new DeclarationThirdAsCarryOver();
       break;
     case manage_menu.customId:
       action = manage_menu;
@@ -61,14 +61,14 @@ export async function action(interaction: ButtonInteraction) {
     case reset_declaration_report.customId:
       action = reset_declaration_report;
       break;
-    case reset_declaration_report_first.customId:
-      action = reset_declaration_report_first;
+    case ResetDeclarationReportFirst.customId:
+      action = new ResetDeclarationReportFirst();
       break;
-    case reset_declaration_report_second.customId:
-      action = reset_declaration_report_second;
+    case ResetDeclarationReportSecond.customId:
+      action = new ResetDeclarationReportSecond();
       break;
-    case reset_declaration_report_third.customId:
-      action = reset_declaration_report_third;
+    case ResetDeclarationReportThird.customId:
+      action = new ResetDeclarationReportThird();
       break;
     case edit_lap.customId:
       action = edit_lap;

@@ -33,6 +33,8 @@ export default class Report {
   @Column()
   attackCount: number;
   @Column()
+  isAttackCarryOver: boolean;
+  @Column()
   damage: number;
   @Column()
   isDefeat: boolean;
@@ -51,6 +53,7 @@ export default class Report {
     lap: number,
     day: number,
     attackCount: number,
+    isAttackCarryOver: boolean,
     damage: number,
     isDefeat: boolean,
     isCarryOver: boolean,
@@ -62,6 +65,7 @@ export default class Report {
     this.lap = lap;
     this.day = day;
     this.attackCount = attackCount;
+    this.isAttackCarryOver = isAttackCarryOver;
     this.damage = damage;
     this.isDefeat = isDefeat;
     this.isCarryOver = isCarryOver;

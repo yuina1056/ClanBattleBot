@@ -12,6 +12,7 @@ import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
 
 export const customId = "report_defeat";
 export const data = new ButtonBuilder()
@@ -20,7 +21,6 @@ export const data = new ButtonBuilder()
   .setLabel("撃破");
 
 export async function execute(interaction: ButtonInteraction) {
-  let content = "";
   let guild: Guild;
   if (interaction.guild != null) {
     guild = interaction.guild;
@@ -73,11 +73,17 @@ export async function execute(interaction: ButtonInteraction) {
   // 凸宣言取得
   const declarationRepository = DataSource.getRepository(Declaration);
   const declaration = await declarationRepository.findOneBy({
+    userId: user.id,
+    clanId: clan.id,
+    eventId: event.id,
+    day: event.getClanBattleDay(),
     isFinished: false,
   });
   if (declaration == null) {
-    content = "凸宣言がされていません";
-    await interaction.reply({ content: content, ephemeral: true });
+    await interaction.reply({
+      content: "凸宣言がされていません。先に凸宣言を行ってください。",
+      ephemeral: true,
+    });
     return;
   }
   if (declaration.id == null) {
@@ -111,41 +117,41 @@ export async function execute(interaction: ButtonInteraction) {
       if (lap.boss1Lap == null) {
         throw new Error("lap.boss1Lap is null");
       }
-      lap.boss1Lap += 1;
       bossLap = lap.boss1Lap;
-      eventBoss.boss1HP = 27000;
+      lap.boss1Lap += 1;
+      eventBoss.boss1HP = Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)];
       break;
     case 2:
       if (lap.boss2Lap == null) {
         throw new Error("lap.boss2Lap is null");
       }
-      lap.boss2Lap += 1;
       bossLap = lap.boss2Lap;
-      eventBoss.boss2HP = 28000;
+      lap.boss2Lap += 1;
+      eventBoss.boss2HP = Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)];
       break;
     case 3:
       if (lap.boss3Lap == null) {
         throw new Error("lap.boss3Lap is null");
       }
-      lap.boss3Lap += 1;
       bossLap = lap.boss3Lap;
-      eventBoss.boss3HP = 30000;
+      lap.boss3Lap += 1;
+      eventBoss.boss3HP = Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)];
       break;
     case 4:
       if (lap.boss4Lap == null) {
         throw new Error("lap.boss4Lap is null");
       }
-      lap.boss4Lap += 1;
       bossLap = lap.boss4Lap;
-      eventBoss.boss4HP = 31000;
+      lap.boss4Lap += 1;
+      eventBoss.boss4HP = Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)];
       break;
     case 5:
       if (lap.boss5Lap == null) {
         throw new Error("lap.boss5Lap is null");
       }
-      lap.boss5Lap += 1;
       bossLap = lap.boss5Lap;
-      eventBoss.boss5HP = 32000;
+      lap.boss5Lap += 1;
+      eventBoss.boss5HP = Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)];
       break;
     default:
       break;
@@ -157,6 +163,7 @@ export async function execute(interaction: ButtonInteraction) {
   let isCarryOver = false;
   const reports = await DataSource.getRepository(Report).find({
     where: {
+      userId: user.id,
       eventId: event.id,
       day: declaration.day,
       attackCount: declaration.attackCount,
@@ -175,13 +182,12 @@ export async function execute(interaction: ButtonInteraction) {
     bossLap,
     event.getClanBattleDay(),
     declaration.attackCount,
+    declaration.isAttackCarryOver,
     0,
     true,
     isCarryOver,
   );
   await DataSource.getRepository(Report).save(report);
-
-  content = user.name + "が" + boss.bossid + "ボスを撃破しました";
 
   const declarations = await DataSource.getRepository(Declaration).find({
     where: {
@@ -192,6 +198,8 @@ export async function execute(interaction: ButtonInteraction) {
       user: true,
     },
   });
+  const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
+  await deleteMessage.delete();
   await BossChannelMessage.sendMessage(
     interaction.channel,
     clan,
@@ -200,7 +208,13 @@ export async function execute(interaction: ButtonInteraction) {
     lap,
     declarations,
   );
-  await interaction.reply({ content: content });
+  if (!channel.isTextBased()) {
+    throw new Error("interaction.channel is not TextBasedChannel");
+  }
+  await interaction.deferUpdate();
+  await channel.send({
+    content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました",
+  });
 }
 
 export default {

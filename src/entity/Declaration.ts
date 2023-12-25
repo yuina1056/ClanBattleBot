@@ -33,6 +33,8 @@ export default class Declaration {
   @Column()
   attackCount: number;
   @Column()
+  isAttackCarryOver: boolean;
+  @Column()
   isFinished: boolean;
   @CreateDateColumn()
   CreatedAt?: Date;
@@ -48,6 +50,7 @@ export default class Declaration {
     day: number,
     attackCount: number,
     isFinished: boolean,
+    isAttackCarryOver: boolean,
   ) {
     this.clanId = clanId;
     this.userId = userId;
@@ -57,5 +60,6 @@ export default class Declaration {
     this.day = day;
     this.attackCount = attackCount;
     this.isFinished = isFinished;
+    this.isAttackCarryOver = isAttackCarryOver;
   }
 }

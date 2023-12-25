@@ -9,6 +9,7 @@ import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
+import Config from "@/config/config";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -49,28 +50,47 @@ export async function sendMessage(
   }
   let bossHp = 0;
   let bossMaxHp = 0;
-  // TODO: 4段階目用で準備したので、２段階目・３段階目に対応する必要がある。
   if (eventBoss != null) {
     switch (boss.bossid) {
       case 1:
+        if (lap == null) {
+          bossMaxHp = Config.BossHPConfig.boss1HP[2];
+        } else {
+          bossMaxHp = Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)];
+        }
         bossHp = eventBoss.boss1HP ?? 0;
-        bossMaxHp = 27000;
         break;
       case 2:
+        if (lap == null) {
+          bossMaxHp = Config.BossHPConfig.boss2HP[2];
+        } else {
+          bossMaxHp = Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)];
+        }
         bossHp = eventBoss.boss2HP ?? 0;
-        bossMaxHp = 28000;
         break;
       case 3:
+        if (lap == null) {
+          bossMaxHp = Config.BossHPConfig.boss3HP[2];
+        } else {
+          bossMaxHp = Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)];
+        }
         bossHp = eventBoss.boss3HP ?? 0;
-        bossMaxHp = 30000;
         break;
       case 4:
+        if (lap == null) {
+          bossMaxHp = Config.BossHPConfig.boss4HP[2];
+        } else {
+          bossMaxHp = Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)];
+        }
         bossHp = eventBoss.boss4HP ?? 0;
-        bossMaxHp = 31000;
         break;
       case 5:
+        if (lap == null) {
+          bossMaxHp = Config.BossHPConfig.boss5HP[2];
+        } else {
+          bossMaxHp = Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)];
+        }
         bossHp = eventBoss.boss5HP ?? 0;
-        bossMaxHp = 32000;
         break;
       default:
         break;
