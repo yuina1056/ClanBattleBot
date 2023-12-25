@@ -21,7 +21,6 @@ export class ReloadAttackStatus extends Button {
       .setLabel("凸状況更新");
   }
   async execute(interaction: ButtonInteraction) {
-    await interaction.deferUpdate();
     const guild = interaction.guild;
     if (guild == null) {
       throw new Error("guild is null");
@@ -67,7 +66,7 @@ export class ReloadAttackStatus extends Button {
     if (eventBoss == null) {
       throw new Error("ボスHP情報が取得できませんでした");
     }
-
+    await interaction.deferUpdate();
     await ManagementMessage.sendMessage(
       interaction.channel,
       interaction.message,
