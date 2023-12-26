@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/repository";
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
-import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -48,11 +47,10 @@ export class ReportShave extends Button {
       throw new Error("ボス情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }

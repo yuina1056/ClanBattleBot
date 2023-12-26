@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Lap from "@/entity/Lap";
 import Report from "@/entity/Report";
-import User from "@/entity/User";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import {
   ActionRowBuilder,
@@ -20,6 +19,7 @@ import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -91,11 +91,10 @@ export class ModalReportShaveHP extends Modal {
       throw new Error("周回数が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan?.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }

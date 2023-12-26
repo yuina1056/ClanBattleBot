@@ -2,7 +2,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
-import User from "@/entity/User";
 import Report from "@/entity/Report";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Config from "@/config/config";
@@ -13,6 +12,7 @@ import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -61,11 +61,10 @@ export class ReportDefeat extends Button {
       throw new Error("ボス情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }

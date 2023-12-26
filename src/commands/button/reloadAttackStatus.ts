@@ -2,12 +2,11 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
-import DataSource from "@/repository/repository";
-import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class ReloadAttackStatus extends Button {
   static readonly customId = "reload_attack_status";
@@ -43,14 +42,7 @@ export class ReloadAttackStatus extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const users = await DataSource.getRepository(User).find({
-      where: { clanId: clan.id },
-      relations: {
-        reports: {
-          event: true,
-        },
-      },
-    });
+    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id!);
     const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
       clan.id!,
       event.id!,

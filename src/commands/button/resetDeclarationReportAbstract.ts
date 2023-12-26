@@ -2,12 +2,12 @@
 import { ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
-import User from "@/entity/User";
 import Report from "@/entity/Report";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
@@ -39,11 +39,10 @@ export abstract class ResetDeclarationReportAbstract extends Button {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }

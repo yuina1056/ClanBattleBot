@@ -3,12 +3,12 @@ import { ChannelType, SlashCommandBuilder, Guild, CommandInteraction } from "dis
 
 import DataSource from "@/repository/repository";
 import Clan from "@/entity/Clan";
-import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import management_message from "@/messages/ManagementChannelMessage";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Declaration from "@/entity/Declaration";
 import { Slash } from "@/commands/slash/slash";
+import { UserRepository } from "@/repository/userRepository";
 
 export class Setup extends Slash {
   static readonly commandName: string = "setup";
@@ -80,9 +80,7 @@ export class Setup extends Slash {
         } else {
           userName = guildMember.user.username;
         }
-        const user = new User(saveClan.id!, userName, guildMember.user.id);
-        const userRepository = DataSource.getRepository(User);
-        await userRepository.save(user);
+        await new UserRepository().create(guildMember.user.id, userName, saveClan.id!);
       });
     }
 
@@ -112,9 +110,7 @@ export class Setup extends Slash {
     if (channel == null) {
       throw new Error("channel is null");
     }
-    const users = await DataSource.getRepository(User).findBy({
-      clanId: clan.id,
-    });
+    const users = await new UserRepository().getUsersByClanId(clan.id!);
 
     if (channel.isTextBased()) {
       await management_message.sendMessage(channel, null, clan, users, null, null, true);

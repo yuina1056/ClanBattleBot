@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import DataSource from "@/repository/repository";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import Event from "@/entity/Event";
 import { DeclarationRepository } from "@/repository/declarationRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export async function regist(
   boss: Boss,
@@ -14,11 +14,10 @@ export async function regist(
   event: Event,
 ): Promise<User | Error> {
   // ユーザー取得
-  const userRepository = DataSource.getRepository(User);
-  const user = await userRepository.findOneBy({
-    discordUserId: discordUserId,
-    clanId: boss.clanId,
-  });
+  const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+    discordUserId,
+    boss.clanId!,
+  );
   if (user == null) {
     return new Error("ユーザー情報が取得できませんでした");
   }

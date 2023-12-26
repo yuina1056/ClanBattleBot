@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/repository";
-import User from "@/entity/User";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
@@ -11,6 +9,7 @@ import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -56,11 +55,10 @@ export class DeclarationCancel extends Button {
       throw new Error("ボス情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      clanId: clan.id,
-      discordUserId: interaction.user.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }

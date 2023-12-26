@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 
-import DataSource from "@/repository/repository";
 import Report from "@/entity/Report";
-import User from "@/entity/User";
 import { DeclarationFirst } from "@/commands/button/declarationFirst";
 import { DeclarationSecond } from "@/commands/button/declarationSecond";
 import { DeclarationThird } from "@/commands/button/declarationThird";
@@ -15,6 +13,7 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -56,15 +55,10 @@ export class DeclarationStart extends Button {
     }
 
     const interactionUserId = interaction.user.id;
-    const clanUser = await DataSource.getRepository(User).findOne({
-      where: {
-        discordUserId: interactionUserId,
-        clanId: clan.id,
-      },
-      relations: {
-        reports: true,
-      },
-    });
+    const clanUser = await new UserRepository().getUserByDiscordUserIdAndClanIdToRelationReports(
+      interactionUserId,
+      clan.id!,
+    );
     if (clanUser == null) {
       throw new Error("あなたはこのクランに所属していないよ");
     }
