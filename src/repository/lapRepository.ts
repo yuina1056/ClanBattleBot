@@ -10,4 +10,7 @@ export class LapRepository {
       clanId: clanId,
     });
   }
+  async save(lap: Lap): Promise<void> {
+    await LapRepository.repository.save(lap);
+  }
 }

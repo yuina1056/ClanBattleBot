@@ -8,7 +8,6 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import DataSource from "@/repository/repository";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
@@ -154,8 +153,7 @@ export class ModalEditLap extends Modal {
     lap.boss4Lap = bossLap.boss4Lap;
     lap.boss5Lap = bossLap.boss5Lap;
 
-    const lapRepository = DataSource.getRepository(Lap);
-    await lapRepository.save(lap);
+    await new LapRepository().save(lap);
     await interaction.reply({
       content: "周回数が変更されました",
       ephemeral: true,

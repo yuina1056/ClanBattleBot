@@ -6,7 +6,6 @@ import User from "@/entity/User";
 import Report from "@/entity/Report";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Button } from "@/commands/button/button";
@@ -152,8 +151,7 @@ export class ReportDefeat extends Button {
       default:
         break;
     }
-    const lapRepository = DataSource.getRepository(Lap);
-    await lapRepository.save(lap);
+    await new LapRepository().save(lap);
     await eventBossRepository.save(eventBoss);
 
     // 持ち越しが発生しているかチェック

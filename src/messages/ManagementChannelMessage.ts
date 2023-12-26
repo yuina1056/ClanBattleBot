@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ActionRowBuilder,
   Message,
@@ -20,6 +21,7 @@ import Boss from "@/entity/Boss";
 import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
+import { LapRepository } from "@/repository/lapRepository";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -89,17 +91,12 @@ export async function sendMessage(
   );
 
   // 周回数
-  const lapRepository = DataSource.getRepository(Lap);
   let lap: Lap | null = null;
   if (event !== null) {
-    lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
   } else {
     lap = new Lap(clan.id ?? 0, 0);
   }
-
   if (lap == null) {
     throw new Error("lap is null");
   }
@@ -107,7 +104,6 @@ export async function sendMessage(
   // ボス状況
   const bossRepository = DataSource.getRepository(Boss);
   const bosses = await bossRepository.find();
-  // TODO 各段階ボスの満タンHP情報を盛り込む。HPは４段階目のみになっているため、段階ごとに切り替えられるようにする必要がある。
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
