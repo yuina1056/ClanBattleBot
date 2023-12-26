@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import { ModalEditLap } from "@/commands/modal/editLap";
-import Lap from "@/entity/Lap";
-import DataSource from "@/repository/repository";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 export class EditLap extends Button {
   static readonly customId = "edit_lap";
@@ -45,11 +45,7 @@ export class EditLap extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("周回数情報が取得できませんでした");
     }

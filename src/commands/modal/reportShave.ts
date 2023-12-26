@@ -19,6 +19,7 @@ import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -85,11 +86,7 @@ export class ModalReportShaveHP extends Modal {
     }
 
     // 周回数取得
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      eventId: event.id,
-      clanId: clan.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("周回数が取得できませんでした");
     }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
@@ -5,12 +6,12 @@ import DataSource from "@/repository/repository";
 import DeclarationRepository from "@/entity/Declaration";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
@@ -52,10 +53,7 @@ export abstract class DeclarationAbstract extends Button {
     }
 
     // 周回数取得
-    const lap = await DataSource.getRepository(Lap).findOneBy({
-      eventId: event.id,
-      clanId: clan.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     let bossLap = 0;
     if (lap != null) {
       switch (boss.bossid) {

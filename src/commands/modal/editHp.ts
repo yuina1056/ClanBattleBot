@@ -14,6 +14,7 @@ import Lap from "@/entity/Lap";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 interface FormBossHP {
   boss1HP: string;
@@ -144,11 +145,7 @@ export class ModalEditHp extends Modal {
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("クランバトル周回数情報が取得できませんでした");
     }

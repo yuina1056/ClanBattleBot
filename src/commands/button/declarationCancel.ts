@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
 import User from "@/entity/User";
-import Lap from "@/entity/Lap";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import EventBoss from "@/entity/EventBoss";
@@ -10,6 +10,7 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -89,12 +90,7 @@ export class DeclarationCancel extends Button {
     }
 
     // 周回数取得
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      eventId: event.id,
-      clanId: clan.id,
-    });
-
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     const eventBossRepository = DataSource.getRepository(EventBoss);
     const eventBoss = await eventBossRepository.findOneBy({
       clanId: clan.id,

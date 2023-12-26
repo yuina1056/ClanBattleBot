@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
@@ -9,11 +10,11 @@ import { DeclarationThird } from "@/commands/button/declarationThird";
 import { DeclarationFirstAsCarryOver } from "@/commands/button/declarationFirstAsCarryOver";
 import { DeclarationSecondAsCarryOver } from "@/commands/button/declarationSecondAsCarryOver";
 import { DeclarationThirdAsCarryOver } from "@/commands/button/declarationThirdAsCarryOver";
-import Lap from "@/entity/Lap";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -77,11 +78,7 @@ export class DeclarationStart extends Button {
       throw new Error("ボス情報を取得できません");
     }
 
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      eventId: event.id,
-      clanId: clan.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("周回数情報を取得できません");
     }

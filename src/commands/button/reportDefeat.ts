@@ -13,6 +13,7 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -92,11 +93,7 @@ export class ReportDefeat extends Button {
     await declarationRepository.update(declaration.id, { isFinished: true });
 
     // 周回数・HP更新
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("周回数情報が取得できませんでした");
     }
@@ -155,6 +152,7 @@ export class ReportDefeat extends Button {
       default:
         break;
     }
+    const lapRepository = DataSource.getRepository(Lap);
     await lapRepository.save(lap);
     await eventBossRepository.save(eventBoss);
 
