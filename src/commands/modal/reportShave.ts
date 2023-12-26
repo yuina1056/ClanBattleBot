@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Lap from "@/entity/Lap";
-import Report from "@/entity/Report";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import {
   ActionRowBuilder,
@@ -10,7 +9,6 @@ import {
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js";
-import DataSource from "@/repository/repository";
 import Config from "@/config/config";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
@@ -20,6 +18,7 @@ import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ReportRepository } from "@/repository/reportRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -159,10 +158,10 @@ export class ModalReportShaveHP extends Modal {
     await new DeclarationRepository().updateIsFinishedById(declaration.id!, true);
 
     // DBに保存
-    const report = new Report(
+    await new ReportRepository().create(
       user.clanId,
       user.id!,
-      event!.id!,
+      event.id!,
       boss.bossid,
       bossLap,
       event.getClanBattleDay(),
@@ -172,8 +171,6 @@ export class ModalReportShaveHP extends Modal {
       false,
       false,
     );
-    const reportRepository = DataSource.getRepository(Report);
-    await reportRepository.save(report);
 
     const saveEventBoss = await new EventBossRepository().save(eventBoss);
 

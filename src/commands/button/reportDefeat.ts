@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/repository";
-import Report from "@/entity/Report";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Config from "@/config/config";
 import { Button } from "@/commands/button/button";
@@ -13,6 +11,7 @@ import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ReportRepository } from "@/repository/reportRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -154,20 +153,18 @@ export class ReportDefeat extends Button {
 
     // 持ち越しが発生しているかチェック
     let isCarryOver = false;
-    const reports = await DataSource.getRepository(Report).find({
-      where: {
-        userId: user.id,
-        eventId: event.id,
-        day: declaration.day,
-        attackCount: declaration.attackCount,
-      },
-    });
+    const reports = await new ReportRepository().getReportsByUserIdAndEventIdAndDayAndAttackCount(
+      user.id!,
+      event.id!,
+      declaration.day,
+      declaration.attackCount,
+    );
     if (reports.length === 0) {
       isCarryOver = true;
     }
 
     // DBに保存
-    const report = new Report(
+    await new ReportRepository().create(
       user.clanId,
       user.id!,
       event.id!,
@@ -180,7 +177,6 @@ export class ReportDefeat extends Button {
       true,
       isCarryOver,
     );
-    await DataSource.getRepository(Report).save(report);
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(

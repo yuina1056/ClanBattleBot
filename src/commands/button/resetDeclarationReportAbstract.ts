@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/repository";
-import Report from "@/entity/Report";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ReportRepository } from "@/repository/reportRepository";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
@@ -54,14 +53,12 @@ export abstract class ResetDeclarationReportAbstract extends Button {
       event.getClanBattleDay(),
       this.attackCount,
     );
-    await DataSource.getRepository(Report)
-      .createQueryBuilder("report")
-      .delete()
-      .where("report.userId = :userId", { userId: user.id })
-      .andWhere("report.eventId = :eventId", { eventId: event.id })
-      .andWhere("report.day = :day", { day: event.getClanBattleDay() })
-      .andWhere("report.attackCount = :attackCount", { attackCount: this.attackCount })
-      .execute();
+    await new ReportRepository().deleteByUserIdAndEventIdAndDayAndAttackCount(
+      user.id!,
+      event.id!,
+      event.getClanBattleDay(),
+      this.attackCount,
+    );
 
     await interaction.reply({
       content: this.attackCount + "凸目の宣言・報告をリセットしました。",
