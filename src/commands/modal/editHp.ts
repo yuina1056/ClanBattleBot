@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Clan from "@/entity/Clan";
 import {
   ModalSubmitInteraction,
   ModalBuilder,
@@ -14,6 +13,7 @@ import Config from "@/config/config";
 import Lap from "@/entity/Lap";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 interface FormBossHP {
   boss1HP: string;
@@ -132,9 +132,7 @@ export class ModalEditHp extends Modal {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }

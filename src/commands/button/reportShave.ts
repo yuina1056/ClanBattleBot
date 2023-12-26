@@ -2,7 +2,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
-import Clan from "@/entity/Clan";
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
 import EventBoss from "@/entity/EventBoss";
 import Declaration from "@/entity/Declaration";
@@ -10,6 +9,7 @@ import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -35,9 +35,7 @@ export class ReportShave extends Button {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id);
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel!.parentId!,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel!.parentId!);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }

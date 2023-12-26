@@ -10,10 +10,10 @@ import { DeclarationFirstAsCarryOver } from "@/commands/button/declarationFirstA
 import { DeclarationSecondAsCarryOver } from "@/commands/button/declarationSecondAsCarryOver";
 import { DeclarationThirdAsCarryOver } from "@/commands/button/declarationThirdAsCarryOver";
 import Lap from "@/entity/Lap";
-import Clan from "@/entity/Clan";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -48,9 +48,8 @@ export class DeclarationStart extends Button {
       throw new Error("channel.parentId is null");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
+
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }

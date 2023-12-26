@@ -1,12 +1,12 @@
 import { ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
-import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import Declaration from "@/entity/Declaration";
 import Report from "@/entity/Report";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
@@ -29,9 +29,7 @@ export abstract class ResetDeclarationReportAbstract extends Button {
     if (channel.parentId == null) {
       throw new Error("親カテゴリ情報が取得できませんでした");
     }
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }

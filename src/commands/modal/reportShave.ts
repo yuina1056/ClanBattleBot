@@ -19,6 +19,7 @@ import Config from "@/config/config";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -71,9 +72,7 @@ export class ModalReportShaveHP extends Modal {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel!.parentId!,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel!.parentId!);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }

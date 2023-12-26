@@ -1,11 +1,11 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
-import Clan from "@/entity/Clan";
 import { ModalEditHp } from "@/commands/modal/editHp";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 export class EditHp extends Button {
   static readonly customId = "edit_hp";
@@ -41,9 +41,7 @@ export class EditHp extends Button {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }

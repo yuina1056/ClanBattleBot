@@ -1,8 +1,8 @@
 import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
 import DataSource from "@/repository/repository";
-import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import { Slash } from "@/commands/slash/slash";
+import { ClanRepository } from "@/repository/clanRepository";
 
 export class UpdateUser extends Slash {
   static readonly commandName: string = "updateuser";
@@ -39,9 +39,7 @@ export class UpdateUser extends Slash {
     } else {
       throw new Error("interaction.guild is null");
     }
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordRoleId: roleId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordRoleId(roleId);
     if (clan == null) {
       throw new Error("clan is null");
     }

@@ -3,9 +3,9 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 import { ModalEditLap } from "@/commands/modal/editLap";
 import Lap from "@/entity/Lap";
 import DataSource from "@/repository/repository";
-import Clan from "@/entity/Clan";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
 
 export class EditLap extends Button {
   static readonly customId = "edit_lap";
@@ -41,9 +41,7 @@ export class EditLap extends Button {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
