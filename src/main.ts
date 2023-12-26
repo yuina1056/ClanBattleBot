@@ -2,17 +2,16 @@
 import { Client, Events, GatewayIntentBits, Interaction } from "discord.js";
 import dotenv from "dotenv";
 
-dotenv.config();
-
-import dataSource from "./datasource";
-
-dataSource.initialize();
-
+import dataSource from "@/datasource";
 import slash from "@/commands/slash";
 import button from "@/commands/button";
 import modal from "@/commands/modal";
 
-// クライアントインスタンスと呼ばれるオブジェクトを作成します
+// 初期化処理
+dotenv.config();
+dataSource.initialize();
+
+// クライアント生成
 const client = new Client({
   intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers],
 });
