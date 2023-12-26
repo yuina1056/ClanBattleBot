@@ -2,11 +2,10 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 
 import DataSource from "@/repository/datasource";
 import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
-import dayjs from "dayjs";
 import { ModalEditHp } from "@/commands/modal/editHp";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export class EditHp extends Button {
   static readonly customId = "edit_hp";
@@ -37,12 +36,7 @@ export class EditHp extends Button {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

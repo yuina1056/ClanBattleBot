@@ -1,9 +1,7 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
-import dayjs from "dayjs";
 
 import DataSource from "@/repository/datasource";
 import Boss from "@/entity/Boss";
-import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 import User from "@/entity/User";
 import { DeclarationFirst } from "@/commands/button/declarationFirst";
@@ -15,6 +13,7 @@ import { DeclarationThirdAsCarryOver } from "@/commands/button/declarationThirdA
 import Lap from "@/entity/Lap";
 import Clan from "@/entity/Clan";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -29,12 +28,7 @@ export class DeclarationStart extends Button {
   }
 
   async execute(interaction: ButtonInteraction) {
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
-import dayjs from "dayjs";
 
 import DataSource from "@/repository/datasource";
 
 import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
 
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
 import EventBoss from "@/entity/EventBoss";
 import Declaration from "@/entity/Declaration";
 import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -33,12 +32,7 @@ export class ReportShave extends Button {
     } else {
       throw new Error("interaction.guild is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

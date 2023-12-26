@@ -1,16 +1,15 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
-import dayjs from "dayjs";
 
 import DataSource from "@/repository/datasource";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
 import Lap from "@/entity/Lap";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -86,12 +85,7 @@ export class DeclarationCancel extends Button {
     }
     await declarationRepository.delete(declaration.id);
 
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

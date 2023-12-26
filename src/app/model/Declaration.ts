@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import dayjs from "dayjs";
-
 import DataSource from "@/repository/datasource";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
@@ -13,16 +11,8 @@ export async function regist(
   lap: number,
   attackCount: number,
   isAttackCarryOver: boolean,
+  event: Event,
 ): Promise<User | Error> {
-  const today = dayjs().format();
-  const event = await DataSource.getRepository(Event)
-    .createQueryBuilder("event")
-    .where("event.fromDate <= :today", { today })
-    .andWhere("event.toDate >= :today", { today })
-    .getOne();
-  if (event == null) {
-    return new Error("クランバトル開催情報が取得できませんでした");
-  }
   // ユーザー取得
   const userRepository = DataSource.getRepository(User);
   const user = await userRepository.findOneBy({

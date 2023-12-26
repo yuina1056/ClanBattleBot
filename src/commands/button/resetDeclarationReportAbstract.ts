@@ -4,10 +4,9 @@ import DataSource from "@/repository/datasource";
 import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import Declaration from "@/entity/Declaration";
-import Event from "@/entity/Event";
 import Report from "@/entity/Report";
-import dayjs from "dayjs";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
@@ -36,12 +35,7 @@ export abstract class ResetDeclarationReportAbstract extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

@@ -1,13 +1,12 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
-import dayjs from "dayjs";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
 import DataSource from "@/repository/datasource";
 import User from "@/entity/User";
 import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export class ReloadAttackStatus extends Button {
   static readonly customId = "reload_attack_status";
@@ -35,12 +34,7 @@ export class ReloadAttackStatus extends Button {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("開催情報が取得できませんでした");
     }

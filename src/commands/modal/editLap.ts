@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import Clan from "@/entity/Clan";
 import Lap from "@/entity/Lap";
-import Event from "@/entity/Event";
-import dayjs from "dayjs";
 import {
   ModalSubmitInteraction,
   ModalBuilder,
@@ -13,6 +11,7 @@ import {
 } from "discord.js";
 import DataSource from "@/repository/datasource";
 import { Modal } from "@/commands/modal/modal";
+import { EventRepository } from "@/repository/eventRepository";
 
 interface FormBossLap {
   boss1Lap: string;
@@ -125,12 +124,7 @@ export class ModalEditLap extends Modal {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

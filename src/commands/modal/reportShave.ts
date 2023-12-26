@@ -3,11 +3,9 @@ import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import Declaration from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
-import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 import User from "@/entity/User";
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import dayjs from "dayjs";
 import {
   ActionRowBuilder,
   Guild,
@@ -20,6 +18,7 @@ import DataSource from "@/repository/datasource";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Modal } from "@/commands/modal/modal";
+import { EventRepository } from "@/repository/eventRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -61,12 +60,7 @@ export class ModalReportShaveHP extends Modal {
     } else {
       throw new Error("interaction.guild is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }

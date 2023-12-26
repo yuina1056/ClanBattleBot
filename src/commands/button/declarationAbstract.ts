@@ -8,10 +8,9 @@ import DeclarationRepository from "@/entity/Declaration";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Lap from "@/entity/Lap";
-import Event from "@/entity/Event";
-import dayjs from "dayjs";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
 
 export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
@@ -49,12 +48,7 @@ export abstract class DeclarationAbstract extends Button {
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
@@ -94,6 +88,7 @@ export abstract class DeclarationAbstract extends Button {
       bossLap,
       this.attackCount,
       this.isAttackCarryOver,
+      event,
     );
     if (user instanceof Error) {
       await interaction.reply({
