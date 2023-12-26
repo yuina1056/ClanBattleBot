@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import Declaration from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
@@ -19,6 +18,7 @@ import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -78,10 +78,10 @@ export class ModalReportShaveHP extends Modal {
       throw new Error("クラン情報が取得できませんでした");
     }
     // ボス情報取得
-    const bossRepository = DataSource.getRepository(Boss);
-    const boss = await bossRepository.findOneBy({
-      discordChannelId: interaction.channel!.id,
-    });
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interaction.channel!.id,
+    );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }

@@ -4,7 +4,6 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 import DataSource from "@/repository/datasource";
 import User from "@/entity/User";
 import Report from "@/entity/Report";
-import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
@@ -13,6 +12,7 @@ import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -55,10 +55,10 @@ export class ReportDefeat extends Button {
       throw new Error("クラン情報が取得できませんでした");
     }
     // ボス情報取得
-    const bossRepository = DataSource.getRepository(Boss);
-    const boss = await bossRepository.findOneBy({
-      discordChannelId: interaction.channel?.id,
-    });
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interaction.channel.id,
+    );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }

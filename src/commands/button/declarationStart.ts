@@ -1,7 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 
 import DataSource from "@/repository/datasource";
-import Boss from "@/entity/Boss";
 import Report from "@/entity/Report";
 import User from "@/entity/User";
 import { DeclarationFirst } from "@/commands/button/declarationFirst";
@@ -14,6 +13,7 @@ import Lap from "@/entity/Lap";
 import Clan from "@/entity/Clan";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -70,12 +70,10 @@ export class DeclarationStart extends Button {
     }
 
     const interactionChannelId = interaction.channelId;
-    const boss = await DataSource.getRepository(Boss)
-      .createQueryBuilder("boss")
-      .where("boss.discordChannelId = :channelId", {
-        channelId: interactionChannelId,
-      })
-      .getOne();
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interactionChannelId,
+    );
     if (boss == null) {
       throw new Error("ボス情報を取得できません");
     }

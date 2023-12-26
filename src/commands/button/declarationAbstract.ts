@@ -2,7 +2,6 @@ import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/repository/datasource";
-import Boss from "@/entity/Boss";
 import Clan from "@/entity/Clan";
 import DeclarationRepository from "@/entity/Declaration";
 
@@ -11,6 +10,7 @@ import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
 
 export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
@@ -40,11 +40,10 @@ export abstract class DeclarationAbstract extends Button {
       throw new Error("クラン情報が取得できませんでした");
     }
     // ボス情報取得
-    const bossRepository = DataSource.getRepository(Boss);
-    const boss = await bossRepository.findOneBy({
-      clanId: clan.id,
-      discordChannelId: interaction.channel.id,
-    });
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interaction.channel.id,
+    );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
