@@ -32,7 +32,7 @@ export class ReportRepository {
     isDefeat: boolean,
     isCarryOver: boolean,
   ): Promise<Report> {
-    return await ReportRepository.repository.save({
+    const report = new Report(
       clanId,
       userId,
       eventId,
@@ -44,7 +44,8 @@ export class ReportRepository {
       damage,
       isDefeat,
       isCarryOver,
-    });
+    );
+    return await ReportRepository.repository.save(report);
   }
   async deleteByUserIdAndEventIdAndDayAndAttackCount(
     userId: number,
