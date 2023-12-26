@@ -52,8 +52,7 @@ export abstract class DeclarationAbstract extends Button {
     }
 
     // 周回数取得
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
+    const lap = await DataSource.getRepository(Lap).findOneBy({
       eventId: event.id,
       clanId: clan.id,
     });
