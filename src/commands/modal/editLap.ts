@@ -9,7 +9,7 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 

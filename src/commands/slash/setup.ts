@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChannelType, SlashCommandBuilder, Guild, CommandInteraction } from "discord.js";
 
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";

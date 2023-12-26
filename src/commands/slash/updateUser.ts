@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import { Slash } from "@/commands/slash/slash";

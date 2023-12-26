@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import Clan from "@/entity/Clan";
 import { ModalEditHp } from "@/commands/modal/editHp";
 import EventBoss from "@/entity/EventBoss";

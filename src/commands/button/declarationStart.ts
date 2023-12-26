@@ -1,6 +1,6 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import Report from "@/entity/Report";
 import User from "@/entity/User";
 import { DeclarationFirst } from "@/commands/button/declarationFirst";

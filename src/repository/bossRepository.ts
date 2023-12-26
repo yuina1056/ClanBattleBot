@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import Boss from "@/entity/Boss";
-import dataSource from "@/repository/datasource";
+import dataSource from "@/repository/repository";
 
 export class BossRepository {
   static readonly repository: Repository<Boss> = dataSource.getRepository(Boss);

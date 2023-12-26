@@ -1,6 +1,6 @@
 import { ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import Declaration from "@/entity/Declaration";

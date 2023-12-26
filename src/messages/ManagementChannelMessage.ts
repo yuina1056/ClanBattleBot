@@ -8,7 +8,7 @@ import {
   // time,
 } from "discord.js";
 
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import { ReloadAttackStatus } from "@/commands/button/reloadAttackStatus";
 import { ManageMenu } from "@/commands/button/manageMenu";
 

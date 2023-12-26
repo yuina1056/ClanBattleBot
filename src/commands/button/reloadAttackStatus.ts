@@ -1,7 +1,7 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import User from "@/entity/User";
 import Clan from "@/entity/Clan";
 import EventBoss from "@/entity/EventBoss";

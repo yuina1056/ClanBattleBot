@@ -2,7 +2,7 @@
 import { Client, Events, GatewayIntentBits, Interaction } from "discord.js";
 import dotenv from "dotenv";
 
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import slash from "@/commands/slash";
 import button from "@/commands/button";
 import modal from "@/commands/modal";

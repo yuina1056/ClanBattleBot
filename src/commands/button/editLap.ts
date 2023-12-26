@@ -2,7 +2,7 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 
 import { ModalEditLap } from "@/commands/modal/editLap";
 import Lap from "@/entity/Lap";
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import Clan from "@/entity/Clan";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";

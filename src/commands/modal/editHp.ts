@@ -8,7 +8,7 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import DataSource from "@/repository/datasource";
+import DataSource from "@/repository/repository";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import Lap from "@/entity/Lap";
