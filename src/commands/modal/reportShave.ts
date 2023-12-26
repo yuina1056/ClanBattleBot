@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Clan from "@/entity/Clan";
 import Declaration from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
 import Report from "@/entity/Report";
