@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonInteraction, Guild } from "discord.js";
+import { ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/datasource";
 import Clan from "@/entity/Clan";
@@ -7,11 +7,10 @@ import Declaration from "@/entity/Declaration";
 import Event from "@/entity/Event";
 import Report from "@/entity/Report";
 import dayjs from "dayjs";
+import { Button } from "@/commands/button/button";
 
-export abstract class ResetDeclarationReportAbstract {
-  static readonly customId: string;
+export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
-  abstract data: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;
@@ -44,7 +43,7 @@ export abstract class ResetDeclarationReportAbstract {
       .andWhere("event.toDate >= :today", { today })
       .getOne();
     if (event == null) {
-      return new Error("クランバトル開催情報が取得できませんでした");
+      throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // ユーザー取得
     const userRepository = DataSource.getRepository(User);

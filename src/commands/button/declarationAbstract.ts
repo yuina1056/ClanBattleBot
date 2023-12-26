@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonInteraction, Guild } from "discord.js";
+import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/datasource";
@@ -11,12 +11,11 @@ import Lap from "@/entity/Lap";
 import Event from "@/entity/Event";
 import dayjs from "dayjs";
 import EventBoss from "@/entity/EventBoss";
+import { Button } from "@/commands/button/button";
 
-export abstract class DeclarationAbstract {
-  static readonly customId: string;
+export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
   abstract isAttackCarryOver: boolean;
-  abstract data: ButtonBuilder;
 
   async execute(interaction: ButtonInteraction) {
     let guild: Guild;
@@ -97,7 +96,7 @@ export abstract class DeclarationAbstract {
       this.isAttackCarryOver,
     );
     if (user instanceof Error) {
-      interaction.reply({
+      await interaction.reply({
         content: user.message,
         ephemeral: true,
       });
@@ -144,7 +143,7 @@ export abstract class DeclarationAbstract {
         "【" +
         bossLap +
         "週目】" +
-        user?.name +
+        user.name +
         "が" +
         boss.bossid +
         "ボスに" +

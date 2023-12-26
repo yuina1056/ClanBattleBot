@@ -1,9 +1,9 @@
 import { ActionRowBuilder, EmbedBuilder, TextBasedChannel, ButtonBuilder } from "discord.js";
 
-import button_declaration from "@/commands/button/declaration_start";
-import button_report_shave from "@/commands/button/report_shave";
-import button_report_defeat from "@/commands/button/report_defeat";
-import button_declaration_cancel from "@/commands/button/declaration_cancel";
+import { DeclarationStart } from "@/commands/button/declarationStart";
+import { ReportShave } from "@/commands/button/reportShave";
+import { ReportDefeat } from "@/commands/button/reportDefeat";
+import { DeclarationCancel } from "@/commands/button/declarationCancel";
 import Clan from "@/entity/Clan";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";
@@ -120,14 +120,19 @@ export async function sendMessage(
       },
     );
 
+  const declarationStart = new DeclarationStart();
+  const declarationCancel = new DeclarationCancel();
+  const reportDefeat = new ReportDefeat();
+  const reportShave = new ReportShave();
+
   await channel.send({
     embeds: [embed],
     components: [
       new ActionRowBuilder<ButtonBuilder>().addComponents(
-        button_declaration.data,
-        button_report_shave.data,
-        button_report_defeat.data,
-        button_declaration_cancel.data,
+        declarationStart.button,
+        reportShave.button,
+        reportDefeat.button,
+        declarationCancel.button,
       ),
     ],
   });

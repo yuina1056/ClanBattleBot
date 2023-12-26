@@ -1,31 +1,29 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
+import dayjs from "dayjs";
 
-import { ModalEditLap } from "@/commands/modal/editLap";
-import Lap from "@/entity/Lap";
+import ManagementMessage from "@/messages/ManagementChannelMessage";
 import DataSource from "@/datasource";
+import User from "@/entity/User";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
-import dayjs from "dayjs";
+import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 
-export class EditLap extends Button {
-  static readonly customId = "edit_lap";
+export class ReloadAttackStatus extends Button {
+  static readonly customId = "reload_attack_status";
   button: ButtonBuilder;
 
   constructor() {
     super();
     this.button = new ButtonBuilder()
-      .setCustomId(EditLap.customId)
+      .setCustomId(ReloadAttackStatus.customId)
       .setStyle(ButtonStyle.Secondary)
-      .setLabel("周回数修正");
+      .setLabel("凸状況更新");
   }
-
   async execute(interaction: ButtonInteraction) {
-    let guild: Guild;
-    if (interaction.guild != null) {
-      guild = interaction.guild;
-    } else {
-      throw new Error("interaction.guild is null");
+    const guild = interaction.guild;
+    if (guild == null) {
+      throw new Error("guild is null");
     }
     if (interaction.channel == null) {
       throw new Error("interaction.channel is null");
@@ -44,24 +42,39 @@ export class EditLap extends Button {
       .andWhere("event.toDate >= :today", { today })
       .getOne();
     if (event == null) {
-      throw new Error("クランバトル開催情報が取得できませんでした");
+      throw new Error("開催情報が取得できませんでした");
     }
-    // クラン取得
     const clan = await DataSource.getRepository(Clan).findOneBy({
       discordCategoryId: channel.parentId,
     });
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
+    const users = await DataSource.getRepository(User).find({
+      where: { clanId: clan.id },
+      relations: {
+        reports: {
+          event: true,
+        },
+      },
+    });
+    const eventBossRepository = DataSource.getRepository(EventBoss);
+    const eventBoss = await eventBossRepository.findOneBy({
       clanId: clan.id,
       eventId: event.id,
     });
-    if (lap == null) {
-      throw new Error("周回数情報が取得できませんでした");
+    if (eventBoss == null) {
+      throw new Error("ボスHP情報が取得できませんでした");
     }
-    const modal = new ModalEditLap().createModal(lap);
-    await interaction.showModal(modal);
+    await interaction.deferUpdate();
+    await ManagementMessage.sendMessage(
+      interaction.channel,
+      interaction.message,
+      clan,
+      users,
+      event,
+      eventBoss,
+      false,
+    );
   }
 }
