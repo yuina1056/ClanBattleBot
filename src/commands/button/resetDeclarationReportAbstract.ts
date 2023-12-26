@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
 import DataSource from "@/repository/repository";
 import User from "@/entity/User";
-import Declaration from "@/entity/Declaration";
 import Report from "@/entity/Report";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
@@ -48,14 +49,12 @@ export abstract class ResetDeclarationReportAbstract extends Button {
     }
 
     // 削除処理
-    await DataSource.getRepository(Declaration)
-      .createQueryBuilder("declaration")
-      .delete()
-      .where("declaration.userId = :userId", { userId: user.id })
-      .andWhere("declaration.eventId = :eventId", { eventId: event.id })
-      .andWhere("declaration.day = :day", { day: event.getClanBattleDay() })
-      .andWhere("declaration.attackCount = :attackCount", { attackCount: this.attackCount })
-      .execute();
+    await new DeclarationRepository().deleteByUserIdAndEventIdAndDayAndAttackCount(
+      user.id!,
+      event.id!,
+      event.getClanBattleDay(),
+      this.attackCount,
+    );
     await DataSource.getRepository(Report)
       .createQueryBuilder("report")
       .delete()

@@ -3,7 +3,6 @@ import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
 import DataSource from "@/repository/repository";
-import DeclarationRepository from "@/entity/Declaration";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import EventBoss from "@/entity/EventBoss";
@@ -12,6 +11,7 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
 
 export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
@@ -93,15 +93,11 @@ export abstract class DeclarationAbstract extends Button {
       return;
     }
 
-    const declarations = await DataSource.getRepository(DeclarationRepository).find({
-      where: {
-        bossId: boss.id,
-        isFinished: false,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const declarations =
+      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+        boss.id!,
+        false,
+      );
 
     const eventBossRepository = DataSource.getRepository(EventBoss);
     const eventBoss = await eventBossRepository.findOneBy({

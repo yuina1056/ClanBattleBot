@@ -4,12 +4,12 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 import DataSource from "@/repository/repository";
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
 import EventBoss from "@/entity/EventBoss";
-import Declaration from "@/entity/Declaration";
 import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -57,14 +57,14 @@ export class ReportShave extends Button {
       throw new Error("ユーザー情報が取得できませんでした");
     }
     // 凸宣言取得
-    const declarationRepository = DataSource.getRepository(Declaration);
-    const declaration = await declarationRepository.findOneBy({
-      userId: user.id,
-      clanId: clan.id,
-      eventId: event.id,
-      day: event.getClanBattleDay(),
-      isFinished: false,
-    });
+    const declaration =
+      await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
+        user.id!,
+        clan.id!,
+        event.id!,
+        event.getClanBattleDay(),
+        false,
+      );
     if (declaration == null) {
       await interaction.reply({
         content: "凸宣言がされていません",

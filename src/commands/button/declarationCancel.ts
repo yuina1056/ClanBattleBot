@@ -3,7 +3,6 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 
 import DataSource from "@/repository/repository";
 import User from "@/entity/User";
-import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
@@ -11,6 +10,7 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -66,12 +66,12 @@ export class DeclarationCancel extends Button {
     }
 
     // DBから削除
-    const declarationRepository = DataSource.getRepository(Declaration);
-    const declaration = await declarationRepository.findOneBy({
-      clanId: clan.id,
-      userId: user.id,
-      isFinished: false,
-    });
+    const declaration =
+      await new DeclarationRepository().getDeclarationByClanIdAndUserIdAndIsFinished(
+        clan.id!,
+        user.id!,
+        false,
+      );
     if (declaration == null) {
       await interaction.reply({
         content: "取り消しする凸宣言がありません",
@@ -82,7 +82,7 @@ export class DeclarationCancel extends Button {
     if (declaration.id == null) {
       throw new Error("declaration.id is null");
     }
-    await declarationRepository.delete(declaration.id);
+    await new DeclarationRepository().deleteById(declaration.id);
 
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
@@ -100,15 +100,11 @@ export class DeclarationCancel extends Button {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
 
-    const declarations = await declarationRepository.find({
-      where: {
-        bossId: boss.id,
-        isFinished: false,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const declarations =
+      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+        boss.id!,
+        false,
+      );
     await BossChannelMessage.sendMessage(
       interaction.channel,
       clan,

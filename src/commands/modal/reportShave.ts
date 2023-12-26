@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Declaration from "@/entity/Declaration";
 import Lap from "@/entity/Lap";
 import Report from "@/entity/Report";
 import User from "@/entity/User";
@@ -20,6 +19,7 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -143,13 +143,14 @@ export class ModalReportShaveHP extends Modal {
         break;
     }
 
-    const declarationRepository = DataSource.getRepository(Declaration);
-    const declaration = await declarationRepository.findOneBy({
-      userId: user.id,
-      clanId: clan.id,
-      eventId: event.id,
-      isFinished: false,
-    });
+    const declaration =
+      await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
+        user.id!,
+        clan.id!,
+        event.id!,
+        event.getClanBattleDay(),
+        false,
+      );
     if (declaration == null) {
       await interaction.reply({
         content: "凸宣言がされていません",
@@ -157,7 +158,7 @@ export class ModalReportShaveHP extends Modal {
       });
       return;
     }
-    await declarationRepository.update(declaration!.id!, { isFinished: true });
+    await new DeclarationRepository().updateIsFinishedById(declaration.id!, true);
 
     // DBに保存
     const report = new Report(
@@ -178,15 +179,11 @@ export class ModalReportShaveHP extends Modal {
 
     const saveEventBoss = await eventBossRepository.save(eventBoss);
 
-    const declarations = await DataSource.getRepository(Declaration).find({
-      where: {
-        bossId: boss.id,
-        isFinished: false,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const declarations =
+      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+        boss.id!,
+        false,
+      );
     await BossChannelMessage.sendMessage(
       interaction.channel!,
       clan,

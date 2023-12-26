@@ -4,7 +4,6 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 import DataSource from "@/repository/repository";
 import User from "@/entity/User";
 import Report from "@/entity/Report";
-import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
@@ -13,6 +12,7 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -70,14 +70,14 @@ export class ReportDefeat extends Button {
       throw new Error("ユーザー情報が取得できませんでした");
     }
     // 凸宣言取得
-    const declarationRepository = DataSource.getRepository(Declaration);
-    const declaration = await declarationRepository.findOneBy({
-      userId: user.id,
-      clanId: clan.id,
-      eventId: event.id,
-      day: event.getClanBattleDay(),
-      isFinished: false,
-    });
+    const declaration =
+      await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
+        user.id!,
+        clan.id!,
+        event.id!,
+        event.getClanBattleDay(),
+        false,
+      );
     if (declaration == null) {
       await interaction.reply({
         content: "凸宣言がされていません。先に凸宣言を行ってください。",
@@ -89,7 +89,7 @@ export class ReportDefeat extends Button {
       throw new Error("declaration.id is null");
     }
     // 対象凸を完了状態にする
-    await declarationRepository.update(declaration.id, { isFinished: true });
+    await new DeclarationRepository().updateIsFinishedById(declaration.id, true);
 
     // 周回数・HP更新
     const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
@@ -184,15 +184,11 @@ export class ReportDefeat extends Button {
     );
     await DataSource.getRepository(Report).save(report);
 
-    const declarations = await DataSource.getRepository(Declaration).find({
-      where: {
-        bossId: boss.id,
-        isFinished: false,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const declarations =
+      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+        boss.id!,
+        false,
+      );
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
     await deleteMessage.delete();
     await BossChannelMessage.sendMessage(
