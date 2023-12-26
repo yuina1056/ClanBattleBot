@@ -2,14 +2,14 @@
 import { Client, Events, GatewayIntentBits, Interaction } from "discord.js";
 import dotenv from "dotenv";
 
-import dataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import slash from "@/commands/slash";
 import button from "@/commands/button";
 import modal from "@/commands/modal";
 
 // 初期化処理
 dotenv.config();
-dataSource.initialize();
+DataSource.initialize();
 
 // クライアント生成
 const client = new Client({

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import dayjs from "dayjs";
 
-import DataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";

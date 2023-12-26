@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
-import dataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import Clan from "@/entity/Clan";
 import User from "@/entity/User";
 import { Slash } from "@/commands/slash/slash";
@@ -39,13 +39,13 @@ export class UpdateUser extends Slash {
     } else {
       throw new Error("interaction.guild is null");
     }
-    const clan = await dataSource.getRepository(Clan).findOneBy({
+    const clan = await DataSource.getRepository(Clan).findOneBy({
       discordRoleId: roleId,
     });
     if (clan == null) {
       throw new Error("clan is null");
     }
-    const userRepository = dataSource.getRepository(User);
+    const userRepository = DataSource.getRepository(User);
     const users = await userRepository.findBy({ clanId: clan.id });
     await userRepository
       .createQueryBuilder("user")

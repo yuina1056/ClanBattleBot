@@ -11,7 +11,7 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import DataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import { Modal } from "@/commands/modal/modal";
 
 interface FormBossLap {

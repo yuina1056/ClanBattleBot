@@ -2,7 +2,7 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 import dayjs from "dayjs";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
-import DataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import User from "@/entity/User";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";

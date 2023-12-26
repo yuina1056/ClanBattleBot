@@ -8,7 +8,7 @@ import {
   // time,
 } from "discord.js";
 
-import dataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import { ReloadAttackStatus } from "@/commands/button/reloadAttackStatus";
 import { ManageMenu } from "@/commands/button/manageMenu";
 
@@ -39,7 +39,7 @@ export async function sendMessage(
   // クラン紹介
   const clanTitle: string = bold("凸状況") + "\n";
   const clanProfile: string = "# " + clan.name + " (" + users.length + "人)\n";
-  const reportRepository = dataSource.getRepository(Report);
+  const reportRepository = DataSource.getRepository(Report);
 
   let todayReports: Report[] = [];
   if (event !== null) {
@@ -89,7 +89,7 @@ export async function sendMessage(
   );
 
   // 周回数
-  const lapRepository = dataSource.getRepository(Lap);
+  const lapRepository = DataSource.getRepository(Lap);
   let lap: Lap | null = null;
   if (event !== null) {
     lap = await lapRepository.findOneBy({
@@ -105,7 +105,7 @@ export async function sendMessage(
   }
 
   // ボス状況
-  const bossRepository = dataSource.getRepository(Boss);
+  const bossRepository = DataSource.getRepository(Boss);
   const bosses = await bossRepository.find();
   // TODO 各段階ボスの満タンHP情報を盛り込む。HPは４段階目のみになっているため、段階ごとに切り替えられるようにする必要がある。
   let bossStatusCodeBlock = "";

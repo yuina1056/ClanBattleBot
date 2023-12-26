@@ -1,7 +1,7 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 import dayjs from "dayjs";
 
-import DataSource from "@/datasource";
+import DataSource from "@/repository/datasource";
 import Boss from "@/entity/Boss";
 import Event from "@/entity/Event";
 import Report from "@/entity/Report";
