@@ -4,13 +4,13 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 import DataSource from "@/repository/repository";
 import User from "@/entity/User";
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -91,11 +91,10 @@ export class DeclarationCancel extends Button {
 
     // 周回数取得
     const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      event.id!,
+      clan.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }

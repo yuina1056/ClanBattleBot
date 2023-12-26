@@ -7,7 +7,6 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import DataSource from "@/repository/repository";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import Lap from "@/entity/Lap";
@@ -15,6 +14,7 @@ import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 interface FormBossHP {
   boss1HP: string;
@@ -137,11 +137,10 @@ export class ModalEditHp extends Modal {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      event.id!,
+      clan.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
@@ -165,7 +164,7 @@ export class ModalEditHp extends Modal {
     eventBoss.boss4HP = bossHP.boss4HP;
     eventBoss.boss5HP = bossHP.boss5HP;
 
-    await eventBossRepository.save(eventBoss);
+    await new EventBossRepository().save(eventBoss);
     await interaction.reply({
       content: "各ボスの残HPが変更されました。",
       ephemeral: true,

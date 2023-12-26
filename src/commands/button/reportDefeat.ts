@@ -5,7 +5,6 @@ import DataSource from "@/repository/repository";
 import User from "@/entity/User";
 import Report from "@/entity/Report";
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
@@ -13,6 +12,7 @@ import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -98,11 +98,10 @@ export class ReportDefeat extends Button {
     }
     let bossLap = 0;
 
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
@@ -152,7 +151,7 @@ export class ReportDefeat extends Button {
         break;
     }
     await new LapRepository().save(lap);
-    await eventBossRepository.save(eventBoss);
+    await new EventBossRepository().save(eventBoss);
 
     // 持ち越しが発生しているかチェック
     let isCarryOver = false;

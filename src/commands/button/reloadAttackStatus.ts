@@ -1,12 +1,13 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
 import DataSource from "@/repository/repository";
 import User from "@/entity/User";
-import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export class ReloadAttackStatus extends Button {
   static readonly customId = "reload_attack_status";
@@ -50,11 +51,10 @@ export class ReloadAttackStatus extends Button {
         },
       },
     });
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("ボスHP情報が取得できませんでした");
     }

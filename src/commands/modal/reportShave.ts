@@ -12,7 +12,6 @@ import {
   TextInputStyle,
 } from "discord.js";
 import DataSource from "@/repository/repository";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
@@ -20,6 +19,7 @@ import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -100,11 +100,10 @@ export class ModalReportShaveHP extends Modal {
       throw new Error("ユーザー情報が取得できませんでした");
     }
 
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
@@ -177,7 +176,7 @@ export class ModalReportShaveHP extends Modal {
     const reportRepository = DataSource.getRepository(Report);
     await reportRepository.save(report);
 
-    const saveEventBoss = await eventBossRepository.save(eventBoss);
+    const saveEventBoss = await new EventBossRepository().save(eventBoss);
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(

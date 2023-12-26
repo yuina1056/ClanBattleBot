@@ -1,11 +1,10 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/repository/repository";
 import { ModalEditHp } from "@/commands/modal/editHp";
-import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export class EditHp extends Button {
   static readonly customId = "edit_hp";
@@ -45,11 +44,10 @@ export class EditHp extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id ?? 0,
+      event.id ?? 0,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }

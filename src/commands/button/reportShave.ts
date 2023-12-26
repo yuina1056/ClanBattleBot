@@ -3,13 +3,13 @@ import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js
 
 import DataSource from "@/repository/repository";
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
-import EventBoss from "@/entity/EventBoss";
 import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -73,11 +73,10 @@ export class ReportShave extends Button {
       return;
     }
 
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
