@@ -10,4 +10,11 @@ export class BossRepository {
       discordChannelId: channelId,
     });
   }
+  async create(clanId: number, discordChannelId: string, bossId: number): Promise<Boss> {
+    return await BossRepository.repository.save({
+      clanId,
+      discordChannelId,
+      bossId,
+    });
+  }
 }
