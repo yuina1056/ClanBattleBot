@@ -47,6 +47,7 @@ export abstract class DeclarationAbstract extends Button {
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
+    // イベント情報取得
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
