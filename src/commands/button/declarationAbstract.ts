@@ -93,8 +93,9 @@ export abstract class DeclarationAbstract extends Button {
     }
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
-        boss.id!,
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+        clan.id!,
+        boss.bossid!,
         false,
       );
 

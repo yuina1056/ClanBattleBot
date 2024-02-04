@@ -90,16 +90,17 @@ export class DeclarationCancel extends Button {
     // 周回数取得
     const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      event.id!,
       clan.id!,
+      event.id!,
     );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
-        boss.id!,
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+        clan.id!,
+        boss.bossid!,
         false,
       );
     await BossChannelMessage.sendMessage(
