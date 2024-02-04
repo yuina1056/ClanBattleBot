@@ -93,9 +93,9 @@ export class DeclarationCancel extends Button {
     );
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndbossNoAndIsFinishedToRelationUser(
         clan.id!,
-        boss.bossid!,
+        boss.bossNo!,
         false,
       );
     await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);

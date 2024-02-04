@@ -96,7 +96,7 @@ export async function sendMessage(
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
-      bosses[0].bossid +
+      bosses[0].bossNo +
         " ( " +
         String(clanEvent.boss1Lap).padStart(2) +
         "周目 )" +
@@ -104,9 +104,9 @@ export async function sendMessage(
         "\n" +
         String(clanEvent?.boss1HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(bosses[0].bossid)] +
+        Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(bosses[0].bossNo)] +
         " \n" +
-        bosses[1].bossid +
+        bosses[1].bossNo +
         " ( " +
         String(clanEvent.boss2Lap).padStart(2) +
         "周目 )" +
@@ -114,9 +114,9 @@ export async function sendMessage(
         "\n" +
         String(clanEvent?.boss2HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(bosses[1].bossid)] +
+        Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(bosses[1].bossNo)] +
         "\n" +
-        bosses[2].bossid +
+        bosses[2].bossNo +
         " ( " +
         String(clanEvent.boss3Lap).padStart(2) +
         "周目 )" +
@@ -124,9 +124,9 @@ export async function sendMessage(
         "\n" +
         String(clanEvent?.boss3HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(bosses[2].bossid)] +
+        Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(bosses[2].bossNo)] +
         "\n" +
-        bosses[3].bossid +
+        bosses[3].bossNo +
         " ( " +
         String(clanEvent.boss4Lap).padStart(2) +
         "周目 )" +
@@ -134,9 +134,9 @@ export async function sendMessage(
         "\n" +
         String(clanEvent?.boss4HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(bosses[3].bossid)] +
+        Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(bosses[3].bossNo)] +
         "\n" +
-        bosses[4].bossid +
+        bosses[4].bossNo +
         " ( " +
         String(clanEvent.boss5Lap).padStart(2) +
         "周目 )" +
@@ -144,7 +144,7 @@ export async function sendMessage(
         "\n" +
         String(clanEvent?.boss5HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(bosses[4].bossid)] +
+        Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(bosses[4].bossNo)] +
         "\n",
     );
   } else {

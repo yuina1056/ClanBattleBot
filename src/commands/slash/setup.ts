@@ -118,7 +118,7 @@ export class Setup extends Slash {
   async createBossChannel(
     guild: Guild,
     roleName: string,
-    bossId: number,
+    bossNo: number,
     channelName: string,
     clan: Clan,
   ) {
@@ -135,7 +135,7 @@ export class Setup extends Slash {
     if (channel == null) {
       throw new Error("channel is null");
     }
-    const boss = await new BossRepository().create(clan.id!, channel.id!, bossId);
+    const boss = await new BossRepository().create(clan.id!, channel.id!, bossNo);
 
     const declaration: Declaration[] = [];
     if (channel?.isTextBased()) {

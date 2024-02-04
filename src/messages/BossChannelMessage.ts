@@ -28,7 +28,7 @@ export async function sendMessage(
   let bossHp = 0;
   let bossMaxHp = 0;
   if (clanEvent != null) {
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
         bossLap = clanEvent.boss1Lap ?? 1;
         bossMaxHp = Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(1)];
@@ -61,7 +61,7 @@ export async function sendMessage(
 
   // コンポーネント定義
   const embed = new EmbedBuilder()
-    .setTitle(boss.bossid + "ボス")
+    .setTitle(boss.bossNo + "ボス")
     .setColor("#00ff00")
     .setFields(
       {

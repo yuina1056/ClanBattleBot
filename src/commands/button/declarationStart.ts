@@ -79,7 +79,7 @@ export class DeclarationStart extends Button {
     if (clanEvent == null) {
       throw new Error("周回数情報を取得できません");
     }
-    if (!clanEvent.isAttackPossible(boss.bossid)) {
+    if (!clanEvent.isAttackPossible(boss.bossNo)) {
       await interaction.reply({
         content: "このボスには凸できません",
         ephemeral: true,
@@ -89,7 +89,7 @@ export class DeclarationStart extends Button {
 
     let bossLap = 0;
 
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
         bossLap = clanEvent.boss1Lap ?? 1;
         break;
@@ -128,7 +128,7 @@ export class DeclarationStart extends Button {
           "さんの " +
           bossLap +
           "周目 " +
-          boss.bossid +
+          boss.bossNo +
           "ボス 宣言だよ。",
         ephemeral: true,
         components: [new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirst.button)],
@@ -156,7 +156,7 @@ export class DeclarationStart extends Button {
             "さんの " +
             bossLap +
             "周目 " +
-            boss.bossid +
+            boss.bossNo +
             "ボス 宣言だよ。",
           ephemeral: true,
           components: [
@@ -173,7 +173,7 @@ export class DeclarationStart extends Button {
             "さんの " +
             bossLap +
             "周目 " +
-            boss.bossid +
+            boss.bossNo +
             "ボス 宣言だよ。",
           ephemeral: true,
           components: [
@@ -198,7 +198,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [
@@ -215,7 +215,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [
@@ -237,7 +237,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [
@@ -257,7 +257,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [

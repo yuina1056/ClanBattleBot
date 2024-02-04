@@ -57,7 +57,7 @@ export abstract class DeclarationAbstract extends Button {
     );
     let bossLap = 0;
     if (clanEvent != null) {
-      switch (boss.bossid) {
+      switch (boss.bossNo) {
         case 1:
           bossLap = clanEvent.boss1Lap ?? 1;
           break;
@@ -95,9 +95,9 @@ export abstract class DeclarationAbstract extends Button {
     }
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndbossNoAndIsFinishedToRelationUser(
         clan.id!,
-        boss.bossid!,
+        boss.bossNo!,
         false,
       );
 
@@ -117,7 +117,7 @@ export abstract class DeclarationAbstract extends Button {
         "週目】" +
         user.name +
         "が" +
-        boss.bossid +
+        boss.bossNo +
         "ボスに" +
         (this.isAttackCarryOver ? "持越" : "本戦") +
         "凸宣言しました",

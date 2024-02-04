@@ -32,7 +32,7 @@ export async function regist(
     user.clanId,
     user.id!,
     event!.id!,
-    boss.bossid,
+    boss.bossNo,
     lap,
     event.getClanBattleDay(),
     attackCount,
@@ -55,7 +55,7 @@ async function validate(user: User, event: Event): Promise<Error | null> {
   // 宣言済みの凸がある場合
   const declared = declarations.filter((declaration) => declaration.isFinished === false);
   if (declared.length > 0) {
-    return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
+    return new Error("既に" + declared[0].bossNo + "ボスに凸宣言済みです");
   }
 
   return null;

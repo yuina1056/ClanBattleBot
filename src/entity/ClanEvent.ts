@@ -49,10 +49,10 @@ export default class ClanEvent {
   /**
    * ボスに攻撃可能かを判定する
    *
-   * @param bossId ボスID(1~5)
+   * @param bossNo ボスID(1~5)
    * @return true:攻撃可能 false:攻撃不可
    */
-  isAttackPossible(bossId: number): boolean {
+  isAttackPossible(bossNo: number): boolean {
     if (
       this.boss1Lap == null ||
       this.boss2Lap == null ||
@@ -62,7 +62,7 @@ export default class ClanEvent {
     ) {
       throw new Error("lap.boss1Lap is null");
     }
-    switch (bossId) {
+    switch (bossNo) {
       case 1:
         // 周回差チェック
         if (
@@ -317,12 +317,12 @@ export default class ClanEvent {
   /**
    * 何段階目かを取得する
    *
-   * @param bossId ボスID(1~5)
+   * @param bossNo ボスID(1~5)
    * @return 何段階目か(2~4)
    * @throws bossLap is null
    */
-  getCurrentStage(bossId: number): number {
-    switch (bossId) {
+  getCurrentStage(bossNo: number): number {
+    switch (bossNo) {
       case 1:
         if (this.boss1Lap == null) {
           throw new Error("lap.boss1Lap is null");

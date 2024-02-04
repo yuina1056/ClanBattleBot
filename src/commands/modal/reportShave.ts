@@ -99,7 +99,7 @@ export class ModalReportShaveHP extends Modal {
       throw new Error("ユーザー情報が取得できませんでした");
     }
 
-    const ReportShaveHP = this.validateForm(formReportShaveHP, clanEvent, boss.bossid);
+    const ReportShaveHP = this.validateForm(formReportShaveHP, clanEvent, boss.bossNo);
     if (ReportShaveHP instanceof Error) {
       await interaction.reply({
         content: "撃破処理に失敗しました。" + ReportShaveHP.message,
@@ -108,7 +108,7 @@ export class ModalReportShaveHP extends Modal {
       return;
     }
     let bossLap = 0;
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
         bossLap = clanEvent.boss1Lap ?? 0;
         clanEvent.boss1HP = ReportShaveHP.remaining_hp;
@@ -155,7 +155,7 @@ export class ModalReportShaveHP extends Modal {
       user.clanId,
       user.id!,
       event.id!,
-      boss.bossid,
+      boss.bossNo,
       bossLap,
       event.getClanBattleDay(),
       declaration.attackCount,
@@ -168,9 +168,9 @@ export class ModalReportShaveHP extends Modal {
     const saveClanEvent = await new ClanEventRepository().save(clanEvent);
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndbossNoAndIsFinishedToRelationUser(
         clan.id!,
-        boss.bossid!,
+        boss.bossNo!,
         false,
       );
     await BossChannelMessage.sendMessage(
@@ -187,14 +187,14 @@ export class ModalReportShaveHP extends Modal {
     }
     await interaction.deferUpdate();
     await channel.send({
-      content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを削りました",
+      content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossNo + "ボスを削りました",
     });
   }
 
   validateForm(
     formReportShaveHP: FormReportShaveHP,
     clanEvent: ClanEvent,
-    bossId: number,
+    bossNo: number,
   ): ReportShaveHP | Error {
     const remaining_hp = Number(formReportShaveHP.remaining_hp);
     if (isNaN(remaining_hp)) {
@@ -203,7 +203,7 @@ export class ModalReportShaveHP extends Modal {
     if (remaining_hp < 0) {
       return new Error("残HPが0になる時は撃破ボタンを押して報告してください。");
     }
-    switch (bossId) {
+    switch (bossNo) {
       case 1:
         if (Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(1)] < remaining_hp) {
           return new Error("1ボスの残HPがボスの最大HPを超えています");

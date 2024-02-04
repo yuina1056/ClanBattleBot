@@ -80,7 +80,7 @@ export class ReportShave extends Button {
       throw new Error("クラン毎のイベント情報が取得できませんでした");
     }
     let remainingHp = 0;
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
         remainingHp = clanEvent.boss1HP ?? 0;
         break;

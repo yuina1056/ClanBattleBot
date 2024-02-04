@@ -98,7 +98,7 @@ export class ReportDefeat extends Button {
     }
     let bossLap = 0;
 
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
         if (clanEvent.boss1Lap == null) {
           throw new Error("lap.boss1Lap is null");
@@ -161,7 +161,7 @@ export class ReportDefeat extends Button {
       user.clanId,
       user.id!,
       event.id!,
-      boss.bossid,
+      boss.bossNo,
       bossLap,
       event.getClanBattleDay(),
       declaration.attackCount,
@@ -172,9 +172,9 @@ export class ReportDefeat extends Button {
     );
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndbossNoAndIsFinishedToRelationUser(
         clan.id!,
-        boss.bossid!,
+        boss.bossNo!,
         false,
       );
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
@@ -185,7 +185,7 @@ export class ReportDefeat extends Button {
     }
     await interaction.deferUpdate();
     await channel.send({
-      content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました",
+      content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossNo + "ボスを撃破しました",
     });
   }
 }
