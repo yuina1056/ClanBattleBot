@@ -42,7 +42,7 @@ export class ModalReportShaveHP extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(hp.toString())
+        .setPlaceholder(hp.toString())
         .setRequired(true),
     );
     modal.addComponents(ActionRowRemainingHP);
