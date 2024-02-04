@@ -1,12 +1,17 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import Clan from "@/entity/Clan";
 
 @Entity()
 // クラン毎イベント情報
 export default class ClanEvent {
   @PrimaryGeneratedColumn()
   id?: number;
+
   @Column()
   clanId: number;
+  @ManyToOne(() => Clan, (clan) => clan.clanEvents)
+  clan!: Clan;
+
   @Column()
   eventId: number;
 
