@@ -102,7 +102,7 @@ export class ModalReportShaveHP extends Modal {
     const ReportShaveHP = this.validateForm(formReportShaveHP, clanEvent, boss.bossNo);
     if (ReportShaveHP instanceof Error) {
       await interaction.reply({
-        content: "撃破処理に失敗しました。" + ReportShaveHP.message,
+        content: "撃破処理に失敗しました。[Error:" + ReportShaveHP.message + "]",
         ephemeral: true,
       });
       return;
