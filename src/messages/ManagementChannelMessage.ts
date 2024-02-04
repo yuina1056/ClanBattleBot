@@ -9,7 +9,6 @@ import {
   // time,
 } from "discord.js";
 
-import DataSource from "@/repository/repository";
 import { ReloadAttackStatus } from "@/commands/button/reloadAttackStatus";
 import { ManageMenu } from "@/commands/button/manageMenu";
 
@@ -17,11 +16,12 @@ import User from "@/entity/User";
 import Event from "@/entity/Event";
 import Clan from "@/entity/Clan";
 import Report from "@/entity/Report";
-import Boss from "@/entity/Boss";
 import Lap from "@/entity/Lap";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { LapRepository } from "@/repository/lapRepository";
+import { ReportRepository } from "@/repository/reportRepository";
+import { BossRepository } from "@/repository/bossRepository";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -41,17 +41,15 @@ export async function sendMessage(
   // クラン紹介
   const clanTitle: string = bold("凸状況") + "\n";
   const clanProfile: string = "# " + clan.name + " (" + users.length + "人)\n";
-  const reportRepository = DataSource.getRepository(Report);
+  const reportRepository = new ReportRepository();
 
   let todayReports: Report[] = [];
   if (event !== null) {
-    todayReports = await reportRepository.find({
-      where: {
-        clanId: clan.id,
-        eventId: event.id,
-        day: event.getClanBattleDay(),
-      },
-    });
+    todayReports = await reportRepository.getByClanIdAndEventIdAndDay(
+      clan.id!,
+      event.id!,
+      event.getClanBattleDay(),
+    );
   }
   // let latestReport: Report;
   // let latestReportTime: string;
@@ -102,8 +100,8 @@ export async function sendMessage(
   }
 
   // ボス状況
-  const bossRepository = DataSource.getRepository(Boss);
-  const bosses = await bossRepository.find();
+  const bossRepository = new BossRepository();
+  const bosses = await bossRepository.getAll();
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(

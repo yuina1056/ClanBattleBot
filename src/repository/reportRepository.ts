@@ -62,4 +62,17 @@ export class ReportRepository {
       .andWhere("report.attackCount = :attackCount", { attackCount: attackCount })
       .execute();
   }
+  async getByClanIdAndEventIdAndDay(
+    clanId: number,
+    eventId: number,
+    day: number,
+  ): Promise<Report[]> {
+    return await ReportRepository.repository.find({
+      where: {
+        clanId: clanId,
+        eventId: eventId,
+        day: day,
+      },
+    });
+  }
 }

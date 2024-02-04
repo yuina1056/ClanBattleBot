@@ -17,4 +17,7 @@ export class BossRepository {
       bossid: bossId,
     });
   }
+  async getAll(): Promise<Boss[]> {
+    return await BossRepository.repository.find();
+  }
 }
