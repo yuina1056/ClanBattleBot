@@ -1,14 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-type bossNo = number;
-type BossNo = number;
 @Entity()
 // ボス情報
 export default class Boss {
   @PrimaryGeneratedColumn()
-  id?: bossNo;
+  id?: number;
   @Column()
-  bossNo: BossNo;
+  bossNo: number;
   @Column()
   clanId: number;
   @Column()
