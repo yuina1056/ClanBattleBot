@@ -46,8 +46,8 @@ export class EditLap extends Button {
       throw new Error("クラン情報が取得できませんでした");
     }
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      event.id!,
       clan.id!,
+      event.id!,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");

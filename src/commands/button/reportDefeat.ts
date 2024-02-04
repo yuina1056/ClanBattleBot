@@ -90,8 +90,8 @@ export class ReportDefeat extends Button {
 
     // 周回数・HP更新
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      event.id!,
       clan.id!,
+      event.id!,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");

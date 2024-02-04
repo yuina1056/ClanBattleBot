@@ -84,8 +84,8 @@ export class ModalReportShaveHP extends Modal {
     }
 
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      event.id!,
       clan.id!,
+      event.id!,
     );
     if (clanEvent == null) {
       throw new Error("周回数が取得できませんでした");
