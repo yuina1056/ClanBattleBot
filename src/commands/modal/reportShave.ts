@@ -200,7 +200,7 @@ export class ModalReportShaveHP extends Modal {
     if (isNaN(remaining_hp)) {
       return new Error("残HPの入力値が数値ではありません。数値を入力してください。");
     }
-    if (remaining_hp < 0) {
+    if (remaining_hp <= 0) {
       return new Error("残HPが0になる時は撃破ボタンを押して報告してください。");
     }
     switch (bossNo) {
