@@ -47,7 +47,7 @@ export class UserRepository {
   async create(discordUserId: string, userName: string, clanId: number): Promise<User> {
     return await UserRepository.repository.save({
       discordUserId: discordUserId,
-      userName: userName,
+      name: userName,
       clanId: clanId,
     });
   }

@@ -12,9 +12,9 @@ export class BossRepository {
   }
   async create(clanId: number, discordChannelId: string, bossId: number): Promise<Boss> {
     return await BossRepository.repository.save({
-      clanId,
-      discordChannelId,
-      bossId,
+      clanId: clanId,
+      discordChannelId: discordChannelId,
+      bossid: bossId,
     });
   }
 }

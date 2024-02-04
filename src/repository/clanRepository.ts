@@ -16,9 +16,9 @@ export class ClanRepository {
   }
   async create(roleName: string, discordRoleId: string, discordCategoryId: string): Promise<Clan> {
     return await ClanRepository.repository.save({
-      roleName,
-      discordRoleId,
-      discordCategoryId,
+      name: roleName,
+      discordRoleId: discordRoleId,
+      discordCategoryId: discordCategoryId,
     });
   }
 }
