@@ -175,7 +175,8 @@ export class ModalReportShaveHP extends Modal {
     const saveEventBoss = await new EventBossRepository().save(eventBoss);
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+        clan.id!,
         boss.id!,
         false,
       );

@@ -179,7 +179,8 @@ export class ReportDefeat extends Button {
     );
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
+        clan.id!,
         boss.id!,
         false,
       );
