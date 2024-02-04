@@ -1,17 +1,16 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
-import DataSource from "@/datasource";
-import Boss from "@/entity/Boss";
-import Clan from "@/entity/Clan";
-import DeclarationRepository from "@/entity/Declaration";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import Lap from "@/entity/Lap";
-import Event from "@/entity/Event";
-import dayjs from "dayjs";
-import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
@@ -34,37 +33,26 @@ export abstract class DeclarationAbstract extends Button {
     if (channel.parentId == null) {
       throw new Error("親カテゴリ情報が取得できませんでした");
     }
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
     // ボス情報取得
-    const bossRepository = DataSource.getRepository(Boss);
-    const boss = await bossRepository.findOneBy({
-      clanId: clan.id,
-      discordChannelId: interaction.channel.id,
-    });
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interaction.channel.id,
+    );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    // イベント情報取得
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
 
     // 周回数取得
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      eventId: event.id,
-      clanId: clan.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     let bossLap = 0;
     if (lap != null) {
       switch (boss.bossid) {
@@ -94,6 +82,7 @@ export abstract class DeclarationAbstract extends Button {
       bossLap,
       this.attackCount,
       this.isAttackCarryOver,
+      event,
     );
     if (user instanceof Error) {
       await interaction.reply({
@@ -103,21 +92,16 @@ export abstract class DeclarationAbstract extends Button {
       return;
     }
 
-    const declarations = await DataSource.getRepository(DeclarationRepository).find({
-      where: {
-        bossId: boss.id,
-        isFinished: false,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const declarations =
+      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+        boss.id!,
+        false,
+      );
 
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }

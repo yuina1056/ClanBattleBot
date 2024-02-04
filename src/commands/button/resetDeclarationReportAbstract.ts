@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/datasource";
-import Clan from "@/entity/Clan";
-import User from "@/entity/User";
-import Declaration from "@/entity/Declaration";
-import Event from "@/entity/Event";
-import Report from "@/entity/Report";
-import dayjs from "dayjs";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
+import { UserRepository } from "@/repository/userRepository";
+import { ReportRepository } from "@/repository/reportRepository";
 
 export abstract class ResetDeclarationReportAbstract extends Button {
   abstract attackCount: number;
@@ -30,48 +29,36 @@ export abstract class ResetDeclarationReportAbstract extends Button {
     if (channel.parentId == null) {
       throw new Error("親カテゴリ情報が取得できませんでした");
     }
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
 
     // 削除処理
-    await DataSource.getRepository(Declaration)
-      .createQueryBuilder("declaration")
-      .delete()
-      .where("declaration.userId = :userId", { userId: user.id })
-      .andWhere("declaration.eventId = :eventId", { eventId: event.id })
-      .andWhere("declaration.day = :day", { day: event.getClanBattleDay() })
-      .andWhere("declaration.attackCount = :attackCount", { attackCount: this.attackCount })
-      .execute();
-    await DataSource.getRepository(Report)
-      .createQueryBuilder("report")
-      .delete()
-      .where("report.userId = :userId", { userId: user.id })
-      .andWhere("report.eventId = :eventId", { eventId: event.id })
-      .andWhere("report.day = :day", { day: event.getClanBattleDay() })
-      .andWhere("report.attackCount = :attackCount", { attackCount: this.attackCount })
-      .execute();
+    await new DeclarationRepository().deleteByUserIdAndEventIdAndDayAndAttackCount(
+      user.id!,
+      event.id!,
+      event.getClanBattleDay(),
+      this.attackCount,
+    );
+    await new ReportRepository().deleteByUserIdAndEventIdAndDayAndAttackCount(
+      user.id!,
+      event.id!,
+      event.getClanBattleDay(),
+      this.attackCount,
+    );
 
     await interaction.reply({
       content: this.attackCount + "凸目の宣言・報告をリセットしました。",

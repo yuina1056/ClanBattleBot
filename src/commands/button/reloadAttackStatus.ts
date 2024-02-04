@@ -1,13 +1,12 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
-import dayjs from "dayjs";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
-import DataSource from "@/datasource";
-import User from "@/entity/User";
-import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
-import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class ReloadAttackStatus extends Button {
   static readonly customId = "reload_attack_status";
@@ -35,34 +34,19 @@ export class ReloadAttackStatus extends Button {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("開催情報が取得できませんでした");
     }
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const users = await DataSource.getRepository(User).find({
-      where: { clanId: clan.id },
-      relations: {
-        reports: {
-          event: true,
-        },
-      },
-    });
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id!);
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("ボスHP情報が取得できませんでした");
     }

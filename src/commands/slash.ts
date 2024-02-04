@@ -1,4 +1,5 @@
 import { ChatInputCommandInteraction } from "discord.js";
+
 import { Dice } from "@/commands/slash/dice";
 import { Setup } from "@/commands/slash/setup";
 import { UpdateUser } from "@/commands/slash/updateUser";

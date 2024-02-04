@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChannelType, SlashCommandBuilder, Guild, CommandInteraction } from "discord.js";
 
-import DataSource from "@/datasource";
 import Clan from "@/entity/Clan";
-import User from "@/entity/User";
-import Boss from "@/entity/Boss";
 import management_message from "@/messages/ManagementChannelMessage";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import Declaration from "@/entity/Declaration";
 import { Slash } from "@/commands/slash/slash";
+import { UserRepository } from "@/repository/userRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { BossRepository } from "@/repository/bossRepository";
 
 export class Setup extends Slash {
   static readonly commandName: string = "setup";
@@ -57,9 +57,7 @@ export class Setup extends Slash {
       guild.channels.cache.find((channel) => channel.name === categoryName)?.id ?? "";
 
     // DBにクラン情報保存
-    const clan = new Clan(roleName, roleId, categoryId);
-    const clanRepository = DataSource.getRepository(Clan);
-    const saveClan = await clanRepository.save(clan);
+    const saveClan = await new ClanRepository().create(roleName, roleId, categoryId);
     if (saveClan == null) {
       throw new Error("クランの初期設定が完了しませんでした");
     }
@@ -70,7 +68,6 @@ export class Setup extends Slash {
     const guildMembers = await role?.members;
     if (guildMembers != null) {
       guildMembers.forEach(async (guildMember) => {
-        console.log(guildMember);
         let userName = "";
         // 名前の取得優先度： サーバーニックネーム > discordネーム > ユーザーID
         if (guildMember.nickname != null) {
@@ -80,19 +77,17 @@ export class Setup extends Slash {
         } else {
           userName = guildMember.user.username;
         }
-        const user = new User(saveClan.id!, userName, guildMember.user.id);
-        const userRepository = DataSource.getRepository(User);
-        await userRepository.save(user);
+        await new UserRepository().create(guildMember.user.id, userName, saveClan.id!);
       });
     }
 
     // 作成したカテゴリ内にチャンネル作成
-    await this.createManagementChannel(guild, "凸状況", clan);
-    await this.createBossChannel(guild, roleName, 1, "1ボス", clan);
-    await this.createBossChannel(guild, roleName, 2, "2ボス", clan);
-    await this.createBossChannel(guild, roleName, 3, "3ボス", clan);
-    await this.createBossChannel(guild, roleName, 4, "4ボス", clan);
-    await this.createBossChannel(guild, roleName, 5, "5ボス", clan);
+    await this.createManagementChannel(guild, "凸状況", saveClan);
+    await this.createBossChannel(guild, roleName, 1, "1ボス", saveClan);
+    await this.createBossChannel(guild, roleName, 2, "2ボス", saveClan);
+    await this.createBossChannel(guild, roleName, 3, "3ボス", saveClan);
+    await this.createBossChannel(guild, roleName, 4, "4ボス", saveClan);
+    await this.createBossChannel(guild, roleName, 5, "5ボス", saveClan);
 
     await interaction.followUp({
       content: "チャンネルを作成しました",
@@ -112,9 +107,7 @@ export class Setup extends Slash {
     if (channel == null) {
       throw new Error("channel is null");
     }
-    const users = await DataSource.getRepository(User).findBy({
-      clanId: clan.id,
-    });
+    const users = await new UserRepository().getUsersByClanId(clan.id!);
 
     if (channel.isTextBased()) {
       await management_message.sendMessage(channel, null, clan, users, null, null, true);
@@ -142,9 +135,7 @@ export class Setup extends Slash {
     if (channel == null) {
       throw new Error("channel is null");
     }
-    const boss = new Boss(clan.id!, bossId, channel.id);
-    const bossRepository = DataSource.getRepository(Boss);
-    await bossRepository.save(boss);
+    const boss = await new BossRepository().create(clan.id!, channel.id!, bossId);
 
     const declaration: Declaration[] = [];
     if (channel?.isTextBased()) {

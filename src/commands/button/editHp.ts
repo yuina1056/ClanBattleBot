@@ -1,12 +1,10 @@
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
-import DataSource from "@/datasource";
-import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
-import dayjs from "dayjs";
 import { ModalEditHp } from "@/commands/modal/editHp";
-import EventBoss from "@/entity/EventBoss";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 export class EditHp extends Button {
   static readonly customId = "edit_hp";
@@ -37,27 +35,19 @@ export class EditHp extends Button {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id ?? 0,
+      event.id ?? 0,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }

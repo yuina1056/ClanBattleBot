@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
-import dayjs from "dayjs";
 import {
   ModalSubmitInteraction,
   ModalBuilder,
@@ -10,11 +7,14 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import DataSource from "@/datasource";
 import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import Lap from "@/entity/Lap";
 import { Modal } from "@/commands/modal/modal";
+import { EventRepository } from "@/repository/eventRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
 
 interface FormBossHP {
   boss1HP: string;
@@ -128,35 +128,23 @@ export class ModalEditHp extends Modal {
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      event.id!,
+      clan.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("クランバトル周回数情報が取得できませんでした");
     }
@@ -176,7 +164,7 @@ export class ModalEditHp extends Modal {
     eventBoss.boss4HP = bossHP.boss4HP;
     eventBoss.boss5HP = bossHP.boss5HP;
 
-    await eventBossRepository.save(eventBoss);
+    await new EventBossRepository().save(eventBoss);
     await interaction.reply({
       content: "各ボスの残HPが変更されました。",
       ephemeral: true,

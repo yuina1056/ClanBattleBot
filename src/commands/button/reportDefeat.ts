@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
-import dayjs from "dayjs";
 
-import DataSource from "@/datasource";
-import User from "@/entity/User";
-import Report from "@/entity/Report";
-import Boss from "@/entity/Boss";
-import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
-import Declaration from "@/entity/Declaration";
 import BossChannelMessage from "@/messages/BossChannelMessage";
-import Lap from "@/entity/Lap";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { LapRepository } from "@/repository/lapRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
+import { ReportRepository } from "@/repository/reportRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -37,12 +35,7 @@ export class ReportDefeat extends Button {
     if (interaction.channel == null) {
       throw new Error("interaction.channel is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
@@ -54,38 +47,35 @@ export class ReportDefeat extends Button {
       throw new Error("channel.parentId is null");
     }
     // クラン取得
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel.parentId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
     // ボス情報取得
-    const bossRepository = DataSource.getRepository(Boss);
-    const boss = await bossRepository.findOneBy({
-      discordChannelId: interaction.channel?.id,
-    });
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interaction.channel.id,
+    );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
     // 凸宣言取得
-    const declarationRepository = DataSource.getRepository(Declaration);
-    const declaration = await declarationRepository.findOneBy({
-      userId: user.id,
-      clanId: clan.id,
-      eventId: event.id,
-      day: event.getClanBattleDay(),
-      isFinished: false,
-    });
+    const declaration =
+      await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
+        user.id!,
+        clan.id!,
+        event.id!,
+        event.getClanBattleDay(),
+        false,
+      );
     if (declaration == null) {
       await interaction.reply({
         content: "凸宣言がされていません。先に凸宣言を行ってください。",
@@ -97,24 +87,19 @@ export class ReportDefeat extends Button {
       throw new Error("declaration.id is null");
     }
     // 対象凸を完了状態にする
-    await declarationRepository.update(declaration.id, { isFinished: true });
+    await new DeclarationRepository().updateIsFinishedById(declaration.id, true);
 
     // 周回数・HP更新
-    const lapRepository = DataSource.getRepository(Lap);
-    const lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
     if (lap == null) {
       throw new Error("周回数情報が取得できませんでした");
     }
     let bossLap = 0;
 
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
@@ -163,25 +148,23 @@ export class ReportDefeat extends Button {
       default:
         break;
     }
-    await lapRepository.save(lap);
-    await eventBossRepository.save(eventBoss);
+    await new LapRepository().save(lap);
+    await new EventBossRepository().save(eventBoss);
 
     // 持ち越しが発生しているかチェック
     let isCarryOver = false;
-    const reports = await DataSource.getRepository(Report).find({
-      where: {
-        userId: user.id,
-        eventId: event.id,
-        day: declaration.day,
-        attackCount: declaration.attackCount,
-      },
-    });
+    const reports = await new ReportRepository().getReportsByUserIdAndEventIdAndDayAndAttackCount(
+      user.id!,
+      event.id!,
+      declaration.day,
+      declaration.attackCount,
+    );
     if (reports.length === 0) {
       isCarryOver = true;
     }
 
     // DBに保存
-    const report = new Report(
+    await new ReportRepository().create(
       user.clanId,
       user.id!,
       event.id!,
@@ -194,17 +177,12 @@ export class ReportDefeat extends Button {
       true,
       isCarryOver,
     );
-    await DataSource.getRepository(Report).save(report);
 
-    const declarations = await DataSource.getRepository(Declaration).find({
-      where: {
-        bossId: boss.id,
-        isFinished: false,
-      },
-      relations: {
-        user: true,
-      },
-    });
+    const declarations =
+      await new DeclarationRepository().getDeclarationsByBossIdAndIsFinishedToRelationUser(
+        boss.id!,
+        false,
+      );
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
     await deleteMessage.delete();
     await BossChannelMessage.sendMessage(

@@ -1,18 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
-import dayjs from "dayjs";
-
-import DataSource from "@/datasource";
-
-import Boss from "@/entity/Boss";
-import Clan from "@/entity/Clan";
-import Event from "@/entity/Event";
 
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
-import EventBoss from "@/entity/EventBoss";
-import Declaration from "@/entity/Declaration";
-import User from "@/entity/User";
 import { Button } from "@/commands/button/button";
+import { EventRepository } from "@/repository/eventRepository";
+import { BossRepository } from "@/repository/bossRepository";
+import { ClanRepository } from "@/repository/clanRepository";
+import { DeclarationRepository } from "@/repository/declarationRepository";
+import { EventBossRepository } from "@/repository/eventBossRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -33,48 +29,40 @@ export class ReportShave extends Button {
     } else {
       throw new Error("interaction.guild is null");
     }
-    const today = dayjs().format();
-    const event = await DataSource.getRepository(Event)
-      .createQueryBuilder("event")
-      .where("event.fromDate <= :today", { today })
-      .andWhere("event.toDate >= :today", { today })
-      .getOne();
+    const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id);
-    const clan = await DataSource.getRepository(Clan).findOneBy({
-      discordCategoryId: channel!.parentId!,
-    });
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel!.parentId!);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
     // ボス情報取得
-    const bossRepository = DataSource.getRepository(Boss);
-    const boss = await bossRepository.findOneBy({
-      discordChannelId: interaction.channel!.id,
-    });
+    const boss = await new BossRepository().getBossByClanIdAndChannelId(
+      clan.id ?? 0,
+      interaction.channel!.id,
+    );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
     // ユーザー取得
-    const userRepository = DataSource.getRepository(User);
-    const user = await userRepository.findOneBy({
-      discordUserId: interaction.user.id,
-      clanId: clan.id,
-    });
+    const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+      interaction.user.id,
+      clan.id!,
+    );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
     // 凸宣言取得
-    const declarationRepository = DataSource.getRepository(Declaration);
-    const declaration = await declarationRepository.findOneBy({
-      userId: user.id,
-      clanId: clan.id,
-      eventId: event.id,
-      day: event.getClanBattleDay(),
-      isFinished: false,
-    });
+    const declaration =
+      await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
+        user.id!,
+        clan.id!,
+        event.id!,
+        event.getClanBattleDay(),
+        false,
+      );
     if (declaration == null) {
       await interaction.reply({
         content: "凸宣言がされていません",
@@ -83,11 +71,10 @@ export class ReportShave extends Button {
       return;
     }
 
-    const eventBossRepository = DataSource.getRepository(EventBoss);
-    const eventBoss = await eventBossRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
+    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
     if (eventBoss == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }

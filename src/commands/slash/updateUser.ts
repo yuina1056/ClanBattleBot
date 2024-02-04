@@ -1,8 +1,7 @@
 import { SlashCommandBuilder, CommandInteraction, Guild } from "discord.js";
-import dataSource from "@/datasource";
-import Clan from "@/entity/Clan";
-import User from "@/entity/User";
 import { Slash } from "@/commands/slash/slash";
+import { ClanRepository } from "@/repository/clanRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export class UpdateUser extends Slash {
   static readonly commandName: string = "updateuser";
@@ -39,19 +38,12 @@ export class UpdateUser extends Slash {
     } else {
       throw new Error("interaction.guild is null");
     }
-    const clan = await dataSource.getRepository(Clan).findOneBy({
-      discordRoleId: roleId,
-    });
+    const clan = await new ClanRepository().getClanByDiscordRoleId(roleId);
     if (clan == null) {
       throw new Error("clan is null");
     }
-    const userRepository = dataSource.getRepository(User);
-    const users = await userRepository.findBy({ clanId: clan.id });
-    await userRepository
-      .createQueryBuilder("user")
-      .softDelete()
-      .where("clanId = :clanId", { clanId: clan.id })
-      .execute();
+    const users = await new UserRepository().getUsersByClanId(clan.id ?? 0);
+    await new UserRepository().deleteByClanId(clan.id ?? 0);
 
     await interaction.guild.members.fetch();
     const role = await guild.roles.fetch(roleId);
@@ -75,11 +67,10 @@ export class UpdateUser extends Slash {
         const user = users.find((user) => user.discordUserId === guildMember.user.id);
         if (user != null) {
           user.name = userName;
-          await userRepository.restore(user.id ?? 0);
-          await userRepository.save(user);
+          await new UserRepository().restoreByUserId(user.id ?? 0);
+          await new UserRepository().save(user);
         } else {
-          const user = new User(clan.id ?? 0, userName, guildMember.user.id);
-          await userRepository.save(user);
+          await new UserRepository().create(guildMember.user.id, userName, clan.id ?? 0);
         }
       });
     }
