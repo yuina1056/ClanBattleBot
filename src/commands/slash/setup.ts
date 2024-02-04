@@ -139,7 +139,7 @@ export class Setup extends Slash {
 
     const declaration: Declaration[] = [];
     if (channel?.isTextBased()) {
-      await BossChannelMessage.sendMessage(channel, clan, boss, null, null, declaration);
+      await BossChannelMessage.sendMessage(channel, clan, boss, null, declaration);
     }
   }
 }

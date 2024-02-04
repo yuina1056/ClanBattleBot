@@ -5,7 +5,7 @@ import { ModalEditLap } from "@/commands/modal/editLap";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class EditLap extends Button {
   static readonly customId = "edit_lap";
@@ -45,11 +45,14 @@ export class EditLap extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
-      throw new Error("周回数情報が取得できませんでした");
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      event.id!,
+      clan.id!,
+    );
+    if (clanEvent == null) {
+      throw new Error("クラン毎イベント情報が取得できませんでした");
     }
-    const modal = new ModalEditLap().createModal(lap);
+    const modal = new ModalEditLap().createModal(clanEvent);
     await interaction.showModal(modal);
   }
 }

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import Lap from "@/entity/Lap";
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import {
   ActionRowBuilder,
@@ -14,11 +13,11 @@ import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
 import { ReportRepository } from "@/repository/reportRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
+import ClanEvent from "@/entity/ClanEvent";
 
 interface FormReportShaveHP {
   remaining_hp: string;
@@ -84,9 +83,11 @@ export class ModalReportShaveHP extends Modal {
       throw new Error("ボス情報が取得できませんでした");
     }
 
-    // 周回数取得
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      event.id!,
+      clan.id!,
+    );
+    if (clanEvent == null) {
       throw new Error("周回数が取得できませんでした");
     }
     // ユーザー取得
@@ -98,15 +99,7 @@ export class ModalReportShaveHP extends Modal {
       throw new Error("ユーザー情報が取得できませんでした");
     }
 
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      clan.id!,
-      event.id!,
-    );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
-    }
-
-    const ReportShaveHP = this.validateForm(formReportShaveHP, lap, boss.bossid);
+    const ReportShaveHP = this.validateForm(formReportShaveHP, clanEvent, boss.bossid);
     if (ReportShaveHP instanceof Error) {
       await interaction.reply({
         content: "撃破処理に失敗しました。" + ReportShaveHP.message,
@@ -117,24 +110,24 @@ export class ModalReportShaveHP extends Modal {
     let bossLap = 0;
     switch (boss.bossid) {
       case 1:
-        bossLap = lap.boss1Lap ?? 0;
-        eventBoss.boss1HP = ReportShaveHP.remaining_hp;
+        bossLap = clanEvent.boss1Lap ?? 0;
+        clanEvent.boss1HP = ReportShaveHP.remaining_hp;
         break;
       case 2:
-        bossLap = lap.boss1Lap ?? 0;
-        eventBoss.boss2HP = ReportShaveHP.remaining_hp;
+        bossLap = clanEvent.boss1Lap ?? 0;
+        clanEvent.boss2HP = ReportShaveHP.remaining_hp;
         break;
       case 3:
-        bossLap = lap.boss3Lap ?? 0;
-        eventBoss.boss3HP = ReportShaveHP.remaining_hp;
+        bossLap = clanEvent.boss3Lap ?? 0;
+        clanEvent.boss3HP = ReportShaveHP.remaining_hp;
         break;
       case 4:
-        bossLap = lap.boss4Lap ?? 0;
-        eventBoss.boss4HP = ReportShaveHP.remaining_hp;
+        bossLap = clanEvent.boss4Lap ?? 0;
+        clanEvent.boss4HP = ReportShaveHP.remaining_hp;
         break;
       case 5:
-        bossLap = lap.boss5Lap ?? 0;
-        eventBoss.boss5HP = ReportShaveHP.remaining_hp;
+        bossLap = clanEvent.boss5Lap ?? 0;
+        clanEvent.boss5HP = ReportShaveHP.remaining_hp;
         break;
       default:
         break;
@@ -172,7 +165,7 @@ export class ModalReportShaveHP extends Modal {
       false,
     );
 
-    const saveEventBoss = await new EventBossRepository().save(eventBoss);
+    const saveClanEvent = await new ClanEventRepository().save(clanEvent);
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
@@ -184,8 +177,7 @@ export class ModalReportShaveHP extends Modal {
       interaction.channel!,
       clan,
       boss,
-      saveEventBoss,
-      lap,
+      saveClanEvent,
       declarations,
     );
     const deleteMessage = await channel.messages.fetch(interaction.message?.id ?? "");
@@ -201,7 +193,7 @@ export class ModalReportShaveHP extends Modal {
 
   validateForm(
     formReportShaveHP: FormReportShaveHP,
-    lap: Lap,
+    clanEvent: ClanEvent,
     bossId: number,
   ): ReportShaveHP | Error {
     const remaining_hp = Number(formReportShaveHP.remaining_hp);
@@ -213,27 +205,27 @@ export class ModalReportShaveHP extends Modal {
     }
     switch (bossId) {
       case 1:
-        if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < remaining_hp) {
+        if (Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(1)] < remaining_hp) {
           return new Error("1ボスの残HPがボスの最大HPを超えています");
         }
         break;
       case 2:
-        if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < remaining_hp) {
+        if (Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(2)] < remaining_hp) {
           return new Error("2ボスの残HPがボスの最大HPを超えています");
         }
         break;
       case 3:
-        if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < remaining_hp) {
+        if (Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(3)] < remaining_hp) {
           return new Error("3ボスの残HPがボスの最大HPを超えています");
         }
         break;
       case 4:
-        if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < remaining_hp) {
+        if (Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(4)] < remaining_hp) {
           return new Error("4ボスの残HPがボスの最大HPを超えています");
         }
         break;
       case 5:
-        if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < remaining_hp) {
+        if (Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(5)] < remaining_hp) {
           return new Error("5ボスの残HPがボスの最大HPを超えています");
         }
         break;

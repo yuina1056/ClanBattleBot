@@ -16,12 +16,10 @@ import User from "@/entity/User";
 import Event from "@/entity/Event";
 import Clan from "@/entity/Clan";
 import Report from "@/entity/Report";
-import Lap from "@/entity/Lap";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
-import { LapRepository } from "@/repository/lapRepository";
 import { ReportRepository } from "@/repository/reportRepository";
 import { BossRepository } from "@/repository/bossRepository";
+import ClanEvent from "@/entity/ClanEvent";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -29,7 +27,7 @@ export async function sendMessage(
   clan: Clan,
   users: User[],
   event: Event | null,
-  eventBoss: EventBoss | null,
+  clanEvent: ClanEvent | null,
   isInit: boolean,
 ) {
   let userStatus = "メンバー(" + users.length + ")\n";
@@ -88,15 +86,8 @@ export async function sendMessage(
       " 凸",
   );
 
-  // 周回数
-  let lap: Lap | null = null;
-  if (event !== null) {
-    lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-  } else {
-    lap = new Lap(clan.id ?? 0, 0);
-  }
-  if (lap == null) {
-    throw new Error("lap is null");
+  if (clanEvent == null) {
+    throw new Error("clanEvent is null");
   }
 
   // ボス状況
@@ -107,53 +98,53 @@ export async function sendMessage(
     bossStatusCodeBlock = codeBlock(
       bosses[0].bossid +
         " ( " +
-        String(lap.boss1Lap).padStart(2) +
+        String(clanEvent.boss1Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(1) ? "" : "💎") +
+        (clanEvent.isAttackPossible(1) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss1HP).padStart(5) +
+        String(clanEvent?.boss1HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss1HP[lap.getCurrentStage(bosses[0].bossid)] +
+        Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(bosses[0].bossid)] +
         " \n" +
         bosses[1].bossid +
         " ( " +
-        String(lap.boss2Lap).padStart(2) +
+        String(clanEvent.boss2Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(2) ? "" : "💎") +
+        (clanEvent.isAttackPossible(2) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss2HP).padStart(5) +
+        String(clanEvent?.boss2HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss2HP[lap.getCurrentStage(bosses[1].bossid)] +
+        Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(bosses[1].bossid)] +
         "\n" +
         bosses[2].bossid +
         " ( " +
-        String(lap.boss3Lap).padStart(2) +
+        String(clanEvent.boss3Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(3) ? "" : "💎") +
+        (clanEvent.isAttackPossible(3) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss3HP).padStart(5) +
+        String(clanEvent?.boss3HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss3HP[lap.getCurrentStage(bosses[2].bossid)] +
+        Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(bosses[2].bossid)] +
         "\n" +
         bosses[3].bossid +
         " ( " +
-        String(lap.boss4Lap).padStart(2) +
+        String(clanEvent.boss4Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(4) ? "" : "💎") +
+        (clanEvent.isAttackPossible(4) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss4HP).padStart(5) +
+        String(clanEvent?.boss4HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss4HP[lap.getCurrentStage(bosses[3].bossid)] +
+        Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(bosses[3].bossid)] +
         "\n" +
         bosses[4].bossid +
         " ( " +
-        String(lap.boss5Lap).padStart(2) +
+        String(clanEvent.boss5Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(5) ? "" : "💎") +
+        (clanEvent.isAttackPossible(5) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss5HP).padStart(5) +
+        String(clanEvent?.boss5HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss5HP[lap.getCurrentStage(bosses[4].bossid)] +
+        Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(bosses[4].bossid)] +
         "\n",
     );
   } else {

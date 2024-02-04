@@ -6,10 +6,9 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -87,15 +86,11 @@ export class DeclarationCancel extends Button {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
 
-    // 周回数取得
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+    // クラン毎イベント情報取得
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
       clan.id!,
       event.id!,
     );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
-    }
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
@@ -103,14 +98,7 @@ export class DeclarationCancel extends Button {
         boss.bossid!,
         false,
       );
-    await BossChannelMessage.sendMessage(
-      interaction.channel,
-      clan,
-      boss,
-      eventBoss,
-      lap,
-      declarations,
-    );
+    await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);
     await interaction.reply({ content: "凸宣言取消しました", ephemeral: true });
     await interaction.message.delete();
   }

@@ -7,8 +7,9 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
+// import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class ReportShave extends Button {
   static readonly customId = "report_shave";
@@ -71,29 +72,29 @@ export class ReportShave extends Button {
       return;
     }
 
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
       clan.id!,
       event.id!,
     );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
+    if (clanEvent == null) {
+      throw new Error("クラン毎のイベント情報が取得できませんでした");
     }
     let remainingHp = 0;
     switch (boss.bossid) {
       case 1:
-        remainingHp = eventBoss.boss1HP ?? 0;
+        remainingHp = clanEvent.boss1HP ?? 0;
         break;
       case 2:
-        remainingHp = eventBoss.boss2HP ?? 0;
+        remainingHp = clanEvent.boss2HP ?? 0;
         break;
       case 3:
-        remainingHp = eventBoss.boss3HP ?? 0;
+        remainingHp = clanEvent.boss3HP ?? 0;
         break;
       case 4:
-        remainingHp = eventBoss.boss4HP ?? 0;
+        remainingHp = clanEvent.boss4HP ?? 0;
         break;
       case 5:
-        remainingHp = eventBoss.boss5HP ?? 0;
+        remainingHp = clanEvent.boss5HP ?? 0;
         break;
       default:
         break;

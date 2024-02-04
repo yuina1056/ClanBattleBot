@@ -5,8 +5,8 @@ import ManagementMessage from "@/messages/ManagementChannelMessage";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class ReloadAttackStatus extends Button {
   static readonly customId = "reload_attack_status";
@@ -43,12 +43,12 @@ export class ReloadAttackStatus extends Button {
       throw new Error("クラン情報が取得できませんでした");
     }
     const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id!);
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
       clan.id!,
       event.id!,
     );
-    if (eventBoss == null) {
-      throw new Error("ボスHP情報が取得できませんでした");
+    if (clanEvent == null) {
+      throw new Error("クラン毎イベント情報が取得できませんでした");
     }
     await interaction.deferUpdate();
     await ManagementMessage.sendMessage(
@@ -57,7 +57,7 @@ export class ReloadAttackStatus extends Button {
       clan,
       users,
       event,
-      eventBoss,
+      clanEvent,
       false,
     );
   }

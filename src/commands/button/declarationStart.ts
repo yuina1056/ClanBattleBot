@@ -12,8 +12,8 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -72,11 +72,14 @@ export class DeclarationStart extends Button {
       throw new Error("ボス情報を取得できません");
     }
 
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id!,
+      event.id!,
+    );
+    if (clanEvent == null) {
       throw new Error("周回数情報を取得できません");
     }
-    if (!lap.isAttackPossible(boss.bossid)) {
+    if (!clanEvent.isAttackPossible(boss.bossid)) {
       await interaction.reply({
         content: "このボスには凸できません",
         ephemeral: true,
@@ -88,19 +91,19 @@ export class DeclarationStart extends Button {
 
     switch (boss.bossid) {
       case 1:
-        bossLap = lap.boss1Lap ?? 1;
+        bossLap = clanEvent.boss1Lap ?? 1;
         break;
       case 2:
-        bossLap = lap.boss2Lap ?? 1;
+        bossLap = clanEvent.boss2Lap ?? 1;
         break;
       case 3:
-        bossLap = lap.boss3Lap ?? 1;
+        bossLap = clanEvent.boss3Lap ?? 1;
         break;
       case 4:
-        bossLap = lap.boss4Lap ?? 1;
+        bossLap = clanEvent.boss4Lap ?? 1;
         break;
       case 5:
-        bossLap = lap.boss5Lap ?? 1;
+        bossLap = clanEvent.boss5Lap ?? 1;
         break;
       default:
         break;
