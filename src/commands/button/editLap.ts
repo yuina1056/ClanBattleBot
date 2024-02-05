@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import { ModalEditLap } from "@/commands/modal/editLap";
@@ -40,14 +39,20 @@ export class EditLap extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     // クラン取得
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("clan.id is null");
+    }
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");

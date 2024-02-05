@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
@@ -36,9 +35,12 @@ export abstract class DeclarationAbstract extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
-      clan.id ?? 0,
+      clan.id,
       interaction.channel.id,
     );
     if (boss == null) {
@@ -49,11 +51,14 @@ export abstract class DeclarationAbstract extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("イベントIDが取得できませんでした");
+    }
 
     // クラン毎イベント情報取得
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     let bossLap = 0;
     if (clanEvent != null) {
@@ -96,8 +101,8 @@ export abstract class DeclarationAbstract extends Button {
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
-        clan.id!,
-        boss.bossNo!,
+        clan.id,
+        boss.bossNo,
         false,
       );
 

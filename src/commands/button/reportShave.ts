@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild, TextBasedChannel } from "discord.js";
 
 import { ModalReportShaveHP } from "@/commands/modal/reportShave";
 import { Button } from "@/commands/button/button";
@@ -7,7 +6,6 @@ import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-// import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
 import { ClanEventRepository } from "@/repository/clanEventRepository";
 
@@ -30,19 +28,37 @@ export class ReportShave extends Button {
     } else {
       throw new Error("interaction.guild is null");
     }
+    let interactionChannel: TextBasedChannel;
+    if (interaction.channel != null) {
+      interactionChannel = interaction.channel;
+    } else {
+      throw new Error("interaction.channel is null");
+    }
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
-    const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id);
-    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel!.parentId!);
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
+    const channel = guild.channels.cache.find((channel) => channel.id === interactionChannel.id);
+    if (channel == null) {
+      throw new Error("channel is null");
+    }
+    if (channel.parentId == null) {
+      throw new Error("channel.parentId is null");
+    }
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
+    }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
     }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
       clan.id ?? 0,
-      interaction.channel!.id,
+      interactionChannel.id,
     );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
@@ -50,17 +66,20 @@ export class ReportShave extends Button {
     // ユーザー取得
     const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
       interaction.user.id,
-      clan.id!,
+      clan.id,
     );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
+    if (user.id == null) {
+      throw new Error("ユーザーIDが取得できませんでした");
+    }
     // 凸宣言取得
     const declaration =
       await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
-        user.id!,
-        clan.id!,
-        event.id!,
+        user.id,
+        clan.id,
+        event.id,
         event.getClanBattleDay(),
         false,
       );
@@ -73,8 +92,8 @@ export class ReportShave extends Button {
     }
 
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎のイベント情報が取得できませんでした");

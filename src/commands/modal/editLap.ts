@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ModalSubmitInteraction,
   ModalBuilder,
@@ -38,6 +37,21 @@ export class ModalEditLap extends Modal {
   text_boss5_lap_customId = "boss5_lap";
 
   createModal(clanEvent: ClanEvent): ModalBuilder {
+    if (clanEvent.boss1Lap == null) {
+      throw new Error("1ボス周回数が取得できませんでした");
+    }
+    if (clanEvent.boss2Lap == null) {
+      throw new Error("2ボス周回数が取得できませんでした");
+    }
+    if (clanEvent.boss3Lap == null) {
+      throw new Error("3ボス周回数が取得できませんでした");
+    }
+    if (clanEvent.boss4Lap == null) {
+      throw new Error("4ボス周回数が取得できませんでした");
+    }
+    if (clanEvent.boss5Lap == null) {
+      throw new Error("5ボス周回数が取得できませんでした");
+    }
     const modal = new ModalBuilder().setTitle("周回数修正").setCustomId(ModalEditLap.customId);
     const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
       new TextInputBuilder()
@@ -46,7 +60,7 @@ export class ModalEditLap extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(clanEvent.boss1Lap!.toString())
+        .setValue(clanEvent.boss1Lap.toString())
         .setRequired(true),
     );
     const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -56,7 +70,7 @@ export class ModalEditLap extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(clanEvent.boss2Lap!.toString())
+        .setValue(clanEvent.boss2Lap.toString())
         .setRequired(true),
     );
     const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -66,7 +80,7 @@ export class ModalEditLap extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(clanEvent.boss3Lap!.toString())
+        .setValue(clanEvent.boss3Lap.toString())
         .setRequired(true),
     );
     const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -76,7 +90,7 @@ export class ModalEditLap extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(clanEvent.boss4Lap!.toString())
+        .setValue(clanEvent.boss4Lap.toString())
         .setRequired(true),
     );
     const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -86,7 +100,7 @@ export class ModalEditLap extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(clanEvent.boss5Lap!.toString())
+        .setValue(clanEvent.boss5Lap.toString())
         .setRequired(true),
     );
 
@@ -128,14 +142,20 @@ export class ModalEditLap extends Modal {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     // クラン取得
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");

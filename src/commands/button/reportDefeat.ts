@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
@@ -38,6 +37,9 @@ export class ReportDefeat extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
     if (channel == null) {
       throw new Error("channel is null");
@@ -50,6 +52,9 @@ export class ReportDefeat extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
       clan.id ?? 0,
@@ -61,17 +66,20 @@ export class ReportDefeat extends Button {
     // ユーザー取得
     const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
       interaction.user.id,
-      clan.id!,
+      clan.id,
     );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
+    if (user.id == null) {
+      throw new Error("ユーザーIDが取得できませんでした");
+    }
     // 凸宣言取得
     const declaration =
       await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
-        user.id!,
-        clan.id!,
-        event.id!,
+        user.id,
+        clan.id,
+        event.id,
         event.getClanBattleDay(),
         false,
       );
@@ -90,8 +98,8 @@ export class ReportDefeat extends Button {
 
     // 周回数・HP更新
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");
@@ -147,8 +155,8 @@ export class ReportDefeat extends Button {
     // 持ち越しが発生しているかチェック
     let isCarryOver = false;
     const reports = await new ReportRepository().getReportsByUserIdAndEventIdAndDayAndAttackCount(
-      user.id!,
-      event.id!,
+      user.id,
+      event.id,
       declaration.day,
       declaration.attackCount,
     );
@@ -159,8 +167,8 @@ export class ReportDefeat extends Button {
     // DBに保存
     await new ReportRepository().create(
       user.clanId,
-      user.id!,
-      event.id!,
+      user.id,
+      event.id,
       boss.bossNo,
       bossLap,
       event.getClanBattleDay(),
@@ -173,8 +181,8 @@ export class ReportDefeat extends Button {
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
-        clan.id!,
-        boss.bossNo!,
+        clan.id,
+        boss.bossNo,
         false,
       );
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");

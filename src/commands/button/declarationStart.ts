@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 
 import Report from "@/entity/Report";
@@ -32,6 +31,9 @@ export class DeclarationStart extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("クランバトル開催情報が取得できませんでした");
+    }
     const dayCount = event.getClanBattleDay();
 
     let guild: Guild;
@@ -53,11 +55,14 @@ export class DeclarationStart extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
 
     const interactionUserId = interaction.user.id;
     const clanUser = await new UserRepository().getUserByDiscordUserIdAndClanIdToRelationReports(
       interactionUserId,
-      clan.id!,
+      clan.id,
     );
     if (clanUser == null) {
       throw new Error("あなたはこのクランに所属していないよ");
@@ -73,8 +78,8 @@ export class DeclarationStart extends Button {
     }
 
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("周回数情報を取得できません");

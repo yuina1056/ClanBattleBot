@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ActionRowBuilder,
   Message,
@@ -30,6 +29,9 @@ export async function sendMessage(
   clanEvent: ClanEvent | null,
   isInit: boolean,
 ) {
+  if (clan.id == null) {
+    throw new Error("clan.id is null");
+  }
   let userStatus = "メンバー(" + users.length + ")\n";
   users.forEach((user) => {
     userStatus += user.getAttackStatus(event) + "\n";
@@ -43,9 +45,12 @@ export async function sendMessage(
 
   let todayReports: Report[] = [];
   if (event !== null) {
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     todayReports = await reportRepository.getByClanIdAndEventIdAndDay(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
       event.getClanBattleDay(),
     );
   }

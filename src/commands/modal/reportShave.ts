@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import BossChannelMessage from "@/messages/BossChannelMessage";
 import {
   ActionRowBuilder,
   Guild,
   ModalBuilder,
   ModalSubmitInteraction,
+  TextBasedChannel,
   TextInputBuilder,
   TextInputStyle,
 } from "discord.js";
@@ -59,33 +59,45 @@ export class ModalReportShaveHP extends Modal {
     } else {
       throw new Error("interaction.guild is null");
     }
+    let interactionChannel: TextBasedChannel;
+    if (interaction.channel != null) {
+      interactionChannel = interaction.channel;
+    } else {
+      throw new Error("interaction.channel is null");
+    }
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
-    const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel!.id);
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
+    const channel = guild.channels.cache.find((channel) => channel.id === interactionChannel.id);
     if (channel == null) {
       throw new Error("channel is null");
     }
     if (channel.parentId == null) {
       throw new Error("channel.parentId is null");
     }
-    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel!.parentId!);
+    const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
+    }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
     }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
       clan.id ?? 0,
-      interaction.channel!.id,
+      interactionChannel.id,
     );
     if (boss == null) {
       throw new Error("ボス情報が取得できませんでした");
     }
 
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("周回数が取得できませんでした");
@@ -93,10 +105,13 @@ export class ModalReportShaveHP extends Modal {
     // ユーザー取得
     const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
       interaction.user.id,
-      clan.id!,
+      clan.id,
     );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
+    }
+    if (user.id == null) {
+      throw new Error("ユーザーIDが取得できませんでした");
     }
 
     const ReportShaveHP = this.validateForm(formReportShaveHP, clanEvent, boss.bossNo);
@@ -135,9 +150,9 @@ export class ModalReportShaveHP extends Modal {
 
     const declaration =
       await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
-        user.id!,
-        clan.id!,
-        event.id!,
+        user.id,
+        clan.id,
+        event.id,
         event.getClanBattleDay(),
         false,
       );
@@ -148,13 +163,16 @@ export class ModalReportShaveHP extends Modal {
       });
       return;
     }
-    await new DeclarationRepository().updateIsFinishedById(declaration.id!, true);
+    if (declaration.id == null) {
+      throw new Error("declaration.id is null");
+    }
+    await new DeclarationRepository().updateIsFinishedById(declaration.id, true);
 
     // DBに保存
     await new ReportRepository().create(
       user.clanId,
-      user.id!,
-      event.id!,
+      user.id,
+      event.id,
       boss.bossNo,
       bossLap,
       event.getClanBattleDay(),
@@ -169,12 +187,12 @@ export class ModalReportShaveHP extends Modal {
 
     const declarations =
       await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
-        clan.id!,
-        boss.bossNo!,
+        clan.id,
+        boss.bossNo,
         false,
       );
     await BossChannelMessage.sendMessage(
-      interaction.channel!,
+      interactionChannel,
       clan,
       boss,
       saveClanEvent,

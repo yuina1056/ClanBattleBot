@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChannelType, SlashCommandBuilder, Guild, CommandInteraction } from "discord.js";
 
 import Clan from "@/entity/Clan";
@@ -61,6 +60,12 @@ export class Setup extends Slash {
     if (saveClan == null) {
       throw new Error("クランの初期設定が完了しませんでした");
     }
+    let saveClanId: number;
+    if (saveClan.id != null) {
+      saveClanId = saveClan.id;
+    } else {
+      throw new Error("clan.id is null");
+    }
 
     // Roleからユーザーを取得してDBに保存
     await interaction.guild.members.fetch();
@@ -77,17 +82,17 @@ export class Setup extends Slash {
         } else {
           userName = guildMember.user.username;
         }
-        await new UserRepository().create(guildMember.user.id, userName, saveClan.id!);
+        await new UserRepository().create(guildMember.user.id, userName, saveClanId);
       });
     }
 
     // 作成したカテゴリ内にチャンネル作成
     await this.createManagementChannel(guild, "凸状況", saveClan);
-    await this.createBossChannel(guild, roleName, 1, "1ボス", saveClan);
-    await this.createBossChannel(guild, roleName, 2, "2ボス", saveClan);
-    await this.createBossChannel(guild, roleName, 3, "3ボス", saveClan);
-    await this.createBossChannel(guild, roleName, 4, "4ボス", saveClan);
-    await this.createBossChannel(guild, roleName, 5, "5ボス", saveClan);
+    await this.createBossChannel(guild, 1, "1ボス", saveClan);
+    await this.createBossChannel(guild, 2, "2ボス", saveClan);
+    await this.createBossChannel(guild, 3, "3ボス", saveClan);
+    await this.createBossChannel(guild, 4, "4ボス", saveClan);
+    await this.createBossChannel(guild, 5, "5ボス", saveClan);
 
     await interaction.followUp({
       content: "チャンネルを作成しました",
@@ -96,6 +101,9 @@ export class Setup extends Slash {
   }
   // 凸管理用チャンネル作成
   async createManagementChannel(guild: Guild, channelName: string, clan: Clan) {
+    if (clan.id == null) {
+      throw new Error("clan.id is null");
+    }
     await guild.channels.create({
       name: channelName,
       parent: clan.discordCategoryId,
@@ -107,7 +115,7 @@ export class Setup extends Slash {
     if (channel == null) {
       throw new Error("channel is null");
     }
-    const users = await new UserRepository().getUsersByClanId(clan.id!);
+    const users = await new UserRepository().getUsersByClanId(clan.id);
 
     if (channel.isTextBased()) {
       await management_message.sendMessage(channel, null, clan, users, null, null, true);
@@ -115,13 +123,10 @@ export class Setup extends Slash {
   }
 
   // 各ボス用チャンネル作成
-  async createBossChannel(
-    guild: Guild,
-    roleName: string,
-    bossNo: number,
-    channelName: string,
-    clan: Clan,
-  ) {
+  async createBossChannel(guild: Guild, bossNo: number, channelName: string, clan: Clan) {
+    if (clan.id == null) {
+      throw new Error("clan.id is null");
+    }
     await guild.channels.create({
       name: channelName,
       parent: clan.discordCategoryId,
@@ -135,7 +140,10 @@ export class Setup extends Slash {
     if (channel == null) {
       throw new Error("channel is null");
     }
-    const boss = await new BossRepository().create(clan.id!, channel.id!, bossNo);
+    if (channel.id == null) {
+      throw new Error("channel.id is null");
+    }
+    const boss = await new BossRepository().create(clan.id, channel.id, bossNo);
 
     const declaration: Declaration[] = [];
     if (channel?.isTextBased()) {

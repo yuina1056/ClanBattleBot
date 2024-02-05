@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
@@ -38,14 +37,20 @@ export class ReloadAttackStatus extends Button {
     if (event == null) {
       throw new Error("開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("イベントIDが取得できませんでした");
+    }
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id!);
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
+    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id);
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+      clan.id,
+      event.id,
     );
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");
