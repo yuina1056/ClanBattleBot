@@ -4,7 +4,7 @@ import dataSource from "@/repository/repository";
 
 export class DeclarationRepository {
   static readonly repository: Repository<Declaration> = dataSource.getRepository(Declaration);
-  async getDeclarationsByClanIdAndbossNoAndIsFinishedToRelationUser(
+  async getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
     clanId: number,
     bossNo: number,
     isFinished: boolean,
