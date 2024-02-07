@@ -26,8 +26,8 @@ export class ManageMenu extends Button {
           new ResetDeclarationReport().button,
           new EditLap().button,
           new EditHp().button,
-          new FixReport().button,
         ),
+        new ActionRowBuilder<ButtonBuilder>().addComponents(new FixReport().button),
       ],
     });
   }
