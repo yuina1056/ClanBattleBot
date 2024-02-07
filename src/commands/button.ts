@@ -19,6 +19,12 @@ import { ResetDeclarationReportThird } from "@/commands/button/resetDeclarationR
 import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 import { FixReport } from "./button/fixReport";
+import { FixReportFirst } from "./button/fixReportFirst";
+import { FixReportFirstAsCarryOver } from "./button/fixReportFirstAsCarryOver";
+import { FixReportSecond } from "./button/fixReportSecond";
+import { FixReportSecondAsCarryOver } from "./button/fixReportSecondAsCarryOver";
+import { FixReportThird } from "./button/fixReportThird";
+import { FixReportThirdAsCarryOver } from "./button/fixReportThirdAsCarryOver";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -79,6 +85,24 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case FixReport.customId:
       action = new FixReport();
+      break;
+    case FixReportFirst.customId:
+      action = new FixReportFirst();
+      break;
+    case FixReportFirstAsCarryOver.customId:
+      action = new FixReportFirstAsCarryOver();
+      break;
+    case FixReportSecond.customId:
+      action = new FixReportSecond();
+      break;
+    case FixReportSecondAsCarryOver.customId:
+      action = new FixReportSecondAsCarryOver();
+      break;
+    case FixReportThird.customId:
+      action = new FixReportThird();
+      break;
+    case FixReportThirdAsCarryOver.customId:
+      action = new FixReportThirdAsCarryOver();
       break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
