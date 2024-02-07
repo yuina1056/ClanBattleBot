@@ -3,6 +3,7 @@ import { ResetDeclarationReport } from "@/commands/button/resetDeclarationReport
 import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 import { Button } from "@/commands/button/button";
+import { FixReport } from "./fixReport";
 
 export class ManageMenu extends Button {
   static readonly customId = "manage_menu";
@@ -17,17 +18,15 @@ export class ManageMenu extends Button {
   }
 
   async execute(interaction: ButtonInteraction) {
-    const editHp = new EditHp();
-    const editLap = new EditLap();
-    const resetDeclarationReport = new ResetDeclarationReport();
     await interaction.reply({
       ephemeral: true,
       content: "管理メニュー",
       components: [
         new ActionRowBuilder<ButtonBuilder>().addComponents(
-          resetDeclarationReport.button,
-          editLap.button,
-          editHp.button,
+          new ResetDeclarationReport().button,
+          new EditLap().button,
+          new EditHp().button,
+          new FixReport().button,
         ),
       ],
     });
