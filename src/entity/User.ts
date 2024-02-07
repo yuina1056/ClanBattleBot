@@ -86,9 +86,9 @@ export default class User {
           let resShave = "";
           todayAttackCountReports.forEach((report) => {
             if (!report.isDefeat) {
-              resShave = report.bossId + "削り";
+              resShave = report.bossNo + "削り";
             } else {
-              resDefeat += report.bossId + "撃破";
+              resDefeat += report.bossNo + "撃破";
             }
           });
           if (resDefeat === "") {

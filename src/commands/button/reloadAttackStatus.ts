@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 
 import ManagementMessage from "@/messages/ManagementChannelMessage";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class ReloadAttackStatus extends Button {
   static readonly customId = "reload_attack_status";
@@ -38,17 +37,23 @@ export class ReloadAttackStatus extends Button {
     if (event == null) {
       throw new Error("開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("イベントIDが取得できませんでした");
+    }
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id!);
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      clan.id!,
-      event.id!,
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
+    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id);
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
     );
-    if (eventBoss == null) {
-      throw new Error("ボスHP情報が取得できませんでした");
+    if (clanEvent == null) {
+      throw new Error("クラン毎イベント情報が取得できませんでした");
     }
     await interaction.deferUpdate();
     await ManagementMessage.sendMessage(
@@ -57,7 +62,7 @@ export class ReloadAttackStatus extends Button {
       clan,
       users,
       event,
-      eventBoss,
+      clanEvent,
       false,
     );
   }

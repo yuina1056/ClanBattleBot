@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
 import { Button } from "@/commands/button/button";
@@ -33,29 +32,38 @@ export abstract class ResetDeclarationReportAbstract extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("イベントIDが取得できませんでした");
+    }
     // ユーザー取得
     const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
       interaction.user.id,
-      clan.id!,
+      clan.id,
     );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
+    if (user.id == null) {
+      throw new Error("ユーザーIDが取得できませんでした");
+    }
 
     // 削除処理
     await new DeclarationRepository().deleteByUserIdAndEventIdAndDayAndAttackCount(
-      user.id!,
-      event.id!,
+      user.id,
+      event.id,
       event.getClanBattleDay(),
       this.attackCount,
     );
     await new ReportRepository().deleteByUserIdAndEventIdAndDayAndAttackCount(
-      user.id!,
-      event.id!,
+      user.id,
+      event.id,
       event.getClanBattleDay(),
       this.attackCount,
     );

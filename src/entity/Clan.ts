@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import User from "@/entity/User";
+import ClanEvent from "./ClanEvent";
 
 @Entity()
 // クラン
@@ -26,6 +27,9 @@ export default class Clan {
 
   @OneToMany(() => User, (user) => user.clan)
   users?: User[];
+
+  @OneToMany(() => ClanEvent, (clanEvent) => clanEvent.clan)
+  clanEvents?: ClanEvent[];
 
   constructor(name: string, roleId: string, categoryId: string) {
     this.name = name;

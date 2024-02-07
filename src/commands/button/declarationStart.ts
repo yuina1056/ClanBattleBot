@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, ActionRowBuilder, Guild } from "discord.js";
 
 import Report from "@/entity/Report";
@@ -12,8 +11,8 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class DeclarationStart extends Button {
   static readonly customId: string = "declaration_start";
@@ -30,6 +29,9 @@ export class DeclarationStart extends Button {
   async execute(interaction: ButtonInteraction) {
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
+      throw new Error("クランバトル開催情報が取得できませんでした");
+    }
+    if (event.id == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
     const dayCount = event.getClanBattleDay();
@@ -53,11 +55,14 @@ export class DeclarationStart extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
 
     const interactionUserId = interaction.user.id;
     const clanUser = await new UserRepository().getUserByDiscordUserIdAndClanIdToRelationReports(
       interactionUserId,
-      clan.id!,
+      clan.id,
     );
     if (clanUser == null) {
       throw new Error("あなたはこのクランに所属していないよ");
@@ -72,11 +77,14 @@ export class DeclarationStart extends Button {
       throw new Error("ボス情報を取得できません");
     }
 
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
+    );
+    if (clanEvent == null) {
       throw new Error("周回数情報を取得できません");
     }
-    if (!lap.isAttackPossible(boss.bossid)) {
+    if (!clanEvent.isAttackPossible(boss.bossNo)) {
       await interaction.reply({
         content: "このボスには凸できません",
         ephemeral: true,
@@ -86,21 +94,21 @@ export class DeclarationStart extends Button {
 
     let bossLap = 0;
 
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
-        bossLap = lap.boss1Lap ?? 1;
+        bossLap = clanEvent.boss1Lap ?? 1;
         break;
       case 2:
-        bossLap = lap.boss2Lap ?? 1;
+        bossLap = clanEvent.boss2Lap ?? 1;
         break;
       case 3:
-        bossLap = lap.boss3Lap ?? 1;
+        bossLap = clanEvent.boss3Lap ?? 1;
         break;
       case 4:
-        bossLap = lap.boss4Lap ?? 1;
+        bossLap = clanEvent.boss4Lap ?? 1;
         break;
       case 5:
-        bossLap = lap.boss5Lap ?? 1;
+        bossLap = clanEvent.boss5Lap ?? 1;
         break;
       default:
         break;
@@ -125,7 +133,7 @@ export class DeclarationStart extends Button {
           "さんの " +
           bossLap +
           "周目 " +
-          boss.bossid +
+          boss.bossNo +
           "ボス 宣言だよ。",
         ephemeral: true,
         components: [new ActionRowBuilder<ButtonBuilder>().addComponents(declarationFirst.button)],
@@ -153,7 +161,7 @@ export class DeclarationStart extends Button {
             "さんの " +
             bossLap +
             "周目 " +
-            boss.bossid +
+            boss.bossNo +
             "ボス 宣言だよ。",
           ephemeral: true,
           components: [
@@ -170,7 +178,7 @@ export class DeclarationStart extends Button {
             "さんの " +
             bossLap +
             "周目 " +
-            boss.bossid +
+            boss.bossNo +
             "ボス 宣言だよ。",
           ephemeral: true,
           components: [
@@ -195,7 +203,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [
@@ -212,7 +220,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [
@@ -234,7 +242,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [
@@ -254,7 +262,7 @@ export class DeclarationStart extends Button {
               "さんの " +
               bossLap +
               "周目 " +
-              boss.bossid +
+              boss.bossNo +
               "ボス 宣言だよ。",
             ephemeral: true,
             components: [

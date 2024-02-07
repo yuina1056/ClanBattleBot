@@ -1,25 +1,45 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import Clan from "@/entity/Clan";
 import Config from "@/config/config";
 
 @Entity()
-// クランバトル周回数
-export default class Lap {
+// クラン毎イベント情報
+export default class ClanEvent {
   @PrimaryGeneratedColumn()
   id?: number;
+
   @Column()
   clanId: number;
+  @ManyToOne(() => Clan, (clan) => clan.clanEvents)
+  clan!: Clan;
+
   @Column()
   eventId: number;
+
   @Column({ default: 1 })
   boss1Lap?: number;
+  @Column({ default: 800 })
+  boss1HP?: number;
+
   @Column({ default: 1 })
   boss2Lap?: number;
+  @Column({ default: 1000 })
+  boss2HP?: number;
+
   @Column({ default: 1 })
   boss3Lap?: number;
+  @Column({ default: 1300 })
+  boss3HP?: number;
+
   @Column({ default: 1 })
   boss4Lap?: number;
+  @Column({ default: 1500 })
+  boss4HP?: number;
+
   @Column({ default: 1 })
   boss5Lap?: number;
+  @Column({ default: 2000 })
+  boss5HP?: number;
 
   constructor(clanId: number, eventId: number) {
     this.clanId = clanId;
@@ -29,10 +49,10 @@ export default class Lap {
   /**
    * ボスに攻撃可能かを判定する
    *
-   * @param bossId ボスID(1~5)
+   * @param bossNo ボスID(1~5)
    * @return true:攻撃可能 false:攻撃不可
    */
-  isAttackPossible(bossId: number): boolean {
+  isAttackPossible(bossNo: number): boolean {
     if (
       this.boss1Lap == null ||
       this.boss2Lap == null ||
@@ -42,7 +62,7 @@ export default class Lap {
     ) {
       throw new Error("lap.boss1Lap is null");
     }
-    switch (bossId) {
+    switch (bossNo) {
       case 1:
         // 周回差チェック
         if (
@@ -297,12 +317,12 @@ export default class Lap {
   /**
    * 何段階目かを取得する
    *
-   * @param bossId ボスID(1~5)
+   * @param bossNo ボスID(1~5)
    * @return 何段階目か(2~4)
    * @throws bossLap is null
    */
-  getCurrentStage(bossId: number): number {
-    switch (bossId) {
+  getCurrentStage(bossNo: number): number {
+    switch (bossNo) {
       case 1:
         if (this.boss1Lap == null) {
           throw new Error("lap.boss1Lap is null");

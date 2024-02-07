@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import {
   ModalSubmitInteraction,
   ModalBuilder,
@@ -7,14 +6,12 @@ import {
   TextInputStyle,
   Guild,
 } from "discord.js";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
-import Lap from "@/entity/Lap";
 import { Modal } from "@/commands/modal/modal";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
+import ClanEvent from "@/entity/ClanEvent";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 interface FormBossHP {
   boss1HP: string;
@@ -41,7 +38,22 @@ export class ModalEditHp extends Modal {
   text_boss4_hp_customId = "boss4_hp";
   text_boss5_hp_customId = "boss5_hp";
 
-  createModal(eventBoss: EventBoss): ModalBuilder {
+  createModal(clanEvent: ClanEvent): ModalBuilder {
+    if (clanEvent.boss1HP == null) {
+      throw new Error("1ボスHPが取得できませんでした");
+    }
+    if (clanEvent.boss2HP == null) {
+      throw new Error("2ボスHPが取得できませんでした");
+    }
+    if (clanEvent.boss3HP == null) {
+      throw new Error("3ボスHPが取得できませんでした");
+    }
+    if (clanEvent.boss4HP == null) {
+      throw new Error("4ボスHPが取得できませんでした");
+    }
+    if (clanEvent.boss5HP == null) {
+      throw new Error("5ボスHPが取得できませんでした");
+    }
     const modal = new ModalBuilder().setTitle("ボスHP修正").setCustomId(ModalEditHp.customId);
     const ActionRowBoss1 = new ActionRowBuilder<TextInputBuilder>().setComponents(
       new TextInputBuilder()
@@ -50,7 +62,7 @@ export class ModalEditHp extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(eventBoss.boss1HP!.toString())
+        .setValue(clanEvent.boss1HP.toString())
         .setRequired(true),
     );
     const ActionRowBoss2 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -60,7 +72,7 @@ export class ModalEditHp extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(eventBoss.boss2HP!.toString())
+        .setValue(clanEvent.boss2HP.toString())
         .setRequired(true),
     );
     const ActionRowBoss3 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -70,7 +82,7 @@ export class ModalEditHp extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(eventBoss.boss3HP!.toString())
+        .setValue(clanEvent.boss3HP.toString())
         .setRequired(true),
     );
     const ActionRowBoss4 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -80,7 +92,7 @@ export class ModalEditHp extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(eventBoss.boss4HP!.toString())
+        .setValue(clanEvent.boss4HP.toString())
         .setRequired(true),
     );
     const ActionRowBoss5 = new ActionRowBuilder<TextInputBuilder>().setComponents(
@@ -90,7 +102,7 @@ export class ModalEditHp extends Modal {
         .setStyle(TextInputStyle.Short)
         .setMaxLength(100)
         .setMinLength(1)
-        .setValue(eventBoss.boss5HP!.toString())
+        .setValue(clanEvent.boss5HP.toString())
         .setRequired(true),
     );
 
@@ -132,24 +144,26 @@ export class ModalEditHp extends Modal {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     // クラン取得
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      event.id!,
-      clan.id!,
-    );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
     }
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
-      throw new Error("クランバトル周回数情報が取得できませんでした");
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
+    );
+    if (clanEvent == null) {
+      throw new Error("クラン毎イベント情報が取得できませんでした");
     }
 
-    const bossHP = this.validateForm(formBossHP, lap);
+    const bossHP = this.validateForm(formBossHP, clanEvent);
     if (bossHP instanceof Error) {
       await interaction.reply({
         content: "ボスHP修正に失敗しました。" + bossHP.message,
@@ -158,20 +172,20 @@ export class ModalEditHp extends Modal {
       return;
     }
 
-    eventBoss.boss1HP = bossHP.boss1HP;
-    eventBoss.boss2HP = bossHP.boss2HP;
-    eventBoss.boss3HP = bossHP.boss3HP;
-    eventBoss.boss4HP = bossHP.boss4HP;
-    eventBoss.boss5HP = bossHP.boss5HP;
+    clanEvent.boss1HP = bossHP.boss1HP;
+    clanEvent.boss2HP = bossHP.boss2HP;
+    clanEvent.boss3HP = bossHP.boss3HP;
+    clanEvent.boss4HP = bossHP.boss4HP;
+    clanEvent.boss5HP = bossHP.boss5HP;
 
-    await new EventBossRepository().save(eventBoss);
+    await new ClanEventRepository().save(clanEvent);
     await interaction.reply({
       content: "各ボスの残HPが変更されました。",
       ephemeral: true,
     });
   }
 
-  validateForm(formHP: FormBossHP, lap: Lap): BossHP | Error {
+  validateForm(formHP: FormBossHP, clanEvent: ClanEvent): BossHP | Error {
     const boss1HP = Number(formHP.boss1HP);
     const boss2HP = Number(formHP.boss2HP);
     const boss3HP = Number(formHP.boss3HP);
@@ -192,19 +206,19 @@ export class ModalEditHp extends Modal {
     if (isNaN(boss5HP)) {
       return new Error("5ボスのHPの入力値が数値ではありません。");
     }
-    if (Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)] < boss1HP) {
+    if (Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(1)] < boss1HP) {
       return new Error("1ボスのHPの入力値が最大値を超えています。");
     }
-    if (Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)] < boss2HP) {
+    if (Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(2)] < boss2HP) {
       return new Error("2ボスのHPの入力値が最大値を超えています。");
     }
-    if (Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)] < boss3HP) {
+    if (Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(3)] < boss3HP) {
       return new Error("3ボスのHPの入力値が最大値を超えています。");
     }
-    if (Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)] < boss4HP) {
+    if (Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(4)] < boss4HP) {
       return new Error("4ボスのHPの入力値が最大値を超えています。");
     }
-    if (Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)] < boss5HP) {
+    if (Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(5)] < boss5HP) {
       return new Error("5ボスのHPの入力値が最大値を超えています。");
     }
     return {

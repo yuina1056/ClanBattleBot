@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
@@ -7,11 +6,10 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
 import { ReportRepository } from "@/repository/reportRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class ReportDefeat extends Button {
   static readonly customId = "report_defeat";
@@ -39,6 +37,9 @@ export class ReportDefeat extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     const channel = guild.channels.cache.find((channel) => channel.id === interaction.channel?.id);
     if (channel == null) {
       throw new Error("channel is null");
@@ -51,6 +52,9 @@ export class ReportDefeat extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
       clan.id ?? 0,
@@ -62,17 +66,20 @@ export class ReportDefeat extends Button {
     // ユーザー取得
     const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
       interaction.user.id,
-      clan.id!,
+      clan.id,
     );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
+    if (user.id == null) {
+      throw new Error("ユーザーIDが取得できませんでした");
+    }
     // 凸宣言取得
     const declaration =
       await new DeclarationRepository().getDeclarationByUserIdAndClanIdAndEventIdAndDayAndIsFinished(
-        user.id!,
-        clan.id!,
-        event.id!,
+        user.id,
+        clan.id,
+        event.id,
         event.getClanBattleDay(),
         false,
       );
@@ -90,72 +97,66 @@ export class ReportDefeat extends Button {
     await new DeclarationRepository().updateIsFinishedById(declaration.id, true);
 
     // 周回数・HP更新
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
-      throw new Error("周回数情報が取得できませんでした");
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
+    );
+    if (clanEvent == null) {
+      throw new Error("クラン毎イベント情報が取得できませんでした");
     }
     let bossLap = 0;
 
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      clan.id!,
-      event.id!,
-    );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
-    }
-
-    switch (boss.bossid) {
+    switch (boss.bossNo) {
       case 1:
-        if (lap.boss1Lap == null) {
+        if (clanEvent.boss1Lap == null) {
           throw new Error("lap.boss1Lap is null");
         }
-        bossLap = lap.boss1Lap;
-        lap.boss1Lap += 1;
-        eventBoss.boss1HP = Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)];
+        bossLap = clanEvent.boss1Lap;
+        clanEvent.boss1Lap += 1;
+        clanEvent.boss1HP = Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(1)];
         break;
       case 2:
-        if (lap.boss2Lap == null) {
+        if (clanEvent.boss2Lap == null) {
           throw new Error("lap.boss2Lap is null");
         }
-        bossLap = lap.boss2Lap;
-        lap.boss2Lap += 1;
-        eventBoss.boss2HP = Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)];
+        bossLap = clanEvent.boss2Lap;
+        clanEvent.boss2Lap += 1;
+        clanEvent.boss2HP = Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(2)];
         break;
       case 3:
-        if (lap.boss3Lap == null) {
+        if (clanEvent.boss3Lap == null) {
           throw new Error("lap.boss3Lap is null");
         }
-        bossLap = lap.boss3Lap;
-        lap.boss3Lap += 1;
-        eventBoss.boss3HP = Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)];
+        bossLap = clanEvent.boss3Lap;
+        clanEvent.boss3Lap += 1;
+        clanEvent.boss3HP = Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(3)];
         break;
       case 4:
-        if (lap.boss4Lap == null) {
+        if (clanEvent.boss4Lap == null) {
           throw new Error("lap.boss4Lap is null");
         }
-        bossLap = lap.boss4Lap;
-        lap.boss4Lap += 1;
-        eventBoss.boss4HP = Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)];
+        bossLap = clanEvent.boss4Lap;
+        clanEvent.boss4Lap += 1;
+        clanEvent.boss4HP = Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(4)];
         break;
       case 5:
-        if (lap.boss5Lap == null) {
+        if (clanEvent.boss5Lap == null) {
           throw new Error("lap.boss5Lap is null");
         }
-        bossLap = lap.boss5Lap;
-        lap.boss5Lap += 1;
-        eventBoss.boss5HP = Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)];
+        bossLap = clanEvent.boss5Lap;
+        clanEvent.boss5Lap += 1;
+        clanEvent.boss5HP = Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(5)];
         break;
       default:
         break;
     }
-    await new LapRepository().save(lap);
-    await new EventBossRepository().save(eventBoss);
+    await new ClanEventRepository().save(clanEvent);
 
     // 持ち越しが発生しているかチェック
     let isCarryOver = false;
     const reports = await new ReportRepository().getReportsByUserIdAndEventIdAndDayAndAttackCount(
-      user.id!,
-      event.id!,
+      user.id,
+      event.id,
       declaration.day,
       declaration.attackCount,
     );
@@ -166,9 +167,9 @@ export class ReportDefeat extends Button {
     // DBに保存
     await new ReportRepository().create(
       user.clanId,
-      user.id!,
-      event.id!,
-      boss.bossid,
+      user.id,
+      event.id,
+      boss.bossNo,
       bossLap,
       event.getClanBattleDay(),
       declaration.attackCount,
@@ -179,27 +180,20 @@ export class ReportDefeat extends Button {
     );
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
-        clan.id!,
-        boss.bossid!,
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+        clan.id,
+        boss.bossNo,
         false,
       );
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
     await deleteMessage.delete();
-    await BossChannelMessage.sendMessage(
-      interaction.channel,
-      clan,
-      boss,
-      eventBoss,
-      lap,
-      declarations,
-    );
+    await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);
     if (!channel.isTextBased()) {
       throw new Error("interaction.channel is not TextBasedChannel");
     }
     await interaction.deferUpdate();
     await channel.send({
-      content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossid + "ボスを撃破しました",
+      content: "【" + bossLap + "周目】" + user.name + "が" + boss.bossNo + "ボスを撃破しました",
     });
   }
 }

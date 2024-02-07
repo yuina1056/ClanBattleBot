@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import BossChannelMessage from "@/messages/BossChannelMessage";
@@ -6,10 +5,9 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
 import { UserRepository } from "@/repository/userRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class DeclarationCancel extends Button {
   static readonly customId: string = "declaration_cancel";
@@ -46,6 +44,9 @@ export class DeclarationCancel extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
       clan.id ?? 0,
@@ -57,17 +58,19 @@ export class DeclarationCancel extends Button {
     // ユーザー取得
     const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
       interaction.user.id,
-      clan.id!,
+      clan.id,
     );
     if (user == null) {
       throw new Error("ユーザー情報が取得できませんでした");
     }
-
+    if (user.id == null) {
+      throw new Error("ユーザーIDが取得できませんでした");
+    }
     // DBから削除
     const declaration =
       await new DeclarationRepository().getDeclarationByClanIdAndUserIdAndIsFinished(
-        clan.id!,
-        user.id!,
+        clan.id,
+        user.id,
         false,
       );
     if (declaration == null) {
@@ -86,31 +89,23 @@ export class DeclarationCancel extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
-
-    // 周回数取得
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      clan.id!,
-      event.id!,
-    );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
+    if (event.id == null) {
+      throw new Error("イベントIDが取得できませんでした");
     }
 
+    // クラン毎イベント情報取得
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
+    );
+
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
-        clan.id!,
-        boss.bossid!,
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+        clan.id,
+        boss.bossNo,
         false,
       );
-    await BossChannelMessage.sendMessage(
-      interaction.channel,
-      clan,
-      boss,
-      eventBoss,
-      lap,
-      declarations,
-    );
+    await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);
     await interaction.reply({ content: "凸宣言取消しました", ephemeral: true });
     await interaction.message.delete();
   }

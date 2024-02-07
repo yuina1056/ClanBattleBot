@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonInteraction, Guild } from "discord.js";
 
 import Declaration from "@/app/model/Declaration";
@@ -8,9 +7,8 @@ import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { BossRepository } from "@/repository/bossRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
 import { DeclarationRepository } from "@/repository/declarationRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export abstract class DeclarationAbstract extends Button {
   abstract attackCount: number;
@@ -37,9 +35,12 @@ export abstract class DeclarationAbstract extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
+    if (clan.id == null) {
+      throw new Error("クランIDが取得できませんでした");
+    }
     // ボス情報取得
     const boss = await new BossRepository().getBossByClanIdAndChannelId(
-      clan.id ?? 0,
+      clan.id,
       interaction.channel.id,
     );
     if (boss == null) {
@@ -50,26 +51,32 @@ export abstract class DeclarationAbstract extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("イベントIDが取得できませんでした");
+    }
 
-    // 周回数取得
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
+    // クラン毎イベント情報取得
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
+    );
     let bossLap = 0;
-    if (lap != null) {
-      switch (boss.bossid) {
+    if (clanEvent != null) {
+      switch (boss.bossNo) {
         case 1:
-          bossLap = lap.boss1Lap ?? 1;
+          bossLap = clanEvent.boss1Lap ?? 1;
           break;
         case 2:
-          bossLap = lap.boss2Lap ?? 1;
+          bossLap = clanEvent.boss2Lap ?? 1;
           break;
         case 3:
-          bossLap = lap.boss3Lap ?? 1;
+          bossLap = clanEvent.boss3Lap ?? 1;
           break;
         case 4:
-          bossLap = lap.boss4Lap ?? 1;
+          bossLap = clanEvent.boss4Lap ?? 1;
           break;
         case 5:
-          bossLap = lap.boss5Lap ?? 1;
+          bossLap = clanEvent.boss5Lap ?? 1;
           break;
         default:
           break;
@@ -93,28 +100,13 @@ export abstract class DeclarationAbstract extends Button {
     }
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossIdAndIsFinishedToRelationUser(
-        clan.id!,
-        boss.bossid!,
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+        clan.id,
+        boss.bossNo,
         false,
       );
 
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
-      clan.id!,
-      event.id!,
-    );
-    if (eventBoss == null) {
-      throw new Error("クランバトルボスのHP情報が取得できませんでした");
-    }
-
-    await BossChannelMessage.sendMessage(
-      interaction.channel,
-      clan,
-      boss,
-      eventBoss,
-      lap,
-      declarations,
-    );
+    await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);
     const deleteMessage = await channel.messages.fetch(
       interaction.message.reference?.messageId ?? "",
     );
@@ -130,7 +122,7 @@ export abstract class DeclarationAbstract extends Button {
         "週目】" +
         user.name +
         "が" +
-        boss.bossid +
+        boss.bossNo +
         "ボスに" +
         (this.isAttackCarryOver ? "持越" : "本戦") +
         "凸宣言しました",

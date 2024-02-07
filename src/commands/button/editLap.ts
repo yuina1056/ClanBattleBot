@@ -1,11 +1,10 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
 
 import { ModalEditLap } from "@/commands/modal/editLap";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { LapRepository } from "@/repository/lapRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class EditLap extends Button {
   static readonly customId = "edit_lap";
@@ -40,16 +39,25 @@ export class EditLap extends Button {
     if (event == null) {
       throw new Error("クランバトル開催情報が取得できませんでした");
     }
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
     // クラン取得
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const lap = await new LapRepository().getLapByEventIdAndClanId(event.id!, clan.id!);
-    if (lap == null) {
-      throw new Error("周回数情報が取得できませんでした");
+    if (clan.id == null) {
+      throw new Error("clan.id is null");
     }
-    const modal = new ModalEditLap().createModal(lap);
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
+      clan.id,
+      event.id,
+    );
+    if (clanEvent == null) {
+      throw new Error("クラン毎イベント情報が取得できませんでした");
+    }
+    const modal = new ModalEditLap().createModal(clanEvent);
     await interaction.showModal(modal);
   }
 }

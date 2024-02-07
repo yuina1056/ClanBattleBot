@@ -7,16 +7,14 @@ import { DeclarationCancel } from "@/commands/button/declarationCancel";
 import Clan from "@/entity/Clan";
 import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";
-import Lap from "@/entity/Lap";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
+import ClanEvent from "@/entity/ClanEvent";
 
 export async function sendMessage(
   channel: TextBasedChannel,
   clan: Clan,
   boss: Boss,
-  eventBoss: EventBoss | null,
-  lap: Lap | null,
+  clanEvent: ClanEvent | null,
   declaration: Declaration[],
 ) {
   let declarationMember = "凸宣言者なし";
@@ -27,70 +25,34 @@ export async function sendMessage(
     });
   }
   let bossLap = 1;
-  if (lap != null) {
-    switch (boss.bossid) {
-      case 1:
-        bossLap = lap.boss1Lap ?? 1;
-        break;
-      case 2:
-        bossLap = lap.boss2Lap ?? 1;
-        break;
-      case 3:
-        bossLap = lap.boss3Lap ?? 1;
-        break;
-      case 4:
-        bossLap = lap.boss4Lap ?? 1;
-        break;
-      case 5:
-        bossLap = lap.boss5Lap ?? 1;
-        break;
-      default:
-        break;
-    }
-  }
   let bossHp = 0;
   let bossMaxHp = 0;
-  if (eventBoss != null) {
-    switch (boss.bossid) {
+  if (clanEvent != null) {
+    switch (boss.bossNo) {
       case 1:
-        if (lap == null) {
-          bossMaxHp = Config.BossHPConfig.boss1HP[2];
-        } else {
-          bossMaxHp = Config.BossHPConfig.boss1HP[lap.getCurrentStage(1)];
-        }
-        bossHp = eventBoss.boss1HP ?? 0;
+        bossLap = clanEvent.boss1Lap ?? 1;
+        bossMaxHp = Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(1)];
+        bossHp = clanEvent.boss1HP ?? 0;
         break;
       case 2:
-        if (lap == null) {
-          bossMaxHp = Config.BossHPConfig.boss2HP[2];
-        } else {
-          bossMaxHp = Config.BossHPConfig.boss2HP[lap.getCurrentStage(2)];
-        }
-        bossHp = eventBoss.boss2HP ?? 0;
+        bossLap = clanEvent.boss2Lap ?? 1;
+        bossMaxHp = Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(2)];
+        bossHp = clanEvent.boss2HP ?? 0;
         break;
       case 3:
-        if (lap == null) {
-          bossMaxHp = Config.BossHPConfig.boss3HP[2];
-        } else {
-          bossMaxHp = Config.BossHPConfig.boss3HP[lap.getCurrentStage(3)];
-        }
-        bossHp = eventBoss.boss3HP ?? 0;
+        bossLap = clanEvent.boss3Lap ?? 1;
+        bossMaxHp = Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(3)];
+        bossHp = clanEvent.boss3HP ?? 0;
         break;
       case 4:
-        if (lap == null) {
-          bossMaxHp = Config.BossHPConfig.boss4HP[2];
-        } else {
-          bossMaxHp = Config.BossHPConfig.boss4HP[lap.getCurrentStage(4)];
-        }
-        bossHp = eventBoss.boss4HP ?? 0;
+        bossLap = clanEvent.boss4Lap ?? 1;
+        bossMaxHp = Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(4)];
+        bossHp = clanEvent.boss4HP ?? 0;
         break;
       case 5:
-        if (lap == null) {
-          bossMaxHp = Config.BossHPConfig.boss5HP[2];
-        } else {
-          bossMaxHp = Config.BossHPConfig.boss5HP[lap.getCurrentStage(5)];
-        }
-        bossHp = eventBoss.boss5HP ?? 0;
+        bossLap = clanEvent.boss5Lap ?? 1;
+        bossMaxHp = Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(5)];
+        bossHp = clanEvent.boss5HP ?? 0;
         break;
       default:
         break;
@@ -99,7 +61,7 @@ export async function sendMessage(
 
   // コンポーネント定義
   const embed = new EmbedBuilder()
-    .setTitle(boss.bossid + "ボス")
+    .setTitle(boss.bossNo + "ボス")
     .setColor("#00ff00")
     .setFields(
       {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
 import Event from "@/entity/Event";
@@ -16,12 +15,17 @@ export async function regist(
   // ユーザー取得
   const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
     discordUserId,
-    boss.clanId!,
+    boss.clanId,
   );
   if (user == null) {
     return new Error("ユーザー情報が取得できませんでした");
   }
-
+  if (user.id == null) {
+    return new Error("ユーザーIDが取得できませんでした");
+  }
+  if (event.id == null) {
+    return new Error("イベントIDが取得できませんでした");
+  }
   // チェック
   const err = await validate(user, event);
   if (err instanceof Error) {
@@ -30,9 +34,9 @@ export async function regist(
   // DBに保存
   await new DeclarationRepository().create(
     user.clanId,
-    user.id!,
-    event!.id!,
-    boss.bossid,
+    user.id,
+    event.id,
+    boss.bossNo,
     lap,
     event.getClanBattleDay(),
     attackCount,
@@ -43,9 +47,15 @@ export async function regist(
 }
 
 async function validate(user: User, event: Event): Promise<Error | null> {
+  if (user.id == null) {
+    return new Error("ユーザーIDが取得できませんでした");
+  }
+  if (event.id == null) {
+    return new Error("イベントIDが取得できませんでした");
+  }
   const declarations = await new DeclarationRepository().getDeclarationsByUserIdAndEventIdAndDay(
-    user.id!,
-    event.id!,
+    user.id,
+    event.id,
     event.getClanBattleDay(),
   );
   // 凸宣言がない場合
@@ -55,7 +65,7 @@ async function validate(user: User, event: Event): Promise<Error | null> {
   // 宣言済みの凸がある場合
   const declared = declarations.filter((declaration) => declaration.isFinished === false);
   if (declared.length > 0) {
-    return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
+    return new Error("既に" + declared[0].bossNo + "ボスに凸宣言済みです");
   }
 
   return null;

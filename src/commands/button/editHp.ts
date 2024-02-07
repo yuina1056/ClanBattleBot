@@ -4,7 +4,7 @@ import { ModalEditHp } from "@/commands/modal/editHp";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
-import { EventBossRepository } from "@/repository/eventBossRepository";
+import { ClanEventRepository } from "@/repository/clanEventRepository";
 
 export class EditHp extends Button {
   static readonly customId = "edit_hp";
@@ -44,14 +44,14 @@ export class EditHp extends Button {
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
-    const eventBoss = await new EventBossRepository().getEventBossByClanIdAndEventId(
+    const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
       clan.id ?? 0,
       event.id ?? 0,
     );
-    if (eventBoss == null) {
+    if (clanEvent == null) {
       throw new Error("クランバトルボスのHP情報が取得できませんでした");
     }
-    const modal = new ModalEditHp().createModal(eventBoss);
+    const modal = new ModalEditHp().createModal(clanEvent);
     await interaction.showModal(modal);
   }
 }
