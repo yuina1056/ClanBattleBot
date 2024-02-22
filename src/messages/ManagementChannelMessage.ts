@@ -158,27 +158,47 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "    800 / 800 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[1] +
+        " / " +
+        Config.BossHPConfig.boss1HP[1] +
+        " \n" +
         2 +
         " (" +
         1 +
         "周)\n" +
-        "   1000 / 1000 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[2] +
+        " / " +
+        Config.BossHPConfig.boss1HP[2] +
+        " \n" +
         3 +
         " (" +
         1 +
         "周)\n" +
-        "   1300 / 1300 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[3] +
+        " / " +
+        Config.BossHPConfig.boss1HP[3] +
+        " \n" +
         4 +
         " (" +
         1 +
         "周)\n" +
-        "   1500 / 1500 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[4] +
+        " / " +
+        Config.BossHPConfig.boss1HP[4] +
+        " \n" +
         5 +
         " (" +
         1 +
         "周)\n" +
-        "   2000 / 2000 \n",
+        "    " +
+        Config.BossHPConfig.boss1HP[5] +
+        " / " +
+        Config.BossHPConfig.boss1HP[5] +
+        " \n",
     );
   }
   const bossStatus = bossStatusCodeBlock;
