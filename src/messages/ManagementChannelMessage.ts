@@ -5,21 +5,20 @@ import {
   ButtonBuilder,
   codeBlock,
   bold,
-  time,
+  // time,
 } from "discord.js";
 
-import dataSource from "@/datasource";
-import button_reload_attack_status from "@/commands/button/reload_attack_status";
-import button_manage_menu from "@/commands/button/ManageMenu";
+import { ReloadAttackStatus } from "@/commands/button/reloadAttackStatus";
+import { ManageMenu } from "@/commands/button/manageMenu";
 
 import User from "@/entity/User";
 import Event from "@/entity/Event";
 import Clan from "@/entity/Clan";
 import Report from "@/entity/Report";
-import Boss from "@/entity/Boss";
-import Lap from "@/entity/Lap";
-import EventBoss from "@/entity/EventBoss";
 import Config from "@/config/config";
+import { ReportRepository } from "@/repository/reportRepository";
+import { BossRepository } from "@/repository/bossRepository";
+import ClanEvent from "@/entity/ClanEvent";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -27,9 +26,12 @@ export async function sendMessage(
   clan: Clan,
   users: User[],
   event: Event | null,
-  eventBoss: EventBoss | null,
+  clanEvent: ClanEvent | null,
   isInit: boolean,
 ) {
+  if (clan.id == null) {
+    throw new Error("clan.id is null");
+  }
   let userStatus = "メンバー(" + users.length + ")\n";
   users.forEach((user) => {
     userStatus += user.getAttackStatus(event) + "\n";
@@ -39,24 +41,25 @@ export async function sendMessage(
   // クラン紹介
   const clanTitle: string = bold("凸状況") + "\n";
   const clanProfile: string = "# " + clan.name + " (" + users.length + "人)\n";
-  const reportRepository = dataSource.getRepository(Report);
+  const reportRepository = new ReportRepository();
 
   let todayReports: Report[] = [];
   if (event !== null) {
-    todayReports = await reportRepository.find({
-      where: {
-        clanId: clan.id,
-        eventId: event.id,
-        day: event.getClanBattleDay(),
-      },
-    });
+    if (event.id == null) {
+      throw new Error("event.id is null");
+    }
+    todayReports = await reportRepository.getByClanIdAndEventIdAndDay(
+      clan.id,
+      event.id,
+      event.getClanBattleDay(),
+    );
   }
-  let latestReport: Report;
-  let latestReportTime: string;
-  if (todayReports.length !== 0) {
-    latestReport = todayReports.reduce((a, b) => (a.UpdatedAt! > b.UpdatedAt! ? a : b));
-    latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
-  }
+  // let latestReport: Report;
+  // let latestReportTime: string;
+  // if (todayReports.length !== 0) {
+  // latestReport = todayReports.reduce((a, b) => (a.UpdatedAt! > b.UpdatedAt! ? a : b));
+  // latestReportTime = latestReport.UpdatedAt ? time(latestReport.UpdatedAt) : "-";
+  // }
 
   const clanStatus: string =
     clanTitle +
@@ -88,78 +91,65 @@ export async function sendMessage(
       " 凸",
   );
 
-  // 周回数
-  const lapRepository = dataSource.getRepository(Lap);
-  let lap: Lap | null = null;
-  if (event !== null) {
-    lap = await lapRepository.findOneBy({
-      clanId: clan.id,
-      eventId: event.id,
-    });
-  } else {
-    lap = new Lap(clan.id ?? 0, 0);
-  }
-
-  if (lap == null) {
-    throw new Error("lap is null");
+  if (clanEvent == null) {
+    throw new Error("clanEvent is null");
   }
 
   // ボス状況
-  const bossRepository = dataSource.getRepository(Boss);
-  const bosses = await bossRepository.find();
-  // TODO 各段階ボスの満タンHP情報を盛り込む。HPは４段階目のみになっているため、段階ごとに切り替えられるようにする必要がある。
+  const bossRepository = new BossRepository();
+  const bosses = await bossRepository.getAll();
   let bossStatusCodeBlock = "";
   if (event !== null) {
     bossStatusCodeBlock = codeBlock(
-      bosses[0].bossid +
+      bosses[0].bossNo +
         " ( " +
-        String(lap.boss1Lap).padStart(2) +
+        String(clanEvent.boss1Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(1) ? "" : "💎") +
+        (clanEvent.isAttackPossible(1) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss1HP).padStart(5) +
+        String(clanEvent?.boss1HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss1HP[lap.getCurrentStage(bosses[0].bossid)] +
+        Config.BossHPConfig.boss1HP[clanEvent.getCurrentStage(bosses[0].bossNo)] +
         " \n" +
-        bosses[1].bossid +
+        bosses[1].bossNo +
         " ( " +
-        String(lap.boss2Lap).padStart(2) +
+        String(clanEvent.boss2Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(2) ? "" : "💎") +
+        (clanEvent.isAttackPossible(2) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss2HP).padStart(5) +
+        String(clanEvent?.boss2HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss2HP[lap.getCurrentStage(bosses[1].bossid)] +
+        Config.BossHPConfig.boss2HP[clanEvent.getCurrentStage(bosses[1].bossNo)] +
         "\n" +
-        bosses[2].bossid +
+        bosses[2].bossNo +
         " ( " +
-        String(lap.boss3Lap).padStart(2) +
+        String(clanEvent.boss3Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(3) ? "" : "💎") +
+        (clanEvent.isAttackPossible(3) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss3HP).padStart(5) +
+        String(clanEvent?.boss3HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss3HP[lap.getCurrentStage(bosses[2].bossid)] +
+        Config.BossHPConfig.boss3HP[clanEvent.getCurrentStage(bosses[2].bossNo)] +
         "\n" +
-        bosses[3].bossid +
+        bosses[3].bossNo +
         " ( " +
-        String(lap.boss4Lap).padStart(2) +
+        String(clanEvent.boss4Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(4) ? "" : "💎") +
+        (clanEvent.isAttackPossible(4) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss4HP).padStart(5) +
+        String(clanEvent?.boss4HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss4HP[lap.getCurrentStage(bosses[3].bossid)] +
+        Config.BossHPConfig.boss4HP[clanEvent.getCurrentStage(bosses[3].bossNo)] +
         "\n" +
-        bosses[4].bossid +
+        bosses[4].bossNo +
         " ( " +
-        String(lap.boss5Lap).padStart(2) +
+        String(clanEvent.boss5Lap).padStart(2) +
         "周目 )" +
-        (lap.isAttackPossible(5) ? "" : "💎") +
+        (clanEvent.isAttackPossible(5) ? "" : "💎") +
         "\n" +
-        String(eventBoss?.boss5HP).padStart(5) +
+        String(clanEvent?.boss5HP).padStart(5) +
         " / " +
-        Config.BossHPConfig.boss5HP[lap.getCurrentStage(bosses[4].bossid)] +
+        Config.BossHPConfig.boss5HP[clanEvent.getCurrentStage(bosses[4].bossNo)] +
         "\n",
     );
   } else {
@@ -168,36 +158,60 @@ export async function sendMessage(
         " (" +
         1 +
         "周)\n" +
-        "    800 / 800 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[1] +
+        " / " +
+        Config.BossHPConfig.boss1HP[1] +
+        " \n" +
         2 +
         " (" +
         1 +
         "周)\n" +
-        "   1000 / 1000 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[2] +
+        " / " +
+        Config.BossHPConfig.boss1HP[2] +
+        " \n" +
         3 +
         " (" +
         1 +
         "周)\n" +
-        "   1300 / 1300 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[3] +
+        " / " +
+        Config.BossHPConfig.boss1HP[3] +
+        " \n" +
         4 +
         " (" +
         1 +
         "周)\n" +
-        "   1500 / 1500 \n" +
+        "    " +
+        Config.BossHPConfig.boss1HP[4] +
+        " / " +
+        Config.BossHPConfig.boss1HP[4] +
+        " \n" +
         5 +
         " (" +
         1 +
         "周)\n" +
-        "   2000 / 2000 \n",
+        "    " +
+        Config.BossHPConfig.boss1HP[5] +
+        " / " +
+        Config.BossHPConfig.boss1HP[5] +
+        " \n",
     );
   }
   const bossStatus = bossStatusCodeBlock;
 
   const content: string = userStatusContent + clanStatus + attackStatus + bossStatus;
+
+  const reloadAttackStatus = new ReloadAttackStatus();
+  const manageMenu = new ManageMenu();
+
   const components = [
     new ActionRowBuilder<ButtonBuilder>().addComponents(
-      button_reload_attack_status.data,
-      button_manage_menu.data,
+      reloadAttackStatus.button,
+      manageMenu.button,
     ),
   ];
   if (isInit) {

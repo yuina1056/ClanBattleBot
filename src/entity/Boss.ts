@@ -6,15 +6,15 @@ export default class Boss {
   @PrimaryGeneratedColumn()
   id?: number;
   @Column()
-  bossid: number;
+  bossNo: number;
   @Column()
   clanId: number;
   @Column()
   discordChannelId: string;
 
-  constructor(clanId: number, bossId: number, discordChannelId: string) {
+  constructor(clanId: number, bossNo: number, discordChannelId: string) {
     this.clanId = clanId;
-    this.bossid = bossId;
+    this.bossNo = bossNo;
     this.discordChannelId = discordChannelId;
   }
 }

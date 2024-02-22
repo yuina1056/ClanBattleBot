@@ -1,17 +1,17 @@
-import { DeclarationAbstract } from "@/commands/button/DeclarationAbstract";
+import { DeclarationAbstract } from "@/commands/button/declarationAbstract";
 import { ButtonBuilder, ButtonStyle } from "discord.js";
 
 export class DeclarationFirstAsCarryOver extends DeclarationAbstract {
   static readonly customId: string = "declarationFirstAsCarryOver";
   attackCount: number;
   isAttackCarryOver: boolean;
-  data: ButtonBuilder;
+  button: ButtonBuilder;
 
   constructor() {
     super();
     this.attackCount = 1;
     this.isAttackCarryOver = true;
-    this.data = new ButtonBuilder()
+    this.button = new ButtonBuilder()
       .setCustomId(DeclarationFirstAsCarryOver.customId)
       .setStyle(ButtonStyle.Danger)
       .setLabel("1凸目持越");

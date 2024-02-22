@@ -1,29 +1,27 @@
-import { ButtonBuilder, ButtonStyle, ButtonInteraction, Guild } from "discord.js";
+import { ButtonBuilder, ButtonStyle, ButtonInteraction } from "discord.js";
 
-import { ModalEditLap } from "@/commands/modal/editLap";
+import ManagementMessage from "@/messages/ManagementChannelMessage";
 import { Button } from "@/commands/button/button";
 import { EventRepository } from "@/repository/eventRepository";
 import { ClanRepository } from "@/repository/clanRepository";
+import { UserRepository } from "@/repository/userRepository";
 import { ClanEventRepository } from "@/repository/clanEventRepository";
 
-export class EditLap extends Button {
-  static readonly customId = "edit_lap";
+export class ReloadAttackStatus extends Button {
+  static readonly customId = "reload_attack_status";
   button: ButtonBuilder;
 
   constructor() {
     super();
     this.button = new ButtonBuilder()
-      .setCustomId(EditLap.customId)
+      .setCustomId(ReloadAttackStatus.customId)
       .setStyle(ButtonStyle.Secondary)
-      .setLabel("周回数修正");
+      .setLabel("凸状況更新");
   }
-
   async execute(interaction: ButtonInteraction) {
-    let guild: Guild;
-    if (interaction.guild != null) {
-      guild = interaction.guild;
-    } else {
-      throw new Error("interaction.guild is null");
+    const guild = interaction.guild;
+    if (guild == null) {
+      throw new Error("guild is null");
     }
     if (interaction.channel == null) {
       throw new Error("interaction.channel is null");
@@ -37,19 +35,19 @@ export class EditLap extends Button {
     }
     const event = await new EventRepository().findEventByToday();
     if (event == null) {
-      throw new Error("クランバトル開催情報が取得できませんでした");
+      throw new Error("開催情報が取得できませんでした");
     }
     if (event.id == null) {
-      throw new Error("event.id is null");
+      throw new Error("イベントIDが取得できませんでした");
     }
-    // クラン取得
     const clan = await new ClanRepository().getClanByDiscordCategoryId(channel.parentId);
     if (clan == null) {
       throw new Error("クラン情報が取得できませんでした");
     }
     if (clan.id == null) {
-      throw new Error("clan.id is null");
+      throw new Error("クランIDが取得できませんでした");
     }
+    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id);
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
       clan.id,
       event.id,
@@ -57,7 +55,15 @@ export class EditLap extends Button {
     if (clanEvent == null) {
       throw new Error("クラン毎イベント情報が取得できませんでした");
     }
-    const modal = new ModalEditLap().createModal(clanEvent);
-    await interaction.showModal(modal);
+    await interaction.deferUpdate();
+    await ManagementMessage.sendMessage(
+      interaction.channel,
+      interaction.message,
+      clan,
+      users,
+      event,
+      clanEvent,
+      false,
+    );
   }
 }

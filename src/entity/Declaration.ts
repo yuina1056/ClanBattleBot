@@ -25,7 +25,7 @@ export default class Declaration {
   @ManyToOne(() => Event, (event) => event.declarations)
   event!: Event;
   @Column()
-  bossId: number;
+  bossNo: number;
   @Column()
   lap: number;
   @Column()
@@ -45,7 +45,7 @@ export default class Declaration {
     clanId: number,
     userId: number,
     eventId: number,
-    bossId: number,
+    bossNo: number,
     lap: number,
     day: number,
     attackCount: number,
@@ -55,7 +55,7 @@ export default class Declaration {
     this.clanId = clanId;
     this.userId = userId;
     this.eventId = eventId;
-    this.bossId = bossId;
+    this.bossNo = bossNo;
     this.lap = lap;
     this.day = day;
     this.attackCount = attackCount;

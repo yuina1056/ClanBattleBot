@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import dayjs from "dayjs";
-
-import DataSource from "@/datasource";
 import User from "@/entity/User";
 import Boss from "@/entity/Boss";
-import Declaration from "@/entity/Declaration";
 import Event from "@/entity/Event";
+import { DeclarationRepository } from "@/repository/declarationRepository";
+import { UserRepository } from "@/repository/userRepository";
 
 export async function regist(
   boss: Boss,
@@ -13,63 +10,62 @@ export async function regist(
   lap: number,
   attackCount: number,
   isAttackCarryOver: boolean,
+  event: Event,
 ): Promise<User | Error> {
-  const today = dayjs().format();
-  const event = await DataSource.getRepository(Event)
-    .createQueryBuilder("event")
-    .where("event.fromDate <= :today", { today })
-    .andWhere("event.toDate >= :today", { today })
-    .getOne();
-  if (event == null) {
-    return new Error("クランバトル開催情報が取得できませんでした");
-  }
   // ユーザー取得
-  const userRepository = DataSource.getRepository(User);
-  const user = await userRepository.findOneBy({
-    discordUserId: discordUserId,
-    clanId: boss.clanId,
-  });
+  const user = await new UserRepository().getUserByDiscordUserIdAndClanId(
+    discordUserId,
+    boss.clanId,
+  );
   if (user == null) {
     return new Error("ユーザー情報が取得できませんでした");
   }
-
+  if (user.id == null) {
+    return new Error("ユーザーIDが取得できませんでした");
+  }
+  if (event.id == null) {
+    return new Error("イベントIDが取得できませんでした");
+  }
   // チェック
   const err = await validate(user, event);
   if (err instanceof Error) {
     return err;
   }
   // DBに保存
-  const declaration = new Declaration(
+  await new DeclarationRepository().create(
     user.clanId,
-    user.id!,
-    event!.id!,
-    boss.bossid,
+    user.id,
+    event.id,
+    boss.bossNo,
     lap,
     event.getClanBattleDay(),
     attackCount,
     false,
     isAttackCarryOver,
   );
-  await DataSource.getRepository(Declaration).save(declaration);
-
   return user;
 }
 
 async function validate(user: User, event: Event): Promise<Error | null> {
-  const declarationRepository = DataSource.getRepository(Declaration);
-  const declaration = await declarationRepository.findBy({
-    userId: user.id,
-    eventId: event.id,
-    day: event.getClanBattleDay(),
-  });
+  if (user.id == null) {
+    return new Error("ユーザーIDが取得できませんでした");
+  }
+  if (event.id == null) {
+    return new Error("イベントIDが取得できませんでした");
+  }
+  const declarations = await new DeclarationRepository().getDeclarationsByUserIdAndEventIdAndDay(
+    user.id,
+    event.id,
+    event.getClanBattleDay(),
+  );
   // 凸宣言がない場合
-  if (declaration.length === 0) {
+  if (declarations.length === 0) {
     return null;
   }
   // 宣言済みの凸がある場合
-  const declared = declaration.filter((declaration) => declaration.isFinished === false);
+  const declared = declarations.filter((declaration) => declaration.isFinished === false);
   if (declared.length > 0) {
-    return new Error("既に" + declared[0].bossId + "ボスに凸宣言済みです");
+    return new Error("既に" + declared[0].bossNo + "ボスに凸宣言済みです");
   }
 
   return null;
