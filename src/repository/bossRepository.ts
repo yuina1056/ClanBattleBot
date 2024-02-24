@@ -20,4 +20,10 @@ export class BossRepository {
   async getAll(): Promise<Boss[]> {
     return await BossRepository.repository.find();
   }
+  async getByClanIdAndBossNo(clanId: number, bossNo: number): Promise<Boss | null> {
+    return await BossRepository.repository.findOneBy({
+      clanId: clanId,
+      bossNo: bossNo,
+    });
+  }
 }
