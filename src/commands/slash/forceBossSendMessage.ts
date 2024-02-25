@@ -45,6 +45,9 @@ export class ForceBossSendMessage extends Slash {
     } else {
       throw new Error("value is null");
     }
+    if (BossNo < 1 || BossNo > 5) {
+      throw new Error("ボス番号は1~5の間で入力してください");
+    }
 
     let guild: Guild;
     if (interaction.guild != null) {
