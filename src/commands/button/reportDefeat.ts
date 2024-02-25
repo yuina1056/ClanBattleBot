@@ -180,10 +180,11 @@ export class ReportDefeat extends Button {
     );
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
         clan.id,
         boss.bossNo,
         false,
+        event.id,
       );
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
     await deleteMessage.delete();

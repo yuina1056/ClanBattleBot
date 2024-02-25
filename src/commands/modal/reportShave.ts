@@ -186,10 +186,11 @@ export class ModalReportShaveHP extends Modal {
     const saveClanEvent = await new ClanEventRepository().save(clanEvent);
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
         clan.id,
         boss.bossNo,
         false,
+        event.id,
       );
     await BossChannelMessage.sendMessage(
       interactionChannel,

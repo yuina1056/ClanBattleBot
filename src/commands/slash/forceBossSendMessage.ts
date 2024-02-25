@@ -45,6 +45,9 @@ export class ForceBossSendMessage extends Slash {
     } else {
       throw new Error("value is null");
     }
+    if (BossNo < 1 || BossNo > 5) {
+      throw new Error("ボス番号は1~5の間で入力してください");
+    }
 
     let guild: Guild;
     if (interaction.guild != null) {
@@ -78,10 +81,11 @@ export class ForceBossSendMessage extends Slash {
       throw new Error("clanEvent is null");
     }
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
         clan.id,
         boss.bossNo,
         false,
+        event.id,
       );
     const channel = guild.channels.client.channels.cache.get(boss.discordChannelId);
     if (channel == null) {

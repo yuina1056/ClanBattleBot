@@ -4,15 +4,17 @@ import dataSource from "@/repository/repository";
 
 export class DeclarationRepository {
   static readonly repository: Repository<Declaration> = dataSource.getRepository(Declaration);
-  async getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+  async getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
     clanId: number,
     bossNo: number,
     isFinished: boolean,
+    eventId: number,
   ): Promise<Declaration[]> {
     return await DeclarationRepository.repository.find({
       where: {
         clanId: clanId,
         bossNo: bossNo,
+        eventId: eventId,
         isFinished: isFinished,
       },
       relations: {
