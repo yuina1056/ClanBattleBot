@@ -100,10 +100,11 @@ export abstract class DeclarationAbstract extends Button {
     }
 
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
         clan.id,
         boss.bossNo,
         false,
+        event.id,
       );
 
     await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);

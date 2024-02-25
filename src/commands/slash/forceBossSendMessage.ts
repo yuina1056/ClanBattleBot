@@ -81,10 +81,11 @@ export class ForceBossSendMessage extends Slash {
       throw new Error("clanEvent is null");
     }
     const declarations =
-      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedToRelationUser(
+      await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
         clan.id,
         boss.bossNo,
         false,
+        event.id,
       );
     const channel = guild.channels.client.channels.cache.get(boss.discordChannelId);
     if (channel == null) {
