@@ -8,7 +8,8 @@
     "start": "node build/src/main.js",
     "dev": "ts-node -r tsconfig-paths/register src/main.ts",
     "compile": "tsc -p tsconfig.json && tsc-alias -p tsconfig.json",
-    "deploy-command": "ts-node -r tsconfig-paths/register src/deploy-command.ts",
+    "deploy-command-dev": "ts-node -r tsconfig-paths/register src/deploy-command.ts",
+    "deploy-command": "node build/src/deploy-command.js",
     "typeorm:generate": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -d src/repository/repository.ts",
     "typeorm:up": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:run -d src/repository/repository.ts",
     "typeorm:down": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:revert -d src/repository/repository.ts",
@@ -23,7 +24,7 @@
     "dayjs": "^1.11.9",
     "discord.js": "14.14.1",
     "dotenv": "^16.3.1",
-    "mysql2": "^3.6.0",
+    "mysql2": "^3.9.4",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.17"
   },

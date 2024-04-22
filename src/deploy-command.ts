@@ -7,15 +7,18 @@ dotenv.config();
 import { Dice } from "@/commands/slash/dice";
 import { Setup } from "@/commands/slash/setup";
 import { UpdateUser } from "@/commands/slash/updateUser";
+import { ForceBossSendMessage } from "./commands/slash/forceBossSendMessage";
 
 // 登録コマンドを呼び出してリスト形式で登録
 const dice = new Dice();
 const setup = new Setup();
 const updateUser = new UpdateUser();
+const forceBossSendMessage = new ForceBossSendMessage();
 const commands = [
   dice.slashCommand.toJSON(),
   setup.slashCommand.toJSON(),
   updateUser.slashCommand.toJSON(),
+  forceBossSendMessage.slashCommand.toJSON(),
 ];
 
 // DiscordのAPIには現在最新のversion10を指定
