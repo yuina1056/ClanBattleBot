@@ -198,7 +198,9 @@ export class ReportDefeat extends Button {
         throw new Error("interaction.channel is not TextBasedChannel");
       }
       channel.send({
-        content: declarationUsers.map((userId) => "<@" + userId + ">").join(" ") + "解凍！",
+        content:
+          declarationUsers.map((userId) => "<@" + userId + ">").join(" ") +
+          "解凍！\n（凸宣言が取り消しされました）",
       });
       declarations = [];
     }
