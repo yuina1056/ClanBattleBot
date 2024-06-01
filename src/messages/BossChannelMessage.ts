@@ -9,6 +9,7 @@ import Boss from "@/entity/Boss";
 import Declaration from "@/entity/Declaration";
 import Config from "@/config/config";
 import ClanEvent from "@/entity/ClanEvent";
+import { Relief } from "@/commands/button/relief";
 
 export async function sendMessage(
   channel: TextBasedChannel,
@@ -86,6 +87,7 @@ export async function sendMessage(
   const declarationCancel = new DeclarationCancel();
   const reportDefeat = new ReportDefeat();
   const reportShave = new ReportShave();
+  const relief = new Relief();
 
   await channel.send({
     embeds: [embed],
@@ -96,6 +98,7 @@ export async function sendMessage(
         reportDefeat.button,
         declarationCancel.button,
       ),
+      new ActionRowBuilder<ButtonBuilder>().addComponents(relief.button),
     ],
   });
 }

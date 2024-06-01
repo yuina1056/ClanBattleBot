@@ -77,14 +77,11 @@ export class Relief extends Button {
         clan.discordRoleId +
         "> 【救援依頼】" +
         user.name +
-        "さんからの" +
+        "さんから" +
         boss.bossNo +
         "ボス救援要請です！",
     });
 
-    await interaction.reply({
-      ephemeral: true,
-      content: "救援依頼を送信しました",
-    });
+    await interaction.deferUpdate();
   }
 }
