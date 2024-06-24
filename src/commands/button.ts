@@ -18,6 +18,8 @@ import { ResetDeclarationReportSecond } from "@/commands/button/resetDeclaration
 import { ResetDeclarationReportThird } from "@/commands/button/resetDeclarationReportThird";
 import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
+import { Relief } from "@/commands/button/relief";
+import { SupportBoss } from "@/commands/button/supportBoss";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -75,6 +77,12 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case EditHp.customId:
       action = new EditHp();
+      break;
+    case Relief.customId:
+      action = new Relief();
+      break;
+    case SupportBoss.customId:
+      action = new SupportBoss();
       break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
