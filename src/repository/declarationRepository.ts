@@ -90,9 +90,6 @@ export class DeclarationRepository {
   async deleteById(id: number): Promise<void> {
     await DeclarationRepository.repository.delete(id);
   }
-  async deleteByIds(ids: number[]): Promise<void> {
-    await DeclarationRepository.repository.delete(ids);
-  }
   async deleteByUserIdAndEventIdAndDayAndAttackCount(
     userId: number,
     eventId: number,
