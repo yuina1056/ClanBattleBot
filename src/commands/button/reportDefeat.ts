@@ -179,32 +179,13 @@ export class ReportDefeat extends Button {
       isCarryOver,
     );
 
-    let declarations =
+    const declarations =
       await new DeclarationRepository().getDeclarationsByClanIdAndBossNoAndIsFinishedAndEventIdToRelationUser(
         clan.id,
         boss.bossNo,
         false,
         event.id,
       );
-
-    if (declarations.length != 0) {
-      const declarationUsers: string[] = declarations.map(
-        (declaration) => declaration.user.discordUserId ?? 0,
-      );
-      await new DeclarationRepository().deleteByIds(
-        declarations.map((declaration) => declaration.id ?? 0),
-      );
-      if (!channel.isTextBased()) {
-        throw new Error("interaction.channel is not TextBasedChannel");
-      }
-      channel.send({
-        content:
-          declarationUsers.map((userId) => "<@" + userId + ">").join(" ") +
-          "解凍！\n（凸宣言が取り消しされました）",
-      });
-      declarations = [];
-    }
-
     const deleteMessage = await channel.messages.fetch(interaction.message.id ?? "");
     await deleteMessage.delete();
     await BossChannelMessage.sendMessage(interaction.channel, clan, boss, clanEvent, declarations);
