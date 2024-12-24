@@ -47,7 +47,7 @@ export class ReloadAttackStatus extends Button {
     if (clan.id == null) {
       throw new Error("クランIDが取得できませんでした");
     }
-    const users = await new UserRepository().getUsersByClanIdToRelationReports(clan.id);
+    const users = await new UserRepository().getUsersByClanIdToRelationReportsAndTaskKills(clan.id);
     const clanEvent = await new ClanEventRepository().getClanEventByClanIdAndEventId(
       clan.id,
       event.id,

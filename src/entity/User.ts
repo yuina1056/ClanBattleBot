@@ -50,9 +50,23 @@ export default class User {
   public getAttackStatus(event: Event | null): string {
     const shortenName = this.name.substring(0, 10).padEnd(10);
     let res: string = shortenName + " [－/－/－]";
+
     if (event == null || this.reports == null || this.reports.length === 0) {
       return res + " (記録なし)";
     }
+
+    if (this.taskKills == null || this.taskKills.length === 0) {
+      return res;
+    }
+    // タスクキルチェック
+    const todayTaskKill = this.taskKills.find((taskKill) => {
+      return taskKill.day == event.getClanBattleDay() && taskKill.eventId == event.id;
+    });
+
+    if (todayTaskKill != null) {
+      res = "🚫" + res;
+    }
+
     if (this.reports.length === 0) {
       return res + " (記録なし)";
     }
