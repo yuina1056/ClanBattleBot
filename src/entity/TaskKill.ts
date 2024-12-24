@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import User from "@/entity/User";
 
 @Entity()
 // タスクキル情報
@@ -11,6 +12,8 @@ export default class TaskKill {
   clanId: number;
   @Column()
   userId: number;
+  @ManyToOne(() => User, (user) => user.taskKills)
+  user!: User;
   @Column()
   day: number;
 

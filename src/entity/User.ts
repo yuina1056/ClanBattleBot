@@ -14,6 +14,7 @@ import Report from "@/entity/Report";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
 import Declaration from "@/entity/Declaration";
+import TaskKill from "./TaskKill";
 
 @Entity()
 // ユーザー
@@ -38,6 +39,8 @@ export default class User {
   reports?: Report[];
   @OneToMany(() => Declaration, (declaration) => declaration.user)
   declarations?: Declaration[];
+  @OneToMany(() => TaskKill, (taskKill) => taskKill.user)
+  taskKills?: TaskKill[];
 
   constructor(clanId: number, name: string, discordUserId: string) {
     this.clanId = clanId;
