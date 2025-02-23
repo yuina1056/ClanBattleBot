@@ -14,7 +14,6 @@ import Report from "@/entity/Report";
 import Clan from "@/entity/Clan";
 import Event from "@/entity/Event";
 import Declaration from "@/entity/Declaration";
-import TaskKill from "./TaskKill";
 
 @Entity()
 // ユーザー
@@ -39,8 +38,6 @@ export default class User {
   reports?: Report[];
   @OneToMany(() => Declaration, (declaration) => declaration.user)
   declarations?: Declaration[];
-  @OneToMany(() => TaskKill, (taskKill) => taskKill.user)
-  taskKills?: TaskKill[];
 
   constructor(clanId: number, name: string, discordUserId: string) {
     this.clanId = clanId;
@@ -50,23 +47,9 @@ export default class User {
   public getAttackStatus(event: Event | null): string {
     const shortenName = this.name.substring(0, 10).padEnd(10);
     let res: string = shortenName + " [－/－/－]";
-
     if (event == null || this.reports == null || this.reports.length === 0) {
       return res + " (記録なし)";
     }
-
-    if (this.taskKills == null || this.taskKills.length === 0) {
-      return res;
-    }
-    // タスクキルチェック
-    const todayTaskKill = this.taskKills.find((taskKill) => {
-      return taskKill.day == event.getClanBattleDay() && taskKill.eventId == event.id;
-    });
-
-    if (todayTaskKill != null) {
-      res = "🚫" + res;
-    }
-
     if (this.reports.length === 0) {
       return res + " (記録なし)";
     }

@@ -9,7 +9,6 @@ import Report from "@/entity/Report";
 import User from "@/entity/User";
 import Event from "@/entity/Event";
 import ClanEvent from "@/entity/ClanEvent";
-import TaskKill from "@/entity/TaskKill";
 
 dotenv.config();
 
@@ -22,7 +21,7 @@ const dataSource = new DataSource({
   database: process.env.DB_NAME ?? "",
   synchronize: false,
   logging: process.env.DB_LOGGING === "true" ? true : false,
-  entities: [Boss, Clan, Declaration, Event, Report, User, ClanEvent, TaskKill],
+  entities: [Boss, Clan, Declaration, Event, Report, User, ClanEvent],
   migrations: [`src/migration/*.${process.env.ENV === "local" ? "ts" : "js"}`],
 });
 

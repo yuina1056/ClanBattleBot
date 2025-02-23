@@ -27,14 +27,13 @@ export class UserRepository {
       },
     });
   }
-  async getUsersByClanIdToRelationReportsAndTaskKills(clanId: number): Promise<User[]> {
+  async getUsersByClanIdToRelationReports(clanId: number): Promise<User[]> {
     return await UserRepository.repository.find({
       where: {
         clanId: clanId,
       },
       relations: {
         reports: true,
-        taskKills: true,
       },
     });
   }
