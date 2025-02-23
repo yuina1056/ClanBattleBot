@@ -20,7 +20,6 @@ import { EditLap } from "@/commands/button/editLap";
 import { EditHp } from "@/commands/button/editHp";
 import { Relief } from "@/commands/button/relief";
 import { SupportBoss } from "@/commands/button/supportBoss";
-import { TaskKill } from "@/commands/button/taskKill";
 
 export async function action(interaction: ButtonInteraction) {
   let action = null;
@@ -84,9 +83,6 @@ export async function action(interaction: ButtonInteraction) {
       break;
     case SupportBoss.customId:
       action = new SupportBoss();
-      break;
-    case TaskKill.customId:
-      action = new TaskKill();
       break;
     default:
       console.error(`${interaction.customId}というボタンには対応していません。`);
